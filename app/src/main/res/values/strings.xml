@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Fut5</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Fields</string>
+    <string name="title_activity_select_team">SelectTeamActivity</string>
+    <string name="title_activity_log_in">LogIn</string>
+    <string name="app_id">535160406638194</string>
+    <string name="backend_ip">172.20.1.185</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
