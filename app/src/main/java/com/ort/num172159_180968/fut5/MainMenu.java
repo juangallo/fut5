@@ -8,12 +8,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.facebook.login.widget.ProfilePictureView;
+
 public class MainMenu extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        ProfilePictureView picture = (ProfilePictureView)findViewById(R.id.profilePicture);
+        picture.setPresetSize(ProfilePictureView.SMALL);
 
         ImageButton btnMaps = (ImageButton)findViewById(R.id.btnMaps);
         btnMaps.setOnClickListener(new View.OnClickListener() {
