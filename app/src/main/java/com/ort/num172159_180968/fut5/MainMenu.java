@@ -37,6 +37,16 @@ public class MainMenu extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
         });
+
+        ImageButton btnUser = (ImageButton)findViewById(R.id.btnUser);
+        btnUser.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), Perfil.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+
     }
 
     @Override
