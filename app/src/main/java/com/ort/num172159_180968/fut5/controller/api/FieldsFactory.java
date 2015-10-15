@@ -20,8 +20,10 @@ import com.ort.num172159_180968.fut5.model.beans.*;
 import java.util.List;
 
 public class FieldsFactory extends ControllerFactory<Fields> {
-  public FieldsFactory(MagnetMobileClient magnetClient) {
+  private static String ip;
+  public FieldsFactory(MagnetMobileClient magnetClient, String backendIp) {
     super(Fields.class, FieldsSchemaFactory.getInstance().getSchema(), magnetClient);
+    ip = backendIp;
   }
 
   // Schema factory for controller Fields
@@ -54,7 +56,7 @@ public class FieldsFactory extends ControllerFactory<Fields> {
         FieldsResult.class,
         null,
         Arrays.asList("application/json"));
-      method1.setBaseUrl("http://192.168.1.106:8080");
+      method1.setBaseUrl("http://" + "localhost" + ":8080");
     }
 
   }
