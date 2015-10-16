@@ -6,6 +6,7 @@
     <string name="title_activity_maps">Fields</string>
     <string name="title_activity_select_team">SelectTeamActivity</string>
     <string name="title_activity_log_in">LogIn</string>
+    <string name="title_activity_perfil">Profile</string>
     <string name="app_id">535160406638194</string>
     <string name="backend_ip">192.168.1.10</string>
 

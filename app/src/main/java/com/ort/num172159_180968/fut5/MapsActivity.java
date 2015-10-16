@@ -1,11 +1,14 @@
 package com.ort.num172159_180968.fut5;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.magnet.android.mms.MagnetMobileClient;
@@ -21,10 +24,12 @@ public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private Fields fields;
+    private String ip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ip = (String)getResources().getString(R.string.backend_ip);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
         mMap.setMyLocationEnabled(true);
@@ -58,7 +63,7 @@ public class MapsActivity extends FragmentActivity {
     protected void setUp() throws Exception {
         // Instantiate a controller
         MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
-        FieldsFactory controllerFactory = new FieldsFactory(magnetClient);
+        FieldsFactory controllerFactory = new FieldsFactory(magnetClient, ip);
         fields = controllerFactory.obtainInstance();
     }
 
@@ -67,8 +72,10 @@ public class MapsActivity extends FragmentActivity {
         if (!callObject.equals(null)) {
             try {
                 List<FieldsResult> result = callObject.get();
+                Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.soccerfieldmarker);
+                Bitmap newBitmap = Bitmap.createScaledBitmap(bm, 40, 40, true);
                 for (FieldsResult field : result) {
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(field.getFieldLat(), field.getFieldLon())).title(field.getFieldName()));
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(field.getFieldLat(), field.getFieldLon())).title(field.getFieldName()).icon(BitmapDescriptorFactory.fromBitmap(newBitmap)));
                 }
 
             } catch (InterruptedException e) {
@@ -76,7 +83,7 @@ public class MapsActivity extends FragmentActivity {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-
         }
+        //int distance =
     }
 }
