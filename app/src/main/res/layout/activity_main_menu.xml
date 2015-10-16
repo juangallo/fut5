@@ -9,17 +9,6 @@
     tools:context=".MainMenu"
     android:background="@drawable/grass">
 
-    <com.facebook.login.widget.ProfilePictureView
-        android:id="@+id/profilePicture"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:gravity="center_horizontal"
-
-        android:layout_gravity="center_horizontal"
-        android:layout_marginRight="63dp"
-        android:measureAllChildren="false"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 
     <ImageButton
         android:layout_width="wrap_content"

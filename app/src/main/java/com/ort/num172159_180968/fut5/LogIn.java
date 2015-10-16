@@ -1,5 +1,8 @@
 package com.ort.num172159_180968.fut5;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,10 +14,12 @@ import android.widget.ImageButton;
 
 public class LogIn extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
         Button btnOk = (Button)findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
 
@@ -23,6 +28,9 @@ public class LogIn extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
         });
+
+
+
     }
 
     @Override

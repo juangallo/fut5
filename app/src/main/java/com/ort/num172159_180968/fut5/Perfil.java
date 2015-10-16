@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.facebook.login.widget.ProfilePictureView;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,10 +31,22 @@ public class Perfil extends AppCompatActivity {
     ImageView viewImage;
     Button b;
 
+    private String id_facebook;
+    private ProfilePictureView mProfilePicture;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
+
+        id_facebook = getIntent().getStringExtra("id_fb");
+        System.out.println("id en el perfil: " + id_facebook);
+        mProfilePicture = (ProfilePictureView) findViewById(R.id.profilePicturePerfil);
+        mProfilePicture.setProfileId(id_facebook);
+
+
         b=(Button)findViewById(R.id.btnSelectPhoto);
         viewImage=(ImageView)findViewById(R.id.viewImage);
         b.setOnClickListener(new View.OnClickListener() {

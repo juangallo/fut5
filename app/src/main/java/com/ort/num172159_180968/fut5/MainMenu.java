@@ -1,5 +1,6 @@
 package com.ort.num172159_180968.fut5;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,17 +9,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 
 public class MainMenu extends AppCompatActivity {
+
+    private String id_facebook;
+    private String user_name;
+    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        ProfilePictureView picture = (ProfilePictureView)findViewById(R.id.profilePicture);
-        picture.setPresetSize(ProfilePictureView.SMALL);
+        id_facebook = getIntent().getStringExtra("id_fb");
+        user_name = getIntent().getStringExtra("user_name");
+
 
         ImageButton btnMaps = (ImageButton)findViewById(R.id.btnMaps);
         btnMaps.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +51,7 @@ public class MainMenu extends AppCompatActivity {
 
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), Perfil.class);
+                intent.putExtra("id_fb", id_facebook);
                 startActivityForResult(intent, 0);
             }
         });
@@ -67,7 +76,17 @@ public class MainMenu extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id == R.id.action_logout){
+            LoginManager.getInstance().logOut();
+            System.out.println("boton log out");
+            Intent intent = new Intent(this, LogIn.class);
+            startActivity(intent);
+            finish();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

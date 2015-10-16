@@ -7,7 +7,7 @@
     tools:context="com.ort.num172159_180968.fut5.Perfil">
 
     <com.facebook.login.widget.ProfilePictureView
-        android:id="@+id/profilePicture"
+        android:id="@+id/profilePicturePerfil"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:gravity="center_horizontal"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:maxHeight="45dp"
         android:maxWidth="45dp"
-        android:layout_alignTop="@+id/profilePicture"
+        android:layout_alignTop="@+id/profilePicturePerfil"
         android:layout_toStartOf="@+id/btnSave"
         android:layout_above="@+id/btnSave" />
         //android:src="@drawable/camera"
@@ -37,8 +37,8 @@
         android:text="SAVE"
         android:id="@+id/btnSave"
         android:layout_marginTop="294dp"
-        android:layout_below="@+id/profilePicture"
-        android:layout_toEndOf="@+id/profilePicture" />
+        android:layout_below="@+id/profilePicturePerfil"
+        android:layout_toEndOf="@+id/profilePicturePerfil" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/txtUsername"
-        android:layout_alignTop="@+id/profilePicture"
+        android:layout_alignTop="@+id/profilePicturePerfil"
         android:layout_alignStart="@+id/txtPassword"
         android:hint="username"/>
 
@@ -98,6 +98,6 @@
         android:text="Camera"
         android:id="@+id/btnSelectPhoto"
         android:layout_below="@+id/txtName"
-        android:layout_alignStart="@+id/profilePicture" />
+        android:layout_alignStart="@+id/profilePicturePerfil" />
 
 </RelativeLayout>

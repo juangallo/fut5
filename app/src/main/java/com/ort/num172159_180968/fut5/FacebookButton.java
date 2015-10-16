@@ -2,6 +2,7 @@ package com.ort.num172159_180968.fut5;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
@@ -65,6 +67,7 @@ public class FacebookButton extends Fragment {
     };
 
     public FacebookButton() {
+        //LoginManager.getInstance().logOut();
     }
 
     @Override
@@ -79,18 +82,21 @@ public class FacebookButton extends Fragment {
         mTokenTracker.startTracking();
         mProfileTracker.startTracking();
 
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_facebook_button, container, false);
+
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        /*super.onViewCreated(view, savedInstanceState);
-        LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
+        super.onViewCreated(view, savedInstanceState);
+        /*LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
         loginButton.setReadPermissions("user_friends");
         loginButton.setFragment(this);
         loginButton.registerCallback(mCallBackManager, mCallback);*/
@@ -109,6 +115,15 @@ public class FacebookButton extends Fragment {
         if(profile != null){
             mProfilePicture.setProfileId(profile.getId());
         }*/
+
+        if(profile != null) {
+            Intent intent = new Intent(getActivity(),MainMenu.class);
+            intent.putExtra("id_fb", profile.getId());
+            intent.putExtra("user_name", profile.getName());
+            intent.putExtra("profile",profile);
+            startActivity(intent);
+
+        }
     }
 
     @Override
@@ -149,6 +164,13 @@ public class FacebookButton extends Fragment {
             protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                 //Log.d("VIVZ", "" + currentProfile);
 
+                Intent intent = new Intent(getActivity(),MainMenu.class);
+                if(currentProfile != null) {
+                    intent.putExtra("id_fb", currentProfile.getId());
+                    intent.putExtra("user_name", currentProfile.getName());
+                    intent.putExtra("profile",currentProfile);
+                }
+                startActivity(intent);
                 /*mTextDetails.setText(constructWelcomeMessage(currentProfile));
                 if(currentProfile != null){
                     mProfilePicture.setProfileId(currentProfile.getId());
@@ -166,6 +188,7 @@ public class FacebookButton extends Fragment {
         //mButtonLogin.setReadPermissions("user_friends");
         mButtonLogin.setReadPermissions("public_profile");
         mButtonLogin.registerCallback(mCallBackManager, mCallback);
+
     }
 
     private String constructWelcomeMessage(Profile profile) {
@@ -175,4 +198,6 @@ public class FacebookButton extends Fragment {
         }
         return stringBuffer.toString();
     }
+
+
 }
