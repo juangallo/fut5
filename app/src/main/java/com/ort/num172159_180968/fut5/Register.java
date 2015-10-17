@@ -2,14 +2,21 @@ package com.ort.num172159_180968.fut5;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.magnet.android.mms.MagnetMobileClient;
+import com.ort.num172159_180968.fut5.controller.api.UserExists;
+import com.ort.num172159_180968.fut5.controller.api.UserExistsFactory;
 
 public class Register extends AppCompatActivity {
 
     Button btnSave;
+    private UserExists userExists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,8 +24,19 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         btnSaveClick();
+        try {
+            setUpExistsUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+    }
 
+    protected void setUpExistsUser() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
+        UserExistsFactory controllerFactory = new UserExistsFactory(magnetClient);
+        userExists = controllerFactory.obtainInstance();
     }
 
     public void btnSaveClick(){
@@ -32,6 +50,15 @@ public class Register extends AppCompatActivity {
                 String username = findViewById(R.id.txtUserNameRegister).toString();
                 String password = findViewById(R.id.txtPasswordRegister).toString();
 
+                if (userExists.userExists(username, null).equals("false")) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Send user.", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Username already in use.", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                }
                 //llamar a la api para insertar usuario
 
                 //si esta ok guardarlo y mandarlo al login para que entre

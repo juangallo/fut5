@@ -1,0 +1,10 @@
++Name userExists
+
++Request
+GET http://localhost:8080/Fut5-war/webservice/existsUser?username=juan
++Headers
++Body
+
++Response
++Body
+true

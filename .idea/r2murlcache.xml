@@ -3,6 +3,8 @@
   <component name="HistoryComponent">
     <option name="urls">
       <array>
+        <option value="http://localhost:8080/Fut5-war/webservice/existsUser?username=juan" />
+        <option value="http://localhost:8080/Fut5-war/webservice/logIn?username=juan&amp;password=pepe" />
         <option value="http://localhost:8080/Fut5-war/webservice/addUser?username=juan&amp;password=juan&amp;firstName=Juan&amp;lastName=Gallo&amp;email=juan_gallo1%40hotmail.com&amp;url=a" />
         <option value="http://localhost:8080/Fut5-war/webservice/addUser?username=juan&amp;password=juan&amp;firstName=Juan&amp;lastName=Gallo&amp;email=juan_gallo1%40hotmail.com&amp;url=null" />
         <option value="http://192.168.1.106:8080/Fut5-war/webservice/getFields" />
