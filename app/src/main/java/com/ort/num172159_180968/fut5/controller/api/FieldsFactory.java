@@ -56,7 +56,7 @@ public class FieldsFactory extends ControllerFactory<Fields> {
         FieldsResult.class,
         null,
         Arrays.asList("application/json"));
-      method1.setBaseUrl("http://" + "localhost" + ":8080");
+      method1.setBaseUrl("http://" + "192.168.1.106" + ":8080");
     }
 
   }

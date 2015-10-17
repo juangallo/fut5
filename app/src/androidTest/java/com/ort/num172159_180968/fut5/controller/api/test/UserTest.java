@@ -38,7 +38,7 @@ public class UserTest extends InstrumentationTestCase {
 
     // Instantiate a controller
     MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getInstrumentation().getTargetContext());
-    UserFactory controllerFactory = new UserFactory(magnetClient);
+    UserFactory controllerFactory = new UserFactory(magnetClient,"");
     user = controllerFactory.obtainInstance();
 
     assertNotNull(user);

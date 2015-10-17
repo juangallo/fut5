@@ -19,22 +19,30 @@
         android:layout_centerHorizontal="true" />
 
     <EditText android:id="@+id/txtUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="400dp"
+        android:layout_height="40dp"
         android:hint="Username"
+        android:layout_marginTop="26dp"
+        android:background="#ffffffff"
+        android:alpha="0.40"
         android:layout_below="@+id/lblTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="28dp"
-        android:background="#0d0d0d0d" />
+        android:textSize="25dp"
+        android:textAlignment="center" />
 
     <EditText android:id="@+id/txtPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="400dp"
+        android:layout_height="40dp"
         android:hint="Password"
         android:layout_marginTop="13dp"
+        android:background="#ffffffff"
+        android:alpha="0.40"
         android:layout_below="@+id/txtUser"
         android:layout_alignRight="@+id/txtUser"
-        android:layout_alignEnd="@+id/txtUser" />
+        android:layout_alignEnd="@+id/txtUser"
+        android:layout_alignStart="@+id/txtUser"
+        android:textSize="25dp"
+        android:textAlignment="center" />
 
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -52,16 +60,16 @@
         android:layout_height="wrap_content"
         android:text="ok"
         android:id="@+id/btnOk"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignTop="@+id/btnRegister"
+        android:layout_toStartOf="@+id/lblTitle" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
         android:id="@+id/btnRegister"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="47dp"
         android:layout_below="@+id/txtPassword"
-        android:layout_centerHorizontal="true" />
+        android:layout_toEndOf="@+id/lblTitle" />
 
 </RelativeLayout>
