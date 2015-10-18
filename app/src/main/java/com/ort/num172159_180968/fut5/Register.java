@@ -1,5 +1,6 @@
 package com.ort.num172159_180968.fut5;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -12,8 +13,11 @@ import android.widget.Toast;
 
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.async.Call;
+import com.ort.num172159_180968.fut5.controller.api.User;
 import com.ort.num172159_180968.fut5.controller.api.UserExists;
 import com.ort.num172159_180968.fut5.controller.api.UserExistsFactory;
+import com.ort.num172159_180968.fut5.controller.api.UserFactory;
+import com.ort.num172159_180968.fut5.model.beans.AddUserResult;
 
 import java.util.concurrent.ExecutionException;
 
@@ -21,6 +25,7 @@ public class Register extends AppCompatActivity {
 
     Button btnSave;
     private UserExists userExists;
+    private User userRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,7 @@ public class Register extends AppCompatActivity {
         btnSaveClick();
         try {
             setUpExistsUser();
+            setUpRegisterUser();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -43,6 +49,13 @@ public class Register extends AppCompatActivity {
         userExists = controllerFactory.obtainInstance();
     }
 
+    protected void setUpRegisterUser() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
+        UserFactory controllerFactory = new UserFactory(magnetClient);
+        userRegister = controllerFactory.obtainInstance();
+    }
+
     public void btnSaveClick(){
 
         btnSave = (Button)findViewById(R.id.btnSave);
@@ -50,19 +63,23 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = ((EditText)findViewById(R.id.txtPersonName)).getText().toString();
-                String lastname = ((EditText)findViewById(R.id.txtLastNameRegister)).getText().toString();
+                String lastName = ((EditText)findViewById(R.id.txtLastNameRegister)).getText().toString();
                 String email = ((EditText)findViewById(R.id.txtEmailAddress)).getText().toString();
                 String username = ((EditText)findViewById(R.id.txtUserNameRegister)).getText().toString();
                 String password = ((EditText)findViewById(R.id.txtPasswordRegister)).getText().toString();
-
+                System.out.println(username);
                 Call<String> callObject = userExists.userExists(username, null);
                 try {
                     String result = callObject.get();
-
+                    System.out.println(result);
                     if (result.equals("false")) {
-                        Toast toast = Toast.makeText(getApplicationContext(), "Send user.", Toast.LENGTH_SHORT);
+                        Call<AddUserResult> callObjectResult = userRegister.addUser(username, password, name, lastName, email, "", null);
+                        AddUserResult user = callObjectResult.get();
+                        Toast toast = Toast.makeText(getApplicationContext(), "User: " + user.getUsername() + " added correctly.", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast.show();
+                        Intent intent = new Intent(getApplicationContext(), LogIn.class);
+                        startActivityForResult(intent, 0);
                     } else {
                         Toast toast = Toast.makeText(getApplicationContext(), "Username already in use.", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER,0,0);
@@ -73,14 +90,6 @@ public class Register extends AppCompatActivity {
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-
-
-
-
-                //si esta ok guardarlo y mandarlo al login para que entre
-
-                
-
             }
         });
     }

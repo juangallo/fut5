@@ -38,7 +38,14 @@ public class LogIn extends AppCompatActivity {
             }
         });
 
+        Button btnNext = (Button)findViewById(R.id.btnNext);
+        btnOk.setOnClickListener(new View.OnClickListener() {
 
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MainMenu.class);
+                startActivityForResult(intent, 0);
+            }
+        });
     }
 
     @Override

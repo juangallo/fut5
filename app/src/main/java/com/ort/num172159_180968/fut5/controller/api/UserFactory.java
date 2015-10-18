@@ -5,6 +5,8 @@
 
 package com.ort.num172159_180968.fut5.controller.api;
 
+import android.content.res.Resources;
+
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.controller.ControllerFactory;
 import com.magnet.android.mms.controller.AbstractControllerSchemaFactory;
@@ -16,13 +18,12 @@ import com.magnet.android.mms.controller.RequestSchema.JParam;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.ort.num172159_180968.fut5.R;
 import com.ort.num172159_180968.fut5.model.beans.*;
 
 public class UserFactory extends ControllerFactory<User> {
-  private static String ip;
-  public UserFactory(MagnetMobileClient magnetClient, String backendIp) {
+  public UserFactory(MagnetMobileClient magnetClient) {
     super(User.class, UserSchemaFactory.getInstance().getSchema(), magnetClient);
-      ip = backendIp;
   }
 
   // Schema factory for controller User
@@ -48,6 +49,8 @@ public class UserFactory extends ControllerFactory<User> {
       schema.setRootPath("");
 
       //controller schema for controller method addUser
+      String ip;
+      //ip = Resources.getSystem().getString(R.string.backend_ip);
       JMethod method1 = addMethod("addUser",
         "Fut5-war/webservice/addUser",
         "POST",

@@ -52,7 +52,7 @@ public class UserExistsFactory extends ControllerFactory<UserExists> {
         null,
         null,
         Arrays.asList("text/plain"));
-      method1.setBaseUrl("http://192.168.1.113:8080");
+      method1.setBaseUrl("http://192.168.1.106:8080");
       method1.addParam("username",
         "QUERY",
         String.class,

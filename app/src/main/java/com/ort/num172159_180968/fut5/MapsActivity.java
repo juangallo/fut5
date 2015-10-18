@@ -63,7 +63,7 @@ public class MapsActivity extends FragmentActivity {
     protected void setUp() throws Exception {
         // Instantiate a controller
         MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
-        FieldsFactory controllerFactory = new FieldsFactory(magnetClient, ip);
+        FieldsFactory controllerFactory = new FieldsFactory(magnetClient);
         fields = controllerFactory.obtainInstance();
     }
 

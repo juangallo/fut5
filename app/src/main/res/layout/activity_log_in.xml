@@ -33,6 +33,7 @@
     <EditText android:id="@+id/txtPassword"
         android:layout_width="400dp"
         android:layout_height="40dp"
+        android:inputType="textPassword"
         android:hint="Password"
         android:layout_marginTop="13dp"
         android:background="#ffffffff"
@@ -58,7 +59,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ok"
+        android:text="Log In"
         android:id="@+id/btnOk"
         android:layout_alignTop="@+id/btnRegister"
         android:layout_toStartOf="@+id/lblTitle" />
@@ -71,5 +72,15 @@
         android:layout_marginTop="47dp"
         android:layout_below="@+id/txtPassword"
         android:layout_toEndOf="@+id/lblTitle" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:id="@+id/btnNext"
+        android:layout_alignBottom="@+id/fragment"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="78dp" />
 
 </RelativeLayout>
