@@ -39,8 +39,8 @@
         android:hint="Email"
         android:ems="10"
         android:id="@+id/txtEmailAddress"
-        android:layout_below="@+id/txtPersonName"
-        android:layout_alignStart="@+id/txtPersonName" />
+        android:layout_below="@+id/txtUserNameRegister"
+        android:layout_alignLeft="@+id/txtPersonName" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -50,8 +50,8 @@
         android:hint="Username"
         android:ems="10"
         android:id="@+id/txtUserNameRegister"
-        android:layout_below="@+id/txtEmailAddress"
-        android:layout_alignStart="@+id/txtEmailAddress" />
+        android:layout_below="@+id/txtLastNameRegister"
+        android:layout_alignStart="@+id/txtPersonName" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -60,8 +60,8 @@
         android:hint="Password"
         android:ems="10"
         android:id="@+id/txtPasswordRegister"
-        android:layout_below="@+id/txtUserNameRegister"
-        android:layout_alignStart="@+id/txtUserNameRegister" />
+        android:layout_below="@+id/txtEmailAddress"
+        android:layout_alignLeft="@+id/txtPersonName" />
 
     <Button
         android:layout_width="wrap_content"
@@ -72,6 +72,17 @@
         android:layout_marginTop="60dp"
         android:layout_below="@+id/txtPasswordRegister"
         android:layout_alignStart="@+id/txtTitle" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Last Name"
+        android:text=""
+        android:ems="10"
+        android:id="@+id/txtLastNameRegister"
+        android:layout_below="@+id/txtPersonName"
+        android:layout_alignStart="@+id/txtEmailAddress" />
 
 
 </RelativeLayout>
