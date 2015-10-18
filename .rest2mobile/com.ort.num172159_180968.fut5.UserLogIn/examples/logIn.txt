@@ -1,0 +1,10 @@
++Name logIn
+
++Request
+GET http://localhost:8080/Fut5-war/webservice/logIn?username=juan&password=pepe
++Headers
++Body
+
++Response
++Body
+false

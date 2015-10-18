@@ -17,6 +17,7 @@ public class MainMenu extends AppCompatActivity {
 
     private String id_facebook;
     private String user_name;
+    private String last_name;
     private Profile profile;
 
     @Override
@@ -26,6 +27,7 @@ public class MainMenu extends AppCompatActivity {
 
         id_facebook = getIntent().getStringExtra("id_fb");
         user_name = getIntent().getStringExtra("user_name");
+        last_name = getIntent().getStringExtra("last_name");
 
 
         ImageButton btnMaps = (ImageButton)findViewById(R.id.btnMaps);
@@ -52,6 +54,8 @@ public class MainMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), Perfil.class);
                 intent.putExtra("id_fb", id_facebook);
+                intent.putExtra("user_name", user_name);
+                intent.putExtra("last_name", last_name);
                 startActivityForResult(intent, 0);
             }
         });

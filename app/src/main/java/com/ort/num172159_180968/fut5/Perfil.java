@@ -16,8 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.facebook.FacebookActivity;
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.io.File;
@@ -30,10 +33,15 @@ public class Perfil extends AppCompatActivity {
 
     ImageView viewImage;
     Button b;
+    Button btnSave;
 
+    private String user_name;
+    private String last_name;
     private String id_facebook;
     private ProfilePictureView mProfilePicture;
 
+    private EditText txtName;
+    private EditText txtLastName;
 
 
     @Override
@@ -41,10 +49,28 @@ public class Perfil extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
+        btnSave = (Button)findViewById(R.id.btnSave);
+
+        user_name = getIntent().getStringExtra("user_name");
+        last_name = getIntent().getStringExtra("last_name");
         id_facebook = getIntent().getStringExtra("id_fb");
         System.out.println("id en el perfil: " + id_facebook);
+
+        txtName = (EditText) findViewById(R.id.txtName);
+        txtLastName = (EditText) findViewById(R.id.txtLastName);
+
         mProfilePicture = (ProfilePictureView) findViewById(R.id.profilePicturePerfil);
         mProfilePicture.setProfileId(id_facebook);
+
+        if(id_facebook != null){
+            btnSave.setVisibility(View.INVISIBLE);
+            txtName.setEnabled(false);
+            txtName.setText(user_name);
+            txtLastName.setEnabled(false);
+            txtLastName.setText(last_name);
+
+        }
+
 
 
         b=(Button)findViewById(R.id.btnSelectPhoto);

@@ -119,7 +119,8 @@ public class FacebookButton extends Fragment {
         if(profile != null) {
             Intent intent = new Intent(getActivity(),MainMenu.class);
             intent.putExtra("id_fb", profile.getId());
-            intent.putExtra("user_name", profile.getName());
+            intent.putExtra("user_name", profile.getFirstName());
+            intent.putExtra("last_name", profile.getLastName());
             intent.putExtra("profile",profile);
             startActivity(intent);
 
@@ -167,7 +168,8 @@ public class FacebookButton extends Fragment {
                 Intent intent = new Intent(getActivity(),MainMenu.class);
                 if(currentProfile != null) {
                     intent.putExtra("id_fb", currentProfile.getId());
-                    intent.putExtra("user_name", currentProfile.getName());
+                    intent.putExtra("user_name", currentProfile.getFirstName());
+                    intent.putExtra("last_name", currentProfile.getLastName());
                     intent.putExtra("profile",currentProfile);
                 }
                 startActivity(intent);
@@ -198,6 +200,8 @@ public class FacebookButton extends Fragment {
         }
         return stringBuffer.toString();
     }
+
+
 
 
 }
