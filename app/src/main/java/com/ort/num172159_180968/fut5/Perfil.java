@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -32,7 +34,7 @@ import java.io.OutputStream;
 public class Perfil extends AppCompatActivity {
 
     ImageView viewImage;
-    Button b;
+    Button btnCamera;
     Button btnSave;
 
     private String user_name;
@@ -43,6 +45,7 @@ public class Perfil extends AppCompatActivity {
     private EditText txtName;
     private EditText txtLastName;
 
+    private boolean rotation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +67,21 @@ public class Perfil extends AppCompatActivity {
 
         if(id_facebook != null){
             btnSave.setVisibility(View.INVISIBLE);
+            btnCamera.setVisibility(View.INVISIBLE);
             txtName.setEnabled(false);
             txtName.setText(user_name);
             txtLastName.setEnabled(false);
             txtLastName.setText(last_name);
 
+        } else {
+
         }
 
 
 
-        b=(Button)findViewById(R.id.btnSelectPhoto);
+        btnCamera=(Button)findViewById(R.id.btnSelectPhoto);
         viewImage=(ImageView)findViewById(R.id.viewImage);
-        b.setOnClickListener(new View.OnClickListener() {
+        btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
@@ -142,6 +148,17 @@ public class Perfil extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
+
+
+                /*Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+                if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
+                    viewImage.setRotation(270);
+                } else {
+                    viewImage.setRotation(90);
+                }*/
+
+
+
                 File f = new File(Environment.getExternalStorageDirectory().toString());
                 for (File temp : f.listFiles()) {
                     if (temp.getName().equals("temp.jpg")) {
@@ -180,6 +197,8 @@ public class Perfil extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+
             } else if (requestCode == 2) {
 
                 Uri selectedImage = data.getData();
@@ -192,9 +211,16 @@ public class Perfil extends AppCompatActivity {
                 Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
                 //Log.w("path of image from gallery......******************.........", picturePath + "");
                 viewImage.setImageBitmap(thumbnail);
+
             }
         }
+        mProfilePicture.setVisibility(View.INVISIBLE);
+
     }
+
+
+
+
 }
 
 
