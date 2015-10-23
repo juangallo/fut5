@@ -5,21 +5,16 @@
 
 package com.ort.num172159_180968.fut5.controller.api;
 
-import android.content.res.Resources;
-
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.controller.ControllerFactory;
 import com.magnet.android.mms.controller.AbstractControllerSchemaFactory;
 import com.magnet.android.mms.controller.RequestSchema;
 import com.magnet.android.mms.controller.RequestSchema.JMethod;
-import com.magnet.android.mms.controller.RequestSchema.JMeta;
-import com.magnet.android.mms.controller.RequestSchema.JParam;
 
 import java.util.Arrays;
-import java.util.Collection;
 
-import com.ort.num172159_180968.fut5.R;
 import com.ort.num172159_180968.fut5.model.beans.*;
+import static com.ort.num172159_180968.fut5.R.string.backend_ip;
 
 public class UserFactory extends ControllerFactory<User> {
   public UserFactory(MagnetMobileClient magnetClient) {

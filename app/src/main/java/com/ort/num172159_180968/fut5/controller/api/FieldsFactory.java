@@ -12,15 +12,12 @@ import com.magnet.android.mms.controller.ControllerFactory;
 import com.magnet.android.mms.controller.AbstractControllerSchemaFactory;
 import com.magnet.android.mms.controller.RequestSchema;
 import com.magnet.android.mms.controller.RequestSchema.JMethod;
-import com.magnet.android.mms.controller.RequestSchema.JMeta;
-import com.magnet.android.mms.controller.RequestSchema.JParam;
 
 import java.util.Arrays;
-import java.util.Collection;
 
-import com.ort.num172159_180968.fut5.R;
 import com.ort.num172159_180968.fut5.model.beans.*;
 import java.util.List;
+import static com.ort.num172159_180968.fut5.R.string.backend_ip;
 
 public class FieldsFactory extends ControllerFactory<Fields> {
   public FieldsFactory(MagnetMobileClient magnetClient) {
@@ -59,7 +56,7 @@ public class FieldsFactory extends ControllerFactory<Fields> {
         FieldsResult.class,
         null,
         Arrays.asList("application/json"));
-      method1.setBaseUrl("http://" + "192.168.1.106" + ":8080");
+      method1.setBaseUrl("http://" + "172.20.3.125" + ":8080");
     }
 
   }

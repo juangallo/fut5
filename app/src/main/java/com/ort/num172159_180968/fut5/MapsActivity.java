@@ -33,13 +33,18 @@ public class MapsActivity extends FragmentActivity {
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
         mMap.setMyLocationEnabled(true);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-34.8076549, -56.1802311), 11));
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
         try {
             setUp();
             callWebService();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-34.8076549, -56.1802311), 11));
     }
 
     @Override
