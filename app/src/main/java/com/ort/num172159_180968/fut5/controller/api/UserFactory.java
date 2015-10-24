@@ -14,7 +14,6 @@ import com.magnet.android.mms.controller.RequestSchema.JMethod;
 import java.util.Arrays;
 
 import com.ort.num172159_180968.fut5.model.beans.*;
-import static com.ort.num172159_180968.fut5.R.string.backend_ip;
 
 public class UserFactory extends ControllerFactory<User> {
   public UserFactory(MagnetMobileClient magnetClient) {
@@ -53,7 +52,7 @@ public class UserFactory extends ControllerFactory<User> {
         null,
         null,
         Arrays.asList("application/json"));
-      method1.setBaseUrl("http://" + "192.168.1.106" + ":8080");
+      method1.setBaseUrl("http://" + Value.ip + ":8080");
       method1.addParam("username",
         "QUERY",
         String.class,
