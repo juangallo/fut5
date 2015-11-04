@@ -9,9 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
+
+import org.json.JSONException;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -19,6 +26,8 @@ public class MainMenu extends AppCompatActivity {
     private String user_name;
     private String last_name;
     private Profile profile;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +37,6 @@ public class MainMenu extends AppCompatActivity {
         id_facebook = getIntent().getStringExtra("id_fb");
         user_name = getIntent().getStringExtra("user_name");
         last_name = getIntent().getStringExtra("last_name");
-
 
         ImageButton btnMaps = (ImageButton)findViewById(R.id.btnMaps);
         btnMaps.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +99,8 @@ public class MainMenu extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
 }

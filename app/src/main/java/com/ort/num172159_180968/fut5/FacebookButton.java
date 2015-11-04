@@ -18,12 +18,22 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
+
+import org.json.JSONException;
+
+import java.sql.Array;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -37,10 +47,6 @@ import com.facebook.login.widget.ProfilePictureView;
 
 public class FacebookButton extends Fragment {
 
-    private ProfilePictureView mProfilePicture;
-
-    private TextView mTextDetails;
-    private ImageButton mImgProfile;
 
     private AccessTokenTracker mTokenTracker;
     private ProfileTracker mProfileTracker;
@@ -53,6 +59,16 @@ public class FacebookButton extends Fragment {
             AccessToken accessToken = loginResult.getAccessToken();
             Profile profile = Profile.getCurrentProfile();
             setupProfileTracker();
+
+
+
+            /*GraphRequest graph = new GraphRequest();
+            graph.setAccessToken(accessToken);
+            graph.setGraphPath("/me/friends");
+            graph.setParameters(null);
+            graph.setHttpMethod(HttpMethod.GET);*/
+
+
 
         }
 
@@ -102,26 +118,22 @@ public class FacebookButton extends Fragment {
         loginButton.registerCallback(mCallBackManager, mCallback);*/
 
         setupLoginButton(view);
-        //setupTextDetails(view);
-        //setupProfilePicture(view);
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+
         Profile profile = Profile.getCurrentProfile();
-        /*mTextDetails.setText(constructWelcomeMessage(profile));
-        if(profile != null){
-            mProfilePicture.setProfileId(profile.getId());
-        }*/
 
         if(profile != null) {
             Intent intent = new Intent(getActivity(),MainMenu.class);
             intent.putExtra("id_fb", profile.getId());
             intent.putExtra("user_name", profile.getFirstName());
             intent.putExtra("last_name", profile.getLastName());
-            intent.putExtra("profile",profile);
+            //intent.putExtra("profile",profile);
             startActivity(intent);
 
         }
@@ -141,14 +153,6 @@ public class FacebookButton extends Fragment {
         mCallBackManager.onActivityResult(requestCode,resultCode,data);
     }
 
-    /*private void setupTextDetails(View view) {
-        mTextDetails = (TextView) view.findViewById(R.id.txtLogin);
-    }
-
-    private void setupProfilePicture(View view){
-        mProfilePicture = (ProfilePictureView) view.findViewById(R.id.profilePicture);
-
-    }*/
 
     private void setupTokenTracker() {
         mTokenTracker = new AccessTokenTracker() {
@@ -173,13 +177,6 @@ public class FacebookButton extends Fragment {
                     intent.putExtra("profile",currentProfile);
                 }
                 startActivity(intent);
-                /*mTextDetails.setText(constructWelcomeMessage(currentProfile));
-                if(currentProfile != null){
-                    mProfilePicture.setProfileId(currentProfile.getId());
-                } else {
-                    mProfilePicture.setProfileId(null);
-                }*/
-
             }
         };
     }
@@ -187,8 +184,15 @@ public class FacebookButton extends Fragment {
     private void setupLoginButton(View view) {
         LoginButton mButtonLogin = (LoginButton) view.findViewById(R.id.login_button);
         mButtonLogin.setFragment(this);
+        List<String> permissions = new ArrayList<>();
+        permissions.add("user_friends");
+        permissions.add("public_profile");
+        permissions.add("email");
         //mButtonLogin.setReadPermissions("user_friends");
-        mButtonLogin.setReadPermissions("public_profile");
+        //mButtonLogin.setReadPermissions("public_profile");
+
+        mButtonLogin.setReadPermissions(permissions);
+        //mButtonLogin.setPublishPermissions(permissions);
         mButtonLogin.registerCallback(mCallBackManager, mCallback);
 
     }
@@ -200,6 +204,7 @@ public class FacebookButton extends Fragment {
         }
         return stringBuffer.toString();
     }
+
 
 
 
