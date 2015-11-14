@@ -18,15 +18,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-<<<<<<< HEAD
+
 import com.facebook.AccessToken;
 import com.facebook.FacebookActivity;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
-=======
->>>>>>> a9b0492b3eab49e3b251a0de34168ea7d601d3bf
+
 import com.facebook.login.widget.ProfilePictureView;
 
 import org.json.JSONException;
