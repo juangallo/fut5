@@ -2,6 +2,7 @@ package com.ort.num172159_180968.fut5;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
+import com.facebook.share.model.ShareLinkContent;
 
 import org.json.JSONException;
 
@@ -101,6 +103,15 @@ public class MainMenu extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    public void share_facebok (){
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                .setContentDescription("Desde Fut5")
+                .build();
+
+
+    }
 
 
 
