@@ -7,7 +7,6 @@ package com.ort.num172159_180968.fut5.controller.api.test;
 
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
-import android.test.suitebuilder.annotation.Suppress;
 
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.async.Call;
@@ -16,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 import com.ort.num172159_180968.fut5.controller.api.User;
 import com.ort.num172159_180968.fut5.controller.api.UserFactory;
-import com.ort.num172159_180968.fut5.model.beans.AddUserResult;
+import com.ort.num172159_180968.fut5.model.beans.UserResult;
 
 /**
 * This is generated stub to test {@link User}
@@ -57,7 +56,7 @@ public class UserTest extends InstrumentationTestCase {
     String email = "juan";
     String url = null;
 
-    Call<AddUserResult> callObject = user.addUser(
+    Call<UserResult> callObject = user.addUser(
       username, 
       password, 
       firstName, 
@@ -66,7 +65,7 @@ public class UserTest extends InstrumentationTestCase {
       url, null);
     assertNotNull(callObject);
 
-    AddUserResult result = callObject.get();
+    UserResult result = callObject.get();
     
     //TODO : add more asserts
   }

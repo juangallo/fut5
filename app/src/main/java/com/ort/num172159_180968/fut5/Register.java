@@ -17,7 +17,7 @@ import com.ort.num172159_180968.fut5.controller.api.User;
 import com.ort.num172159_180968.fut5.controller.api.UserExists;
 import com.ort.num172159_180968.fut5.controller.api.UserExistsFactory;
 import com.ort.num172159_180968.fut5.controller.api.UserFactory;
-import com.ort.num172159_180968.fut5.model.beans.AddUserResult;
+import com.ort.num172159_180968.fut5.model.beans.UserResult;
 
 import java.util.concurrent.ExecutionException;
 
@@ -73,8 +73,8 @@ public class Register extends AppCompatActivity {
                     String result = callObject.get();
                     System.out.println(result);
                     if (result.equals("false")) {
-                        Call<AddUserResult> callObjectResult = userRegister.addUser(username, password, name, lastName, email, "", null);
-                        AddUserResult user = callObjectResult.get();
+                        Call<UserResult> callObjectResult = userRegister.addUser(username, password, name, lastName, email, "", null);
+                        UserResult user = callObjectResult.get();
                         Toast toast = Toast.makeText(getApplicationContext(), "User: " + user.getUsername() + " added correctly.", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast.show();
