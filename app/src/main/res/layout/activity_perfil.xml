@@ -100,4 +100,26 @@
         android:layout_below="@+id/txtName"
         android:layout_alignStart="@+id/profilePicturePerfil" />
 
+
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/profileGallo"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+
+        android:layout_gravity="center_horizontal"
+        android:layout_marginRight="63dp"
+        android:measureAllChildren="false"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/btnSelectPhoto"
+        android:layout_marginBottom="104dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtGallo"
+        android:layout_alignTop="@+id/profileGallo"
+        android:layout_toStartOf="@+id/txtEmail"
+        android:layout_marginTop="27dp" />
+
 </RelativeLayout>

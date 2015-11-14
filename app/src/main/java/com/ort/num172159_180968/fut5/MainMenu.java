@@ -2,6 +2,9 @@ package com.ort.num172159_180968.fut5;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,9 +12,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
+import com.facebook.share.ShareApi;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -19,6 +36,8 @@ public class MainMenu extends AppCompatActivity {
     private String user_name;
     private String last_name;
     private Profile profile;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +47,6 @@ public class MainMenu extends AppCompatActivity {
         id_facebook = getIntent().getStringExtra("id_fb");
         user_name = getIntent().getStringExtra("user_name");
         last_name = getIntent().getStringExtra("last_name");
-
 
         ImageButton btnMaps = (ImageButton)findViewById(R.id.btnMaps);
         btnMaps.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +78,9 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
+        /*if(id_facebook != null){
+            share_facebok();
+        }*/
     }
 
     @Override
@@ -83,14 +104,40 @@ public class MainMenu extends AppCompatActivity {
         if(id == R.id.action_logout){
             LoginManager.getInstance().logOut();
             System.out.println("boton log out");
+            finish();
             Intent intent = new Intent(this, LogIn.class);
             startActivity(intent);
-            finish();
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    public void share_facebok (){
+        List<String> permissions_publish = new ArrayList<>();
+        permissions_publish.add("publish_actions");
+        LoginManager.getInstance().logInWithPublishPermissions(this, permissions_publish);
+        System.out.println("estoy en el share");
+
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                .setContentDescription("Desde Fut5")
+                .build();
+
+        /*Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.unknown);
+        SharePhoto photo = new SharePhoto.Builder()
+                .setBitmap(image)
+                .build();
+        SharePhotoContent content = new SharePhotoContent.Builder()
+                .addPhoto(photo)
+                .build();*/
+
+        ShareApi.share(content,null);
+
+    }
+
 
 
 }

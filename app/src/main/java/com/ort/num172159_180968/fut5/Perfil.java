@@ -18,7 +18,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+
+import com.facebook.AccessToken;
+import com.facebook.FacebookActivity;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.login.LoginManager;
+
 import com.facebook.login.widget.ProfilePictureView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,6 +38,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class Perfil extends AppCompatActivity {
+
+    private JSONObject objectListFriends;
+    private ProfilePictureView pictureGallo;
+    private EditText txtGallo;
 
     ImageView viewImage;
     Button btnCamera;
@@ -48,6 +63,7 @@ public class Perfil extends AppCompatActivity {
         setContentView(R.layout.activity_perfil);
 
         btnSave = (Button)findViewById(R.id.btnSave);
+        btnCamera = (Button)findViewById(R.id.btnSelectPhoto);
 
         user_name = getIntent().getStringExtra("user_name");
         last_name = getIntent().getStringExtra("last_name");
@@ -72,7 +88,10 @@ public class Perfil extends AppCompatActivity {
 
         }
 
+        pictureGallo = (ProfilePictureView) findViewById(R.id.profileGallo);
+        txtGallo = (EditText) findViewById(R.id.txtGallo);
 
+        //loadFriends();
 
         btnCamera=(Button)findViewById(R.id.btnSelectPhoto);
         viewImage=(ImageView)findViewById(R.id.viewImage);
@@ -213,6 +232,59 @@ public class Perfil extends AppCompatActivity {
 
     }
 
+    private void loadFriends(){
+
+        GraphRequest.Callback graphCallback = new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                JSONObject o = graphResponse.getJSONObject();
+                objectListFriends = o;
+                System.out.println("jsonobjeto: " + o);
+            }
+        };
+        GraphRequest graph = new GraphRequest(AccessToken.getCurrentAccessToken(),"/me/friends",null, HttpMethod.GET,graphCallback);
+        graph.executeAsync();
+
+        String id = null;
+        String name = null;
+
+        //String json = "{'data':'x','paging':'x'}";
+        try {
+            Object mainObject  = objectListFriends.get("data");
+            System.out.println(mainObject);
+            /*JSONObject contentObject = mainObject.getJSONObject("content");
+            System.out.println(contentObject);
+
+            name = contentObject.getString("name");
+            id = contentObject.getString("id");*/
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        pictureGallo.setProfileId(id);
+        txtGallo.setText(name);
+
+        /*new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me/friends",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        System.out.println("guardo el json: " + response.getJSONObject());
+
+                        try {
+                            Object o = response.getJSONObject().get("data");
+                            System.out.println("objeto: " + o);
+                            objectListFriends = o;
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).executeAsync();*/
+    }
 
 
 

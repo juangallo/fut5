@@ -6,11 +6,14 @@ import android.content.pm.PackageInstaller;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -18,12 +21,31 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
+import com.magnet.android.mms.MagnetMobileClient;
+import com.magnet.android.mms.async.Call;
+import com.ort.num172159_180968.fut5.controller.api.User;
+import com.ort.num172159_180968.fut5.controller.api.UserExists;
+import com.ort.num172159_180968.fut5.controller.api.UserExistsFactory;
+import com.ort.num172159_180968.fut5.controller.api.UserFactory;
+import com.ort.num172159_180968.fut5.model.beans.UserResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Array;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -37,10 +59,9 @@ import com.facebook.login.widget.ProfilePictureView;
 
 public class FacebookButton extends Fragment {
 
-    private ProfilePictureView mProfilePicture;
-
-    private TextView mTextDetails;
-    private ImageButton mImgProfile;
+    private String user_email;
+    private UserExists userExists;
+    private User userRegister;
 
     private AccessTokenTracker mTokenTracker;
     private ProfileTracker mProfileTracker;
@@ -52,6 +73,24 @@ public class FacebookButton extends Fragment {
         public void onSuccess(LoginResult loginResult) {
             AccessToken accessToken = loginResult.getAccessToken();
             Profile profile = Profile.getCurrentProfile();
+
+            GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        public void onCompleted(JSONObject object, GraphResponse response) {
+                            try {
+                                user_email = object.getString("email");
+                                System.out.println("email: " + user_email);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+            );
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "email");
+            request.setParameters(parameters);
+            request.executeAsync();
+
             setupProfileTracker();
 
         }
@@ -82,8 +121,6 @@ public class FacebookButton extends Fragment {
         mTokenTracker.startTracking();
         mProfileTracker.startTracking();
 
-
-
     }
 
     @Override
@@ -96,32 +133,24 @@ public class FacebookButton extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        /*LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
-        loginButton.setReadPermissions("user_friends");
-        loginButton.setFragment(this);
-        loginButton.registerCallback(mCallBackManager, mCallback);*/
 
         setupLoginButton(view);
-        //setupTextDetails(view);
-        //setupProfilePicture(view);
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+
         Profile profile = Profile.getCurrentProfile();
-        /*mTextDetails.setText(constructWelcomeMessage(profile));
-        if(profile != null){
-            mProfilePicture.setProfileId(profile.getId());
-        }*/
 
         if(profile != null) {
             Intent intent = new Intent(getActivity(),MainMenu.class);
             intent.putExtra("id_fb", profile.getId());
             intent.putExtra("user_name", profile.getFirstName());
             intent.putExtra("last_name", profile.getLastName());
-            intent.putExtra("profile",profile);
+            //intent.putExtra("profile",profile);
             startActivity(intent);
 
         }
@@ -134,21 +163,11 @@ public class FacebookButton extends Fragment {
         mProfileTracker.stopTracking();
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mCallBackManager.onActivityResult(requestCode,resultCode,data);
+        mCallBackManager.onActivityResult(requestCode, resultCode, data);
     }
-
-    /*private void setupTextDetails(View view) {
-        mTextDetails = (TextView) view.findViewById(R.id.txtLogin);
-    }
-
-    private void setupProfilePicture(View view){
-        mProfilePicture = (ProfilePictureView) view.findViewById(R.id.profilePicture);
-
-    }*/
 
     private void setupTokenTracker() {
         mTokenTracker = new AccessTokenTracker() {
@@ -172,14 +191,10 @@ public class FacebookButton extends Fragment {
                     intent.putExtra("last_name", currentProfile.getLastName());
                     intent.putExtra("profile",currentProfile);
                 }
-                startActivity(intent);
-                /*mTextDetails.setText(constructWelcomeMessage(currentProfile));
-                if(currentProfile != null){
-                    mProfilePicture.setProfileId(currentProfile.getId());
-                } else {
-                    mProfilePicture.setProfileId(null);
-                }*/
 
+                addFacebookUser(currentProfile);
+
+                startActivity(intent);
             }
         };
     }
@@ -187,8 +202,17 @@ public class FacebookButton extends Fragment {
     private void setupLoginButton(View view) {
         LoginButton mButtonLogin = (LoginButton) view.findViewById(R.id.login_button);
         mButtonLogin.setFragment(this);
-        //mButtonLogin.setReadPermissions("user_friends");
-        mButtonLogin.setReadPermissions("public_profile");
+        List<String> permissions = new ArrayList<>();
+        permissions.add("user_friends");
+        permissions.add("public_profile");
+        permissions.add("email");
+
+        mButtonLogin.setReadPermissions(permissions);
+
+        /*List<String> permissions_publish = new ArrayList<>();
+        permissions_publish.add("publish_actions");
+        mButtonLogin.setPublishPermissions(permissions_publish);*/
+
         mButtonLogin.registerCallback(mCallBackManager, mCallback);
 
     }
@@ -202,6 +226,51 @@ public class FacebookButton extends Fragment {
     }
 
 
+    private void addFacebookUser(Profile profile){
+
+        try {
+            setUpExistsUser();
+            setUpRegisterUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String username = profile.getId();
+        String email = user_email;
+
+        Call<String> callObject = userExists.userExists(username, null);
+        try {
+            String result = callObject.get();
+            System.out.println(result);
+            if (result.equals("false")) {
+                Call<UserResult> callObjectResult = userRegister.addUser(username, null, profile.getFirstName(), profile.getLastName(), email, "", null);
+                UserResult user = callObjectResult.get();
+                Toast toast = Toast.makeText(getContext(), "User: " + user.getUsername() + " added correctly.", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER,0,0);
+                toast.show();
+                Intent intent = new Intent(getContext(), LogIn.class);
+                startActivityForResult(intent, 0);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void setUpExistsUser() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(getContext());
+        UserExistsFactory controllerFactory = new UserExistsFactory(magnetClient);
+        userExists = controllerFactory.obtainInstance();
+    }
+
+    protected void setUpRegisterUser() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(getContext());
+        UserFactory controllerFactory = new UserFactory(magnetClient);
+        userRegister = controllerFactory.obtainInstance();
+    }
 
 
 }
