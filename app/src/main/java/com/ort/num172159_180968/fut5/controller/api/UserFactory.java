@@ -12,6 +12,7 @@ import com.magnet.android.mms.controller.RequestSchema;
 import com.magnet.android.mms.controller.RequestSchema.JMethod;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.ort.num172159_180968.fut5.model.beans.*;
 
@@ -43,12 +44,10 @@ public class UserFactory extends ControllerFactory<User> {
       schema.setRootPath("");
 
       //controller schema for controller method addUser
-      String ip;
-      //ip = Resources.getSystem().getString(R.string.backend_ip);
       JMethod method1 = addMethod("addUser",
         "Fut5-war/webservice/addUser",
         "POST",
-        AddUserResult.class,
+        UserResult.class,
         null,
         null,
         Arrays.asList("application/json"));
@@ -60,11 +59,11 @@ public class UserFactory extends ControllerFactory<User> {
         "",
         true);
       method1.addParam("password",
-        "QUERY",
-        String.class,
-        null,
-        "",
-        true);
+              "QUERY",
+              String.class,
+              null,
+              "",
+              true);
       method1.addParam("firstName",
         "QUERY",
         String.class,
@@ -84,11 +83,26 @@ public class UserFactory extends ControllerFactory<User> {
         "",
         true);
       method1.addParam("url",
-        "QUERY",
-        String.class,
-        null,
-        "",
-        true);
+              "QUERY",
+              String.class,
+              null,
+              "",
+              true);
+
+      JMethod method2 = addMethod("getUsers",
+              "Fut5-war/webservice/getUsers",
+              "GET",
+              List.class,
+              UserResult.class,
+              null,
+              Arrays.asList("application/json"));
+      method2.setBaseUrl("http://" + Value.ip + ":8080");
+      method2.addParam("username",
+              "QUERY",
+              String.class,
+              null,
+              "",
+              true);
     }
 
   }

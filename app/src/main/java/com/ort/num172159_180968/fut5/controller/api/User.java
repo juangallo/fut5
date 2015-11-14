@@ -10,6 +10,8 @@ import com.magnet.android.mms.async.StateChangedListener;
 
 import com.ort.num172159_180968.fut5.model.beans.*;
 
+import java.util.List;
+
 public interface User {
 
   /**
@@ -22,9 +24,9 @@ public interface User {
    * @param email  style:QUERY
    * @param url  style:QUERY
    * @param listener
-   * @return AddUserResult
+   * @return UserResult
    */
-  Call<AddUserResult> addUser(
+  Call<UserResult> addUser(
      String username,
      String password,
      String firstName,
@@ -34,5 +36,9 @@ public interface User {
      StateChangedListener listener
   );
 
+    Call<List<UserResult>> getUsers(
+            String username,
+            StateChangedListener listener
+    );
 
 }
