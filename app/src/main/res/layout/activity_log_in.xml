@@ -79,8 +79,7 @@
         android:layout_height="wrap_content"
         android:text="OK"
         android:id="@+id/btnNext"
-        android:layout_alignBottom="@+id/fragment"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="78dp" />
+        android:layout_alignTop="@+id/btnRegister"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

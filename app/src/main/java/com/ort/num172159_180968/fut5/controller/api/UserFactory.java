@@ -5,20 +5,14 @@
 
 package com.ort.num172159_180968.fut5.controller.api;
 
-import android.content.res.Resources;
-
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.controller.ControllerFactory;
 import com.magnet.android.mms.controller.AbstractControllerSchemaFactory;
 import com.magnet.android.mms.controller.RequestSchema;
 import com.magnet.android.mms.controller.RequestSchema.JMethod;
-import com.magnet.android.mms.controller.RequestSchema.JMeta;
-import com.magnet.android.mms.controller.RequestSchema.JParam;
 
 import java.util.Arrays;
-import java.util.Collection;
 
-import com.ort.num172159_180968.fut5.R;
 import com.ort.num172159_180968.fut5.model.beans.*;
 
 public class UserFactory extends ControllerFactory<User> {
@@ -58,7 +52,7 @@ public class UserFactory extends ControllerFactory<User> {
         null,
         null,
         Arrays.asList("application/json"));
-      method1.setBaseUrl("http://" + "192.168.1.106" + ":8080");
+      method1.setBaseUrl("http://" + Value.ip + ":8080");
       method1.addParam("username",
         "QUERY",
         String.class,

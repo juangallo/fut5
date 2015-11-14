@@ -28,7 +28,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".LogIn"
-            android:label="LogIn" >
+            android:label="LogIn"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,26 +49,38 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" >
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".SelectTeamActivity"
-            android:label="@string/title_activity_select_team" >
+            android:label="@string/title_activity_select_team"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".MainMenu" >
+        <activity
+            android:name=".MainMenu"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".Perfil"
-            android:label="@string/title_activity_perfil" >
+            android:label="@string/title_activity_perfil"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".Register"
-            android:label="@string/title_activity_register" >
+            android:label="@string/title_activity_register"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".UserListActivity"
+            android:label="@string/title_activity_user_list"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
 

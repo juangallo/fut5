@@ -39,7 +39,7 @@ public class FieldsTest extends InstrumentationTestCase {
 
     // Instantiate a controller
     MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getInstrumentation().getTargetContext());
-    FieldsFactory controllerFactory = new FieldsFactory(magnetClient,"");
+    FieldsFactory controllerFactory = new FieldsFactory(magnetClient);
     fields = controllerFactory.obtainInstance();
 
     assertNotNull(fields);

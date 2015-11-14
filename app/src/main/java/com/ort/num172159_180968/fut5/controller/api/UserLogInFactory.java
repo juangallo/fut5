@@ -10,11 +10,8 @@ import com.magnet.android.mms.controller.ControllerFactory;
 import com.magnet.android.mms.controller.AbstractControllerSchemaFactory;
 import com.magnet.android.mms.controller.RequestSchema;
 import com.magnet.android.mms.controller.RequestSchema.JMethod;
-import com.magnet.android.mms.controller.RequestSchema.JMeta;
-import com.magnet.android.mms.controller.RequestSchema.JParam;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 
 public class UserLogInFactory extends ControllerFactory<UserLogIn> {
@@ -52,7 +49,7 @@ public class UserLogInFactory extends ControllerFactory<UserLogIn> {
         null,
         null,
         Arrays.asList("text/plain"));
-      method1.setBaseUrl("http://localhost:8080");
+      method1.setBaseUrl("http://" + Value.ip + ":8080");
       method1.addParam("username",
         "QUERY",
         String.class,
