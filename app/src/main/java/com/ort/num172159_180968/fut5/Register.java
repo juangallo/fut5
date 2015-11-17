@@ -27,10 +27,14 @@ public class Register extends AppCompatActivity {
     private UserExists userExists;
     private User userRegister;
 
+    private SessionManager session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        session = new SessionManager(getApplicationContext());
 
         btnSaveClick();
         try {
@@ -78,7 +82,8 @@ public class Register extends AppCompatActivity {
                         Toast toast = Toast.makeText(getApplicationContext(), "User: " + user.getUsername() + " added correctly.", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER,0,0);
                         toast.show();
-                        Intent intent = new Intent(getApplicationContext(), LogIn.class);
+                        session.createLoginSession(username,email);
+                        Intent intent = new Intent(getApplicationContext(), MainMenu.class);
                         startActivityForResult(intent, 0);
                     } else {
                         Toast toast = Toast.makeText(getApplicationContext(), "Username already in use.", Toast.LENGTH_SHORT);
