@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -38,10 +40,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class Perfil extends AppCompatActivity {
-
-    private JSONObject objectListFriends;
-    private ProfilePictureView pictureGallo;
-    private EditText txtGallo;
 
     ImageView viewImage;
     Button btnCamera;
@@ -87,11 +85,6 @@ public class Perfil extends AppCompatActivity {
         } else {
 
         }
-
-        pictureGallo = (ProfilePictureView) findViewById(R.id.profileGallo);
-        txtGallo = (EditText) findViewById(R.id.txtGallo);
-
-        //loadFriends();
 
         btnCamera=(Button)findViewById(R.id.btnSelectPhoto);
         viewImage=(ImageView)findViewById(R.id.viewImage);
@@ -183,11 +176,16 @@ public class Perfil extends AppCompatActivity {
                 try {
                     Bitmap bitmap;
                     BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                    //bitmapOptions
 
                     bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
                             bitmapOptions);
 
-                    viewImage.setImageBitmap(bitmap);
+                    Matrix matrix = check_orientation(f.getAbsolutePath());
+
+                    Bitmap adjustedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+                    viewImage.setImageBitmap(adjustedBitmap);
 
                     String path = android.os.Environment
                             .getExternalStorageDirectory()
@@ -232,61 +230,32 @@ public class Perfil extends AppCompatActivity {
 
     }
 
-    private void loadFriends(){
 
-        GraphRequest.Callback graphCallback = new GraphRequest.Callback() {
-            @Override
-            public void onCompleted(GraphResponse graphResponse) {
-                JSONObject o = graphResponse.getJSONObject();
-                objectListFriends = o;
-                System.out.println("jsonobjeto: " + o);
-            }
-        };
-        GraphRequest graph = new GraphRequest(AccessToken.getCurrentAccessToken(),"/me/friends",null, HttpMethod.GET,graphCallback);
-        graph.executeAsync();
+    private Matrix check_orientation(String path) throws IOException{
 
-        String id = null;
-        String name = null;
+        ExifInterface exif = new ExifInterface(path);
 
-        //String json = "{'data':'x','paging':'x'}";
-        try {
-            Object mainObject  = objectListFriends.get("data");
-            System.out.println(mainObject);
-            /*JSONObject contentObject = mainObject.getJSONObject("content");
-            System.out.println(contentObject);
+        int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int rotationInDegrees = exifToDegrees(rotation);
 
-            name = contentObject.getString("name");
-            id = contentObject.getString("id");*/
-        }catch (JSONException e) {
-            e.printStackTrace();
+        System.out.println("Rotation: " + rotation);
+        System.out.println("RotationInDegrees: " + rotationInDegrees);
+
+        Matrix matrix = new Matrix();
+        if (rotation != 0f) {
+            matrix.preRotate(rotationInDegrees);
         }
 
-        pictureGallo.setProfileId(id);
-        txtGallo.setText(name);
+        return matrix;
 
-        /*new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                "/me/friends",
-                null,
-                HttpMethod.GET,
-                new GraphRequest.Callback() {
-                    public void onCompleted(GraphResponse response) {
-                        System.out.println("guardo el json: " + response.getJSONObject());
-
-                        try {
-                            Object o = response.getJSONObject().get("data");
-                            System.out.println("objeto: " + o);
-                            objectListFriends = o;
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-        ).executeAsync();*/
     }
 
-
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
+    }
 
 }
 

@@ -15,17 +15,17 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginRight="63dp"
         android:measureAllChildren="false"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="69dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="45dp" />
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:id="@+id/viewImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxHeight="45dp"
-        android:maxWidth="45dp"
+        android:maxHeight="60dp"
+        android:maxWidth="60dp"
         android:layout_alignTop="@+id/profilePicturePerfil"
         android:layout_toStartOf="@+id/btnSave"
         android:layout_above="@+id/btnSave" />
@@ -39,6 +39,16 @@
         android:layout_marginTop="294dp"
         android:layout_below="@+id/profilePicturePerfil"
         android:layout_toEndOf="@+id/profilePicturePerfil" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/txtUsername"
+        android:hint="username"
+        android:layout_above="@+id/txtPassword"
+        android:layout_alignStart="@+id/txtPassword" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -81,15 +91,6 @@
         android:layout_alignStart="@+id/txtLastName"
         android:hint="email"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/txtUsername"
-        android:layout_alignTop="@+id/profilePicturePerfil"
-        android:layout_alignStart="@+id/txtPassword"
-        android:hint="username"/>
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -97,29 +98,7 @@
         android:layout_height="wrap_content"
         android:text="Camera"
         android:id="@+id/btnSelectPhoto"
-        android:layout_below="@+id/txtName"
+        android:layout_alignTop="@+id/txtLastName"
         android:layout_alignStart="@+id/profilePicturePerfil" />
-
-
-    <com.facebook.login.widget.ProfilePictureView
-        android:id="@+id/profileGallo"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:gravity="center_horizontal"
-
-        android:layout_gravity="center_horizontal"
-        android:layout_marginRight="63dp"
-        android:measureAllChildren="false"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/btnSelectPhoto"
-        android:layout_marginBottom="104dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtGallo"
-        android:layout_alignTop="@+id/profileGallo"
-        android:layout_toStartOf="@+id/txtEmail"
-        android:layout_marginTop="27dp" />
 
 </RelativeLayout>
