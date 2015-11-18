@@ -113,13 +113,8 @@ public class MainMenu extends AppCompatActivity {
         }
         if(id == R.id.action_logout){
             session.logoutUser();
-            LoginManager.getInstance().logOut();
-            System.out.println("boton log out");
             finish();
-            Intent intent = new Intent(this, LogIn.class);
-            startActivity(intent);
-
-            return true;
+            //return true;
         }
 
         return super.onOptionsItemSelected(item);

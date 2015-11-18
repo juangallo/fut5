@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.facebook.login.LoginManager;
+
 import java.util.HashMap;
 
 /**
@@ -101,6 +103,8 @@ public class SessionManager {
 
         // Add new Flag to start new Activity
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        LoginManager.getInstance().logOut();
 
         // Staring Login Activity
         _context.startActivity(i);

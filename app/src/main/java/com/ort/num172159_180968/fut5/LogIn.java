@@ -44,6 +44,7 @@ public class LogIn extends AppCompatActivity {
         if(username != null){
             Intent intent = new Intent(getApplicationContext(), MainMenu.class);
             startActivityForResult(intent, 0);
+            finish();
         }
 
         try {
@@ -99,6 +100,7 @@ public class LogIn extends AppCompatActivity {
                 if (LogIn()) {
                     Intent intent = new Intent(v.getContext(), MainMenu.class);
                     startActivityForResult(intent, 0);
+                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Username and password don't match",
                             Toast.LENGTH_SHORT).show();
