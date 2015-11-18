@@ -119,7 +119,6 @@ public class Perfil extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     private void selectImage() {
 
         final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
@@ -155,16 +154,6 @@ public class Perfil extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
-
-
-                /*Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-                if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
-                    viewImage.setRotation(270);
-                } else {
-                    viewImage.setRotation(90);
-                }*/
-
-
 
                 File f = new File(Environment.getExternalStorageDirectory().toString());
                 for (File temp : f.listFiles()) {
@@ -229,7 +218,6 @@ public class Perfil extends AppCompatActivity {
         mProfilePicture.setVisibility(View.INVISIBLE);
 
     }
-
 
     private Matrix check_orientation(String path) throws IOException{
 

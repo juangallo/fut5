@@ -21,15 +21,31 @@ import com.ort.num172159_180968.fut5.controller.api.UserFactory;
 import com.ort.num172159_180968.fut5.controller.api.UserLogIn;
 import com.ort.num172159_180968.fut5.controller.api.UserLogInFactory;
 
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 public class LogIn extends AppCompatActivity {
     private UserLogIn userLogIn;
 
+    private SessionManager session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
+        session = new SessionManager(getApplicationContext());
+
+        HashMap<String, String> user = session.getUserDetails();
+        String username = user.get(SessionManager.KEY_USERNAME);
+
+        System.out.println("username en el shared preferences login: " + username);
+
+        if(username != null){
+            Intent intent = new Intent(getApplicationContext(), MainMenu.class);
+            startActivityForResult(intent, 0);
+            finish();
+        }
 
         try {
             setUp();
@@ -84,6 +100,7 @@ public class LogIn extends AppCompatActivity {
                 if (LogIn()) {
                     Intent intent = new Intent(v.getContext(), MainMenu.class);
                     startActivityForResult(intent, 0);
+                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Username and password don't match",
                             Toast.LENGTH_SHORT).show();
@@ -101,6 +118,8 @@ public class LogIn extends AppCompatActivity {
             try {
                 String logIn = callObject.get();
                 ret = Boolean.parseBoolean(logIn);
+                session.createLoginSession(username,null);
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

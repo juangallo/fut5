@@ -68,6 +68,8 @@ public class FacebookButton extends Fragment {
 
     private CallbackManager mCallBackManager;
 
+    private SessionManager session;
+
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
@@ -113,6 +115,8 @@ public class FacebookButton extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+
+        session = new SessionManager(getActivity().getApplicationContext());
 
         mCallBackManager = CallbackManager.Factory.create();
         setupTokenTracker();
@@ -193,6 +197,7 @@ public class FacebookButton extends Fragment {
                 }
 
                 addFacebookUser(currentProfile);
+                session.createLoginSession(currentProfile.getId(),user_email);
 
                 startActivity(intent);
             }

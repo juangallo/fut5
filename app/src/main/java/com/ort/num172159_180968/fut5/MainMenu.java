@@ -28,6 +28,7 @@ import com.facebook.share.model.SharePhotoContent;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainMenu extends AppCompatActivity {
@@ -37,12 +38,21 @@ public class MainMenu extends AppCompatActivity {
     private String last_name;
     private Profile profile;
 
-
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        session = new SessionManager(getApplicationContext());
+
+        HashMap<String, String> user = session.getUserDetails();
+        String username = user.get(SessionManager.KEY_USERNAME);
+
+        System.out.println("username en el shared preferences menu: " + username);
+
+
 
         id_facebook = getIntent().getStringExtra("id_fb");
         user_name = getIntent().getStringExtra("user_name");
@@ -102,13 +112,9 @@ public class MainMenu extends AppCompatActivity {
             return true;
         }
         if(id == R.id.action_logout){
-            LoginManager.getInstance().logOut();
-            System.out.println("boton log out");
+            session.logoutUser();
             finish();
-            Intent intent = new Intent(this, LogIn.class);
-            startActivity(intent);
-
-            return true;
+            //return true;
         }
 
         return super.onOptionsItemSelected(item);
