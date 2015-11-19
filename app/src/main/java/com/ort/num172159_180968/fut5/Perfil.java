@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,22 +30,29 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 
 import com.facebook.login.widget.ProfilePictureView;
+import com.magnet.android.mms.MagnetMobileClient;
+import com.ort.num172159_180968.fut5.controller.api.User;
+import com.ort.num172159_180968.fut5.controller.api.UserFactory;
+import com.ort.num172159_180968.fut5.model.beans.AddUserImageRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 public class Perfil extends AppCompatActivity {
 
     ImageView viewImage;
     Button btnCamera;
     Button btnSave;
-
+    private User user;
+    private SessionManager session;
     private String user_name;
     private String last_name;
     private String id_facebook;
@@ -60,10 +68,15 @@ public class Perfil extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
+        session = new SessionManager(getApplicationContext());
+
+        HashMap<String, String> user = session.getUserDetails();
+        user_name = user.get(SessionManager.KEY_USERNAME);
+
         btnSave = (Button)findViewById(R.id.btnSave);
         btnCamera = (Button)findViewById(R.id.btnSelectPhoto);
 
-        user_name = getIntent().getStringExtra("user_name");
+        //user_name = getIntent().getStringExtra("user_name");
         last_name = getIntent().getStringExtra("last_name");
         id_facebook = getIntent().getStringExtra("id_fb");
         System.out.println("id en el perfil: " + id_facebook);
@@ -152,6 +165,7 @@ public class Perfil extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Bitmap image = null;
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
 
@@ -173,7 +187,7 @@ public class Perfil extends AppCompatActivity {
                     Matrix matrix = check_orientation(f.getAbsolutePath());
 
                     Bitmap adjustedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-
+                    image = adjustedBitmap;
                     viewImage.setImageBitmap(adjustedBitmap);
 
                     String path = android.os.Environment
@@ -211,8 +225,24 @@ public class Perfil extends AppCompatActivity {
                 c.close();
                 Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
                 //Log.w("path of image from gallery......******************.........", picturePath + "");
+                image = thumbnail;
                 viewImage.setImageBitmap(thumbnail);
 
+            }
+            if(image != null) {
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream .toByteArray();
+                String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                try {
+                    setUpUser();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                AddUserImageRequest.AddUserImageRequestBuilder builder = new AddUserImageRequest.AddUserImageRequestBuilder();
+                builder.image(encoded);
+                AddUserImageRequest body = builder.build();
+                user.addUserImage(user_name, body, null);
             }
         }
         mProfilePicture.setVisibility(View.INVISIBLE);
@@ -243,6 +273,13 @@ public class Perfil extends AppCompatActivity {
         else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
         else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
         return 0;
+    }
+
+    protected void setUpUser() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
+        UserFactory controllerFactory = new UserFactory(magnetClient);
+        user = controllerFactory.obtainInstance();
     }
 
 }

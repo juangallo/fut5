@@ -1,0 +1,11 @@
++Name addUserImage
+
++Request
+POST http://192.168.1.105:8080/Fut5-war/webservice/addUserImage?username=juan
++Headers
++Body
+{"image":"asdasdAsdfsdfgi345mfshfgvsdf"}
+
++Response
++Body
+"Foto agregada"
