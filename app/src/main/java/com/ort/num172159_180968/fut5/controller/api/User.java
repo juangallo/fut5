@@ -46,4 +46,9 @@ public interface User {
             StateChangedListener listener
     );
 
+    Call<String> addUserImage(
+            String username,
+            AddUserImageRequest body,
+            StateChangedListener listener
+    );
 }
