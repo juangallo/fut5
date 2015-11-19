@@ -1,5 +1,6 @@
 package com.ort.num172159_180968.fut5;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.ort.num172159_180968.fut5.controller.api.User;
 import com.ort.num172159_180968.fut5.controller.api.UserFactory;
 import com.ort.num172159_180968.fut5.model.beans.UserResult;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -103,7 +105,13 @@ public class UserListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
                 UserResult clickedUser = users.get(position);
-                Toast.makeText(UserListActivity.this, clickedUser.getUsername(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(UserListActivity.this, clickedUser.getUsername(), Toast.LENGTH_LONG).show();
+                Intent intent = getIntent();
+                intent.putExtra("name",clickedUser.getFirstName());
+                intent.putExtra("username",clickedUser.getUsername());
+                intent.putExtra("image",BitMapToString(getUserImage(clickedUser.getUsername())));
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }
@@ -153,6 +161,30 @@ public class UserListActivity extends AppCompatActivity {
                 userImageView.setImageResource(R.drawable.soccerplayer);
             }
             return itemView;
+        }
+    }
+
+    private Bitmap getUserImage(String username){
+        Bitmap image = null;
+        for(UsernameImage im: images){
+            if (im.username.equals(username)){
+                image = im.image;
+            }
+        }
+        System.out.println("image: " + image);
+        return image;
+
+    }
+
+    public String BitMapToString(Bitmap bitmap){
+        if(bitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] b = baos.toByteArray();
+            String temp = Base64.encodeToString(b, Base64.DEFAULT);
+            return temp;
+        }else{
+            return "";
         }
     }
 

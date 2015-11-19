@@ -50,5 +50,62 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="LOCAL TEAM"
+        android:id="@+id/lblLocalTeam"
+        android:enabled="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="38dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtPlayer1"
+        android:layout_below="@+id/player4"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="25dp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtPlayer2"
+        android:layout_above="@+id/player2"
+        android:layout_alignStart="@+id/player2"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtPlayer3"
+        android:layout_alignBottom="@+id/txtPlayer2"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtPlayer4"
+        android:layout_above="@+id/player4"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtPlayer5"
+        android:layout_below="@+id/player5"
+        android:layout_alignStart="@+id/txtPlayer4" />
+
 
 </RelativeLayout>
