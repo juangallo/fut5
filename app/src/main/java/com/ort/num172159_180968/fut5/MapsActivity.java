@@ -21,6 +21,8 @@ import com.magnet.android.mms.async.Call;
 import com.ort.num172159_180968.fut5.controller.api.Fields;
 import com.ort.num172159_180968.fut5.controller.api.FieldsFactory;
 import com.ort.num172159_180968.fut5.model.beans.FieldsResult;
+import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
+import com.ort.num172159_180968.fut5.model.persistance.Field;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,26 +33,45 @@ public class MapsActivity extends FragmentActivity {
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private Fields fields;
     private List<Marker> markers;
+    private DatabaseHelper db;
+    private List<Field> fieldList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        db = new DatabaseHelper(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
         mMap.setMyLocationEnabled(true);
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-34.8076549, -56.1802311), 11));
         markers = new ArrayList<>();
+        fieldList = db.getAllFields();
     }
 
     @Override
     public void onStart(){
         super.onStart();
         try {
-            setUp();
-            callWebService();
+            System.out.println(fieldList.size());
+            if (fieldList.size() == 0) {
+                setUp();
+                callWebService();
+            }
+            addMarkers();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void addMarkers() {
+        fieldList = db.getAllFields();
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.soccerfieldmarker);
+        Bitmap newBitmap = Bitmap.createScaledBitmap(bm, 40, 40, true);
+        for (Field f: fieldList) {
+            Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(f.getFieldLat(), f.getFieldLon())).title(f.getFieldName()).icon(BitmapDescriptorFactory.fromBitmap(newBitmap)));
+            markers.add(marker);
+        }
+        centerMap();
     }
 
     @Override
@@ -83,11 +104,11 @@ public class MapsActivity extends FragmentActivity {
         if (!callObject.equals(null)) {
             try {
                 List<FieldsResult> result = callObject.get();
-                Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.soccerfieldmarker);
-                Bitmap newBitmap = Bitmap.createScaledBitmap(bm, 40, 40, true);
                 for (FieldsResult field : result) {
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(field.getFieldLat(), field.getFieldLon())).title(field.getFieldName()).icon(BitmapDescriptorFactory.fromBitmap(newBitmap)));
-                    markers.add(marker);
+                    Field dbField = new Field(field.getFieldId(), field.getFieldName(), field.getFieldLat(), field.getFieldLon());
+                    System.out.println(dbField.getFieldName());
+                    long field1 = db.createField(dbField);
+                    System.out.println(field1);
                 }
 
             } catch (InterruptedException e) {
@@ -96,7 +117,6 @@ public class MapsActivity extends FragmentActivity {
                 e.printStackTrace();
             }
         }
-        centerMap();
         //int distance =
     }
 
@@ -114,5 +134,11 @@ public class MapsActivity extends FragmentActivity {
         int height = size.y;
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
         mMap.animateCamera(cu);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        db.closeDB();
     }
 }
