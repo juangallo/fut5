@@ -1,5 +1,7 @@
 package com.ort.num172159_180968.fut5;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,8 +15,11 @@ import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 import com.ort.num172159_180968.fut5.model.persistance.User;
@@ -38,8 +43,13 @@ public class SelectTeamActivity extends AppCompatActivity {
     private TextView txtPlayer4;
     private TextView txtPlayer5;
 
-    private String[] players;
     private DatabaseHelper db;
+    private ImageButton btnNext;
+
+    private Boolean local;
+
+    private String[] playersLocal;
+    private String[] playersVisitor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +58,45 @@ public class SelectTeamActivity extends AppCompatActivity {
         db = new DatabaseHelper(getApplicationContext());
         listenerPlayers();
 
-        players = new String[6];
-        players[0] = "";
-        players[1] = "";
-        players[2] = "";
-        players[3] = "";
-        players[4] = "";
-        players[5] = "";
+        local = true;
+        btnNext = (ImageButton)findViewById(R.id.imgbtnNext);
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
+                if(local){
+                    if(completeTeam(playersLocal)){
+                        createDialog(local);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Local Team Incomplete",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if(completeTeam(playersVisitor)){
+                        createDialog(local);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Visitor Team Incomplete",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
 
+            }
+        });
+
+        playersLocal = new String[6];
+        playersLocal[0] = "";
+        playersLocal[1] = "";
+        playersLocal[2] = "";
+        playersLocal[3] = "";
+        playersLocal[4] = "";
+        playersLocal[5] = "";
+
+        playersVisitor = new String[6];
+        playersVisitor[0] = "";
+        playersVisitor[1] = "";
+        playersVisitor[2] = "";
+        playersVisitor[3] = "";
+        playersVisitor[4] = "";
+        playersVisitor[5] = "";
     }
 
     @Override
@@ -101,11 +141,11 @@ public class SelectTeamActivity extends AppCompatActivity {
         txtPlayer4 = (TextView) findViewById(R.id.txtPlayer4);
         txtPlayer5 = (TextView) findViewById(R.id.txtPlayer5);
 
-
-
         player1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), UserListActivity.class);
+                intent.putExtra("playersLocal",playersLocal);
+                intent.putExtra("local",local);
                 startActivityForResult(intent, 1);
             }
         });
@@ -113,6 +153,8 @@ public class SelectTeamActivity extends AppCompatActivity {
         player2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), UserListActivity.class);
+                intent.putExtra("playersLocal",playersLocal);
+                intent.putExtra("local",local);
                 startActivityForResult(intent, 2);
             }
         });
@@ -120,6 +162,8 @@ public class SelectTeamActivity extends AppCompatActivity {
         player3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), UserListActivity.class);
+                intent.putExtra("playersLocal",playersLocal);
+                intent.putExtra("local",local);
                 startActivityForResult(intent, 3);
             }
         });
@@ -127,6 +171,8 @@ public class SelectTeamActivity extends AppCompatActivity {
         player4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), UserListActivity.class);
+                intent.putExtra("playersLocal",playersLocal);
+                intent.putExtra("local",local);
                 startActivityForResult(intent, 4);
             }
         });
@@ -134,6 +180,8 @@ public class SelectTeamActivity extends AppCompatActivity {
         player5.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), UserListActivity.class);
+                intent.putExtra("playersLocal",playersLocal);
+                intent.putExtra("local",local);
                 startActivityForResult(intent, 5);
             }
         });
@@ -145,27 +193,33 @@ public class SelectTeamActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             String newUsername = data.getStringExtra("username");
             User newPlayer = db.getUser(newUsername);
+            String[] players;
+            if(local){
+                players = playersLocal;
+            } else {
+                players = playersVisitor;
+            }
             if (requestCode == 1) {
-                setImageAndText(player1, txtPlayer1, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername,1);
+                setImageAndText(player1, txtPlayer1, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername, 1, players);
             }
             if (requestCode == 2) {
-                setImageAndText(player2,txtPlayer2, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername,2);
+                setImageAndText(player2,txtPlayer2, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername, 2, players);
             }
             if (requestCode == 3) {
-                setImageAndText(player3,txtPlayer3, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername,3);
+                setImageAndText(player3,txtPlayer3, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername, 3, players);
             }
             if (requestCode == 4) {
-                setImageAndText(player4,txtPlayer4, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername,4);
+                setImageAndText(player4,txtPlayer4, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername, 4, players);
             }
             if (requestCode == 5) {
-                setImageAndText(player5,txtPlayer5, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername,5);
+                setImageAndText(player5,txtPlayer5, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername, 5, players);
             }
         }
     }
 
-    private void setImageAndText(ImageView image, TextView text, String name, String photo,String username,int code){
+    private void setImageAndText(ImageView image, TextView text, String name, String photo,String username,int code,String[] players){
 
-        int pos = getPosition(username);
+        int pos = getPosition(username,players);
         if(pos != 0) {
             players[pos] = players[code];
             ImageView imageChange = getImage(pos);
@@ -178,7 +232,11 @@ public class SelectTeamActivity extends AppCompatActivity {
         }
 
         if (photo.isEmpty()) {
+            if(local) {
                 image.setImageResource(R.drawable.soccerplayer);
+            } else {
+                image.setImageResource(R.drawable.soccervisit);
+            }
         } else {
                 byte[] decodedString = Base64.decode(photo, Base64.DEFAULT);
                 Bitmap userImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -191,7 +249,7 @@ public class SelectTeamActivity extends AppCompatActivity {
 
     }
 
-    private int getPosition(String username){
+    private int getPosition(String username,String[] players){
         System.out.println("username en el position: " + username);
         for(int i = 0; i < 6; i++)
         {
@@ -200,13 +258,6 @@ public class SelectTeamActivity extends AppCompatActivity {
             }
         }
         return 0;
-
-       /* for (String p : players) {
-            if(p.equals(username)){
-                return pos;
-            }
-            pos++;
-        }*/
 
     }
 
@@ -243,4 +294,67 @@ public class SelectTeamActivity extends AppCompatActivity {
         return null;
     }
 
+    private void cleanPlayers(){
+        player1.setImageBitmap(null);
+        player1.setImageResource(R.drawable.unknown);
+        player2.setImageBitmap(null);
+        player2.setImageResource(R.drawable.unknown);
+        player3.setImageBitmap(null);
+        player3.setImageResource(R.drawable.unknown);
+        player4.setImageBitmap(null);
+        player4.setImageResource(R.drawable.unknown);
+        player5.setImageBitmap(null);
+        player5.setImageResource(R.drawable.unknown);
+
+        txtPlayer1.setText(null);
+        txtPlayer2.setText(null);
+        txtPlayer3.setText(null);
+        txtPlayer4.setText(null);
+        txtPlayer5.setText(null);
+
+    }
+
+    private void createDialog(final Boolean localTeam){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        if(localTeam) {
+            alertDialog.setTitle("Confirm Local Team");
+        } else {
+            alertDialog.setTitle("Confirm Visitor Team");
+        }
+        alertDialog.setMessage("Are you sure you want to confirm the team?");
+
+        alertDialog.setIcon(R.drawable.checkmark);
+
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (localTeam) {
+                    cleanPlayers();
+                    local = false;
+                    TextView text = (TextView) findViewById(R.id.lblLocalTeam);
+                    text.setText("VISITOR TEAM");
+                } else {
+                    //guardar equipos y salir
+                }
+            }
+        });
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+    }
+
+    private boolean completeTeam(String[] players){
+        boolean ret = true;
+        for(int i = 1; i < 6; i++)
+        {
+            if(players[i].equals("")){
+                ret = false;
+            }
+        }
+        return ret;
+    }
 }

@@ -34,11 +34,18 @@ public class UserListActivity extends AppCompatActivity {
     private List<User> users = new ArrayList<>();
     //private List<UsernameImage> images = new ArrayList<>();
 
+    private String[] playersLocal;
+    private Boolean local;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new DatabaseHelper(getApplicationContext());
         setContentView(R.layout.activity_user_list);
+
+        playersLocal = getIntent().getStringArrayExtra("playersLocal");
+        local = getIntent().getBooleanExtra("local",true);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         users = db.getAllUser();
@@ -70,10 +77,29 @@ public class UserListActivity extends AppCompatActivity {
         Call<List<UserResult>> callObject = user.getUsers("", null);
         if (!callObject.equals(null)) {
             try {
+
                 users = callObject.get();
-                for(UserResult u : users) {
-                    System.out.println(u.getUsername() + " " + u.getLastName());
+
+                if(!local) {
+
+                    int pos = -1;
+                    for (int i = 0; i < 6; i++) {
+                        System.out.println("Los locales " + playersLocal[i]);
+                        int aux = 0;
+                        for (UserResult u : users) {
+                            if (playersLocal[i].equals(u.getUsername())) {
+                                pos = aux;
+                            }
+                            aux++;
+                        }
+                        if (pos != -1) {
+                            users.remove(pos);
+                        }
+                        pos = 0;
+                    }
                 }
+
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -106,7 +132,6 @@ public class UserListActivity extends AppCompatActivity {
         ArrayAdapter<User> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.lstUsers);
         list.setAdapter(adapter);
-
     }
 
     private void registerClickCallback() {
@@ -136,6 +161,7 @@ public class UserListActivity extends AppCompatActivity {
             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
             }
+
             //Find the car to work with
             User userRes = users.get(position);
             //Fill the view
@@ -171,7 +197,11 @@ public class UserListActivity extends AppCompatActivity {
             if (image != null) {
                 userImageView.setImageBitmap(image);
             } else {
-                userImageView.setImageResource(R.drawable.soccerplayer);
+                if(local) {
+                    userImageView.setImageResource(R.drawable.soccerplayer);
+                }else {
+                    userImageView.setImageResource(R.drawable.soccervisit);
+                }
             }
             return itemView;
         }

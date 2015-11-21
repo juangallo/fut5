@@ -107,5 +107,17 @@
         android:layout_below="@+id/player5"
         android:layout_alignStart="@+id/txtPlayer4" />
 
+    <ImageButton
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:id="@+id/imgbtnNext"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/player2"
+        android:layout_marginBottom="25dp"
+        android:src="@drawable/arrow"
+        android:scaleType="fitXY"
+        android:background="@android:color/transparent"
+        android:clickable="true" />
+
 
 </RelativeLayout>
