@@ -51,4 +51,6 @@ public interface User {
             AddUserImageRequest body,
             StateChangedListener listener
     );
+
+    Call<List<UsersWithImagesResult>> getUsersWithImages(StateChangedListener listener);
 }

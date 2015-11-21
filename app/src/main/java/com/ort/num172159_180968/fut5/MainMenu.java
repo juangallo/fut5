@@ -1,35 +1,31 @@
 package com.ort.num172159_180968.fut5;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.facebook.AccessToken;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
-import com.facebook.login.widget.ProfilePictureView;
 import com.facebook.share.ShareApi;
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
-
-import org.json.JSONException;
+import com.magnet.android.mms.MagnetMobileClient;
+import com.magnet.android.mms.async.Call;
+import com.ort.num172159_180968.fut5.controller.api.UserFactory;
+import com.ort.num172159_180968.fut5.model.beans.UsersWithImagesResult;
+import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
+//import com.ort.num172159_180968.fut5.model.persistance.User;
+import com.ort.num172159_180968.fut5.controller.api.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -37,6 +33,8 @@ public class MainMenu extends AppCompatActivity {
     private String user_name;
     private String last_name;
     private Profile profile;
+    private User user;
+    private DatabaseHelper db;
 
     SessionManager session;
 
@@ -57,6 +55,8 @@ public class MainMenu extends AppCompatActivity {
         id_facebook = getIntent().getStringExtra("id_fb");
         user_name = getIntent().getStringExtra("user_name");
         last_name = getIntent().getStringExtra("last_name");
+
+        new AsyncCaller().execute();
 
         ImageButton btnMaps = (ImageButton)findViewById(R.id.btnMaps);
         btnMaps.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +120,11 @@ public class MainMenu extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        db.closeDB();
+    }
 
     public void share_facebok (){
         List<String> permissions_publish = new ArrayList<>();
@@ -144,6 +149,66 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
+    protected void setUpUser() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
+        UserFactory controllerFactory = new UserFactory(magnetClient);
+        user = controllerFactory.obtainInstance();
+    }
 
+    private class AsyncCaller extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            try {
+                db = new DatabaseHelper(getApplicationContext());
+                setUpUser();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //this method will be running on UI thread
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Call<List<UsersWithImagesResult>> callObject = user.getUsersWithImages(null);
+                List<UsersWithImagesResult> users = callObject.get();
+                for (UsersWithImagesResult u : users) {
+                /*Field dbField = new Field(field.getFieldId(), field.getFieldName(), field.getFieldLat(), field.getFieldLon());
+                System.out.println(dbField.getFieldName());
+                long field1 = db.createField(dbField);
+                System.out.println(field1);*/
+                    if (!db.existsUser(u.getUsername())) {
+                        System.out.println(u.getUsername());
+                        com.ort.num172159_180968.fut5.model.persistance.User userDb = new
+                                com.ort.num172159_180968.fut5.model.persistance.User(u.getUserId(), u.getUsername(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getPhoto());
+                        long user1 = db.createUser(userDb);
+                        System.out.println(user1);
+                    }else {
+                        System.out.println("user already exists");
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            //this method will be running on background thread so don't update UI frome here
+            //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            //this method will be running on UI thread
+            db.closeDB();
+        }
+
+    }
 
 }

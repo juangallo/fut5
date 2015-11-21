@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "fut5";
@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String KEY_USER_ID = "userId";
     private static final String KEY_USERNAME = "username";
-    private static final String KEY_PASSWORD = "password";
+    //private static final String KEY_PASSWORD = "password";
     private static final String KEY_NAME = "firstName";
     private static final String KEY_LAST_NAME = "lastName";
     private static final String KEY_EMAIL = "email";
@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_USERS = "CREATE TABLE "
             + TABLE_USERS + "(" + KEY_USER_ID + " INTEGER PRIMARY KEY," + KEY_USERNAME
-            + " TEXT," + KEY_PASSWORD + " TEXT," + KEY_NAME + " TEXT,"
+            + " TEXT," + KEY_NAME + " TEXT,"
             + KEY_LAST_NAME + " TEXT," + KEY_EMAIL + " TEXT," + KEY_PHOTO + " BLOB" + ")";
 
     private static final String CREATE_TABLE_FIELDS = "CREATE TABLE " + TABLE_FIELDS
@@ -113,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_FIELDS + " WHERE "
-                + KEY_FIELD_NAME + " = " + field_name;
+                + KEY_FIELD_NAME + " = '" + field_name + "'";
 
         Log.e(LOG, selectQuery);
 
@@ -187,7 +187,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_USER_ID, user.getUserId());
         values.put(KEY_USERNAME, user.getUsername());
-        values.put(KEY_PASSWORD, user.getPassword());
         values.put(KEY_NAME, user.getFirstName());
         values.put(KEY_LAST_NAME, user.getLastName());
         values.put(KEY_EMAIL, user.getEmail());
@@ -215,7 +214,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         User us = new User();
         us.setUserId(c.getInt(c.getColumnIndex(KEY_USER_ID)));
         us.setUsername((c.getString(c.getColumnIndex(KEY_USERNAME))));
-        us.setPassword((c.getString(c.getColumnIndex(KEY_PASSWORD))));
         us.setFirstName((c.getString(c.getColumnIndex(KEY_NAME))));
         us.setLastName((c.getString(c.getColumnIndex(KEY_LAST_NAME))));
         us.setEmail((c.getString(c.getColumnIndex(KEY_EMAIL))));
@@ -228,7 +226,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_USERS + " WHERE "
-                + KEY_USERNAME + " = " + username;
+                + KEY_USERNAME + " = '" + username + "'";
 
         Log.e(LOG, selectQuery);
 
@@ -240,13 +238,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         User us = new User();
         us.setUserId(c.getInt(c.getColumnIndex(KEY_USER_ID)));
         us.setUsername(c.getString(c.getColumnIndex(KEY_USERNAME)));
-        us.setPassword(c.getString(c.getColumnIndex(KEY_PASSWORD)));
         us.setFirstName(c.getString(c.getColumnIndex(KEY_NAME)));
         us.setLastName(c.getString(c.getColumnIndex(KEY_LAST_NAME)));
         us.setEmail(c.getString(c.getColumnIndex(KEY_EMAIL)));
         us.setPhoto(c.getString(c.getColumnIndex(KEY_PHOTO)));
 
         return us;
+    }
+
+    public boolean existsUser(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_USERS + " WHERE "
+                + KEY_USERNAME + " = '" + username + "'";
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c != null){
+            return c.getCount() > 0;
+        }
+        return false;
     }
 
     public List<User> getAllUser() {
@@ -264,7 +276,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 User us = new User();
                 us.setUserId(c.getInt(c.getColumnIndex(KEY_USER_ID)));
                 us.setUsername(c.getString(c.getColumnIndex(KEY_USERNAME)));
-                us.setPassword(c.getString(c.getColumnIndex(KEY_PASSWORD)));
                 us.setFirstName(c.getString(c.getColumnIndex(KEY_NAME)));
                 us.setLastName(c.getString(c.getColumnIndex(KEY_LAST_NAME)));
                 us.setEmail(c.getString(c.getColumnIndex(KEY_EMAIL)));
@@ -283,7 +294,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_USERNAME, user.getUsername());
-        values.put(KEY_PASSWORD, user.getPassword());
         values.put(KEY_NAME, user.getFirstName());
         values.put(KEY_LAST_NAME, user.getLastName());
         values.put(KEY_EMAIL, user.getEmail());

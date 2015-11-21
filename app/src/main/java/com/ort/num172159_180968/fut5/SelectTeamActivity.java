@@ -16,6 +16,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
+import com.ort.num172159_180968.fut5.model.persistance.User;
+
 import org.w3c.dom.Text;
 
 import java.sql.Array;
@@ -36,12 +39,13 @@ public class SelectTeamActivity extends AppCompatActivity {
     private TextView txtPlayer5;
 
     private String[] players;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_team);
-
+        db = new DatabaseHelper(getApplicationContext());
         listenerPlayers();
 
         players = new String[6];
@@ -60,6 +64,12 @@ public class SelectTeamActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_select_team, menu);
         return true;
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        db.closeDB();
     }
 
     @Override
@@ -133,20 +143,22 @@ public class SelectTeamActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            String newUsername = data.getStringExtra("username");
+            User newPlayer = db.getUser(newUsername);
             if (requestCode == 1) {
-                setImageAndText(player1,txtPlayer1,data.getStringExtra("name"),data.getStringExtra("image"),data.getStringExtra("username"),1);
+                setImageAndText(player1, txtPlayer1, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername,1);
             }
             if (requestCode == 2) {
-                setImageAndText(player2,txtPlayer2,data.getStringExtra("name"),data.getStringExtra("image"),data.getStringExtra("username"),2);
+                setImageAndText(player2,txtPlayer2, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername,2);
             }
             if (requestCode == 3) {
-                setImageAndText(player3,txtPlayer3,data.getStringExtra("name"),data.getStringExtra("image"),data.getStringExtra("username"),3);
+                setImageAndText(player3,txtPlayer3, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername,3);
             }
             if (requestCode == 4) {
-                setImageAndText(player4,txtPlayer4,data.getStringExtra("name"),data.getStringExtra("image"),data.getStringExtra("username"),4);
+                setImageAndText(player4,txtPlayer4, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername,4);
             }
             if (requestCode == 5) {
-                setImageAndText(player5,txtPlayer5,data.getStringExtra("name"),data.getStringExtra("image"),data.getStringExtra("username"),5);
+                setImageAndText(player5,txtPlayer5, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername,5);
             }
         }
     }

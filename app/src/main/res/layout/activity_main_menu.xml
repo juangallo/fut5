@@ -11,74 +11,87 @@
 
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:id="@+id/btnMaps"
-        android:src="@drawable/soccerfield128px"
+        android:src="@drawable/arena"
+        android:scaleType="fitXY"
         android:clickable="true"
         android:baselineAlignBottom="false"
         android:layout_marginRight="62dp"
         android:layout_marginEnd="53dp"
         android:layout_alignTop="@+id/btnSearch"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/transparent"
+        android:layout_alignParentStart="false" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:id="@+id/btnSearch"
         android:src="@drawable/search"
+        android:scaleType="fitXY"
         android:clickable="true"
         android:baselineAlignBottom="false"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:background="@android:color/transparent"
         android:layout_marginLeft="80dp"
         android:layout_marginStart="80dp" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:id="@+id/btnNew"
         android:src="@drawable/plus"
+        android:scaleType="fitXY"
         android:clickable="true"
         android:baselineAlignBottom="false"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/btnSearch"
         android:layout_alignStart="@+id/btnSearch"
+        android:background="@android:color/transparent"
         android:layout_marginTop="59dp" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:id="@+id/btnStadistics"
-        android:src="@drawable/stadistics"
+        android:src="@drawable/statistics"
+        android:scaleType="fitXY"
         android:clickable="true"
+        android:background="@android:color/transparent"
         android:baselineAlignBottom="false"
         android:layout_alignTop="@+id/btnNew"
         android:layout_alignLeft="@+id/btnMaps"
         android:layout_alignStart="@+id/btnMaps" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:id="@+id/btnUser"
-        android:src="@drawable/man"
+        android:src="@drawable/football"
+        android:scaleType="fitXY"
         android:clickable="true"
         android:baselineAlignBottom="false"
         android:layout_below="@+id/btnSearch"
         android:layout_alignRight="@+id/btnSearch"
         android:layout_alignEnd="@+id/btnSearch"
         android:layout_marginTop="135dp"
+        android:background="@android:color/transparent"
         android:layout_alignLeft="@+id/btnSearch"
         android:layout_alignStart="@+id/btnSearch" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:id="@+id/btnNotification"
         android:src="@drawable/alert"
+        android:scaleType="fitXY"
         android:clickable="true"
         android:baselineAlignBottom="false"
+        android:background="@android:color/transparent"
         android:layout_alignTop="@+id/btnUser"
         android:layout_alignLeft="@+id/btnMaps"
         android:layout_alignStart="@+id/btnMaps" />
