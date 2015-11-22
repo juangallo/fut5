@@ -174,18 +174,15 @@ public class MainMenu extends AppCompatActivity {
                 Call<List<UsersWithImagesResult>> callObject = user.getUsersWithImages(null);
                 List<UsersWithImagesResult> users = callObject.get();
                 for (UsersWithImagesResult u : users) {
-                /*Field dbField = new Field(field.getFieldId(), field.getFieldName(), field.getFieldLat(), field.getFieldLon());
-                System.out.println(dbField.getFieldName());
-                long field1 = db.createField(dbField);
-                System.out.println(field1);*/
-                    if (!db.existsUser(u.getUsername())) {
+                    com.ort.num172159_180968.fut5.model.persistance.User userDb = new
+                            com.ort.num172159_180968.fut5.model.persistance.User(u.getUserId(), u.getUsername(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getPhoto());
+                    if (!db.existsUser(u.getUserId())) {
                         System.out.println(u.getUsername());
-                        com.ort.num172159_180968.fut5.model.persistance.User userDb = new
-                                com.ort.num172159_180968.fut5.model.persistance.User(u.getUserId(), u.getUsername(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getPhoto());
                         long user1 = db.createUser(userDb);
                         System.out.println(user1);
                     }else {
                         System.out.println("user already exists");
+                        db.updateUser(userDb);
                     }
                 }
             } catch (InterruptedException e) {

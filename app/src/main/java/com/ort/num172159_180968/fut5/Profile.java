@@ -52,6 +52,8 @@ public class Profile extends AppCompatActivity {
     private EditText txtName;
     private EditText txtLastName;
     private DatabaseHelper db;
+    private Bitmap image;
+
 
     private boolean rotation = false;
 
@@ -89,11 +91,23 @@ public class Profile extends AppCompatActivity {
             txtLastName.setText(last_name);
 
         } else {
-            com.ort.num172159_180968.fut5.model.persistance.User dbUser = db.getUser(user_name);
+            com.ort.num172159_180968.fut5.model.persistance.User dbUser;
+            try {
+                dbUser = db.getUser(user_name);
+            } catch (RuntimeException e) {
+                AppHelper helper = new AppHelper(getApplicationContext());
+                helper.reloadUsers();
+                dbUser = db.getUser(user_name);
+            }
             ((EditText) findViewById(R.id.txtName)).setText(dbUser.getFirstName());
             ((EditText) findViewById(R.id.txtUsername)).setText(dbUser.getUsername());
             ((EditText) findViewById(R.id.txtEmail)).setText(dbUser.getEmail());
             ((EditText) findViewById(R.id.txtLastName)).setText(dbUser.getLastName());
+            if (!dbUser.getPhoto().isEmpty()) {
+                byte[] decodedString = Base64.decode(dbUser.getPhoto(), Base64.DEFAULT);
+                Bitmap userImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                ((ImageView)findViewById(R.id.viewImage)).setImageBitmap(userImage);
+            }
         }
 
         btnCamera = (ImageButton)findViewById(R.id.btnSelectPhoto);
@@ -104,6 +118,34 @@ public class Profile extends AppCompatActivity {
                 selectImage();
             }
         });
+        btnSave = (ImageButton)findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveImage();
+            }
+        });
+    }
+
+    private void saveImage() {
+
+
+
+        if(image != null) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            try {
+                setUpUser();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            AddUserImageRequest.AddUserImageRequestBuilder builder = new AddUserImageRequest.AddUserImageRequestBuilder();
+            builder.image(encoded);
+            AddUserImageRequest body = builder.build();
+            user.addUserImage(user_name, body, null);
+        }
     }
 
 
@@ -162,7 +204,6 @@ public class Profile extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap image = null;
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
 
@@ -225,21 +266,6 @@ public class Profile extends AppCompatActivity {
                 image = thumbnail;
                 viewImage.setImageBitmap(thumbnail);
 
-            }
-            if(image != null) {
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream .toByteArray();
-                String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                try {
-                    setUpUser();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-                AddUserImageRequest.AddUserImageRequestBuilder builder = new AddUserImageRequest.AddUserImageRequestBuilder();
-                builder.image(encoded);
-                AddUserImageRequest body = builder.build();
-                user.addUserImage(user_name, body, null);
             }
         }
         mProfilePicture.setVisibility(View.INVISIBLE);

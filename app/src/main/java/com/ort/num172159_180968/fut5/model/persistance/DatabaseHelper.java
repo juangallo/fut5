@@ -261,6 +261,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
+    public boolean existsUser(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_USERS + " WHERE "
+                + KEY_USER_ID + " = " + userId;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c != null){
+            return c.getCount() > 0;
+        }
+        return false;
+    }
+
     public List<User> getAllUser() {
         List<User> users = new ArrayList<User>();
         String selectQuery = "SELECT  * FROM " + TABLE_USERS;
@@ -289,7 +304,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return users;
     }
 
-    public int updateUsers(User user) {
+    public int updateUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();

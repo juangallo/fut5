@@ -41,5 +41,4 @@ dependencies {
     //compile 'org.immutables:gson:2.1.0.alpha'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile 'com.android.support:design:23.1.0'
-
 }
