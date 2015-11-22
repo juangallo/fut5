@@ -2,10 +2,12 @@ package com.ort.num172159_180968.fut5;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInstaller;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,13 +38,19 @@ import com.ort.num172159_180968.fut5.controller.api.User;
 import com.ort.num172159_180968.fut5.controller.api.UserExists;
 import com.ort.num172159_180968.fut5.controller.api.UserExistsFactory;
 import com.ort.num172159_180968.fut5.controller.api.UserFactory;
+import com.ort.num172159_180968.fut5.model.beans.AddUserImageRequest;
 import com.ort.num172159_180968.fut5.model.beans.UserResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Array;
-import java.sql.SQLOutput;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -248,7 +256,32 @@ public class FacebookButton extends Fragment {
             String result = callObject.get();
             System.out.println(result);
             if (result.equals("false")) {
+                System.out.println("datos " + username + profile.getFirstName() + profile.getLastName() + email);
                 Call<UserResult> callObjectResult = userRegister.addUser(username, null, profile.getFirstName(), profile.getLastName(), email, "", null);
+
+                //para subir la foto pasar a otro metodo
+                /*Uri uri = profile.getProfilePictureUri(512, 512);
+                Bitmap photo = null;
+                try {
+                    photo = BitmapFactory.decodeStream((InputStream) new URL(uri.toString()).getContent());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream .toByteArray();
+                String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+                AddUserImageRequest.AddUserImageRequestBuilder builder = new AddUserImageRequest.AddUserImageRequestBuilder();
+                builder.image(encoded);
+                AddUserImageRequest body = builder.build();
+                userRegister.addUserImage(username, body, null);
+
+                System.out.println("foto en uri: " + profile.getProfilePictureUri(512,512));*/
+                //fin
+
                 UserResult user = callObjectResult.get();
                 Toast toast = Toast.makeText(getContext(), "User: " + user.getUsername() + " added correctly.", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER,0,0);
@@ -277,5 +310,8 @@ public class FacebookButton extends Fragment {
         userRegister = controllerFactory.obtainInstance();
     }
 
+   // public static Bitmap getBitmapFromURL(Uri src) {
+
+   // }
 
 }
