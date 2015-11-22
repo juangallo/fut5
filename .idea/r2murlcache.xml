@@ -2,7 +2,10 @@
 <project version="4">
   <component name="HistoryComponent">
     <option name="urls">
-      <array />
+      <array>
+        <option value="http://localhost:8080/Fut5-war/webservice/getUserWithImage" />
+        <option value="http://192.168.1.105:8080/Fut5-war/webservice/addUserImage?username=juan" />
+      </array>
     </option>
   </component>
 </project>

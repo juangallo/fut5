@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.share.ShareApi;
 import com.facebook.share.model.ShareLinkContent;
@@ -32,7 +31,7 @@ public class MainMenu extends AppCompatActivity {
     private String id_facebook;
     private String user_name;
     private String last_name;
-    private Profile profile;
+    private com.facebook.Profile profile;
     private User user;
     private DatabaseHelper db;
 
@@ -80,7 +79,7 @@ public class MainMenu extends AppCompatActivity {
         btnUser.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), Perfil.class);
+                Intent intent = new Intent(v.getContext(), Profile.class);
                 intent.putExtra("id_fb", id_facebook);
                 intent.putExtra("user_name", user_name);
                 intent.putExtra("last_name", last_name);
@@ -175,18 +174,15 @@ public class MainMenu extends AppCompatActivity {
                 Call<List<UsersWithImagesResult>> callObject = user.getUsersWithImages(null);
                 List<UsersWithImagesResult> users = callObject.get();
                 for (UsersWithImagesResult u : users) {
-                /*Field dbField = new Field(field.getFieldId(), field.getFieldName(), field.getFieldLat(), field.getFieldLon());
-                System.out.println(dbField.getFieldName());
-                long field1 = db.createField(dbField);
-                System.out.println(field1);*/
-                    if (!db.existsUser(u.getUsername())) {
+                    com.ort.num172159_180968.fut5.model.persistance.User userDb = new
+                            com.ort.num172159_180968.fut5.model.persistance.User(u.getUserId(), u.getUsername(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getPhoto());
+                    if (!db.existsUser(u.getUserId())) {
                         System.out.println(u.getUsername());
-                        com.ort.num172159_180968.fut5.model.persistance.User userDb = new
-                                com.ort.num172159_180968.fut5.model.persistance.User(u.getUserId(), u.getUsername(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getPhoto());
                         long user1 = db.createUser(userDb);
                         System.out.println(user1);
                     }else {
                         System.out.println("user already exists");
+                        db.updateUser(userDb);
                     }
                 }
             } catch (InterruptedException e) {
