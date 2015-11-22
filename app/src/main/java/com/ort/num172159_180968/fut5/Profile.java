@@ -14,45 +14,34 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
-
-import com.facebook.AccessToken;
-import com.facebook.FacebookActivity;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
-import com.facebook.login.LoginManager;
 
 import com.facebook.login.widget.ProfilePictureView;
 import com.magnet.android.mms.MagnetMobileClient;
 import com.ort.num172159_180968.fut5.controller.api.User;
 import com.ort.num172159_180968.fut5.controller.api.UserFactory;
 import com.ort.num172159_180968.fut5.model.beans.AddUserImageRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 
-public class Perfil extends AppCompatActivity {
+public class Profile extends AppCompatActivity {
 
     ImageView viewImage;
-    Button btnCamera;
-    Button btnSave;
+    ImageButton btnCamera;
+    ImageButton btnSave;
     private User user;
     private SessionManager session;
     private String user_name;
@@ -62,21 +51,23 @@ public class Perfil extends AppCompatActivity {
 
     private EditText txtName;
     private EditText txtLastName;
+    private DatabaseHelper db;
 
     private boolean rotation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_perfil);
+        db = new DatabaseHelper(getApplicationContext());
+        setContentView(R.layout.activity_profile);
 
         session = new SessionManager(getApplicationContext());
 
         HashMap<String, String> user = session.getUserDetails();
         user_name = user.get(SessionManager.KEY_USERNAME);
 
-        btnSave = (Button)findViewById(R.id.btnSave);
-        btnCamera = (Button)findViewById(R.id.btnSelectPhoto);
+        btnSave = (ImageButton)findViewById(R.id.btnSave);
+        btnCamera = (ImageButton)findViewById(R.id.btnSelectPhoto);
 
         //user_name = getIntent().getStringExtra("user_name");
         last_name = getIntent().getStringExtra("last_name");
@@ -98,11 +89,15 @@ public class Perfil extends AppCompatActivity {
             txtLastName.setText(last_name);
 
         } else {
-
+            com.ort.num172159_180968.fut5.model.persistance.User dbUser = db.getUser(user_name);
+            ((EditText) findViewById(R.id.txtName)).setText(dbUser.getFirstName());
+            ((EditText) findViewById(R.id.txtUsername)).setText(dbUser.getUsername());
+            ((EditText) findViewById(R.id.txtEmail)).setText(dbUser.getEmail());
+            ((EditText) findViewById(R.id.txtLastName)).setText(dbUser.getLastName());
         }
 
-        btnCamera=(Button)findViewById(R.id.btnSelectPhoto);
-        viewImage=(ImageView)findViewById(R.id.viewImage);
+        btnCamera = (ImageButton)findViewById(R.id.btnSelectPhoto);
+        viewImage = (ImageView)findViewById(R.id.viewImage);
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +133,7 @@ public class Perfil extends AppCompatActivity {
 
         final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Perfil.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(Profile.this);
         builder.setTitle("Add Photo!");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override

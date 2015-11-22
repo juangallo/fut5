@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.share.ShareApi;
 import com.facebook.share.model.ShareLinkContent;
@@ -32,7 +31,7 @@ public class MainMenu extends AppCompatActivity {
     private String id_facebook;
     private String user_name;
     private String last_name;
-    private Profile profile;
+    private com.facebook.Profile profile;
     private User user;
     private DatabaseHelper db;
 
@@ -80,7 +79,7 @@ public class MainMenu extends AppCompatActivity {
         btnUser.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), Perfil.class);
+                Intent intent = new Intent(v.getContext(), Profile.class);
                 intent.putExtra("id_fb", id_facebook);
                 intent.putExtra("user_name", user_name);
                 intent.putExtra("last_name", last_name);
