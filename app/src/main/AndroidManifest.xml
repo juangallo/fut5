@@ -18,6 +18,11 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <provider
+        android:name="com.facebook.FacebookContentProvider"
+        android:authorities="com.facebook.app.FacebookContentProvider535160406638194"
+        android:exported="true" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -80,10 +85,10 @@
             android:label="@string/title_activity_user_list"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".ConfirmMatch"
+            android:label="@string/title_activity_confirm_match" >
+        </activity>
     </application>
-
-    <provider android:authorities="com.facebook.app.FacebookContentProvider535160406638194"
-        android:name="com.facebook.FacebookContentProvider"
-        android:exported="true"/>
 
 </manifest>

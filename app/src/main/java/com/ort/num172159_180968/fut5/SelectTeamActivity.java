@@ -335,7 +335,10 @@ public class SelectTeamActivity extends AppCompatActivity {
                     TextView text = (TextView) findViewById(R.id.lblLocalTeam);
                     text.setText("VISITOR TEAM");
                 } else {
-                    //guardar equipos y salir
+                    Intent intent = new Intent(getApplicationContext(), ConfirmMatch.class);
+                    intent.putExtra("playersLocal",playersLocal);
+                    intent.putExtra("playersVisitor",playersVisitor);
+                    startActivityForResult(intent, 0);
                 }
             }
         });

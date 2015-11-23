@@ -107,7 +107,12 @@ public class Profile extends AppCompatActivity {
                 byte[] decodedString = Base64.decode(dbUser.getPhoto(), Base64.DEFAULT);
                 Bitmap userImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 ((ImageView)findViewById(R.id.viewImage)).setImageBitmap(userImage);
+
             }
+
+            /*Uri uri = Uri.parse("https://graph.facebook.com/10156116930130472/picture?height=512&width=512&migration_overrides=%7Boctober_2012%3Atrue%7D");
+            ((ImageView)findViewById(R.id.viewImage)).setImageURI(null);
+            ((ImageView)findViewById(R.id.viewImage)).setImageURI(uri);*/
         }
 
         btnCamera = (ImageButton)findViewById(R.id.btnSelectPhoto);
