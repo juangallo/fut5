@@ -89,6 +89,10 @@
             android:name=".ConfirmMatch"
             android:label="@string/title_activity_confirm_match" >
         </activity>
+        <activity
+            android:name=".Statistics"
+            android:label="@string/title_activity_statistics" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.ort.num172159_180968.fut5;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -91,6 +92,15 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
+        ImageButton btnStatistics = (ImageButton)findViewById(R.id.btnStadistics);
+        btnStatistics.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), Statistics.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+        
         /*if(id_facebook != null){
             share_facebok();
         }*/
