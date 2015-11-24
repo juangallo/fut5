@@ -1,6 +1,8 @@
 package com.ort.num172159_180968.fut5;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.async.Call;
@@ -48,6 +50,7 @@ public class AppHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        db.closeDB();
     }
 
     private void setUpUser() throws Exception {
@@ -55,5 +58,19 @@ public class AppHelper {
         MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.context);
         UserFactory controllerFactory = new UserFactory(magnetClient);
         user = controllerFactory.obtainInstance();
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+        // RECREATE THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
+                matrix, false);
+        return resizedBitmap;
     }
 }

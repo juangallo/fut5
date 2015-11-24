@@ -23,9 +23,8 @@ android {
 
 }
 repositories {
-    maven {
-        url "http://repo.magnet.com:8081/artifactory/public/"
-    }
+    maven { url "http://repo.magnet.com:8081/artifactory/public/" }
+    maven { url "https://jitpack.io" }
     mavenLocal()
     mavenCentral()
 }
@@ -41,4 +40,5 @@ dependencies {
     //compile 'org.immutables:gson:2.1.0.alpha'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile 'com.android.support:design:23.1.0'
+    compile 'com.github.bmarrdev:android-DecoView-charting:v0.9.4'
 }

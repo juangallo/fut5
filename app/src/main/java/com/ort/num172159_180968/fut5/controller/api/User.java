@@ -53,4 +53,15 @@ public interface User {
     );
 
     Call<List<UsersWithImagesResult>> getUsersWithImages(StateChangedListener listener);
+
+    Call<String> updateUser(
+            String userId,
+            String username,
+            String password,
+            String firstName,
+            String lastName,
+            String email,
+            UpdateUserRequest body,
+            StateChangedListener listener
+    );
 }

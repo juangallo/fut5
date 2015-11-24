@@ -24,9 +24,11 @@ import android.widget.ImageView;
 
 import com.facebook.login.widget.ProfilePictureView;
 import com.magnet.android.mms.MagnetMobileClient;
+import com.magnet.android.mms.async.Call;
 import com.ort.num172159_180968.fut5.controller.api.User;
 import com.ort.num172159_180968.fut5.controller.api.UserFactory;
 import com.ort.num172159_180968.fut5.model.beans.AddUserImageRequest;
+import com.ort.num172159_180968.fut5.model.beans.UpdateUserRequest;
 import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 
 import java.io.ByteArrayOutputStream;
@@ -36,6 +38,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 public class Profile extends AppCompatActivity {
 
@@ -45,7 +48,7 @@ public class Profile extends AppCompatActivity {
     private User user;
     private SessionManager session;
     private String user_name;
-    private String last_name;
+    private int userId;
     private String id_facebook;
     private ProfilePictureView mProfilePicture;
 
@@ -62,7 +65,11 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         db = new DatabaseHelper(getApplicationContext());
         setContentView(R.layout.activity_profile);
-
+        try {
+            setUpUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         session = new SessionManager(getApplicationContext());
 
         HashMap<String, String> user = session.getUserDetails();
@@ -71,8 +78,6 @@ public class Profile extends AppCompatActivity {
         btnSave = (ImageButton)findViewById(R.id.btnSave);
         btnCamera = (ImageButton)findViewById(R.id.btnSelectPhoto);
 
-        //user_name = getIntent().getStringExtra("user_name");
-        last_name = getIntent().getStringExtra("last_name");
         id_facebook = getIntent().getStringExtra("id_fb");
         System.out.println("id en el perfil: " + id_facebook);
 
@@ -88,17 +93,19 @@ public class Profile extends AppCompatActivity {
             txtName.setEnabled(false);
             txtName.setText(user_name);
             txtLastName.setEnabled(false);
-            txtLastName.setText(last_name);
+            //txtLastName.setText(last_name);
 
         } else {
             com.ort.num172159_180968.fut5.model.persistance.User dbUser;
             try {
+                System.out.println(user_name);
                 dbUser = db.getUser(user_name);
             } catch (RuntimeException e) {
                 AppHelper helper = new AppHelper(getApplicationContext());
                 helper.reloadUsers();
                 dbUser = db.getUser(user_name);
             }
+            userId = dbUser.getUserId();
             ((EditText) findViewById(R.id.txtName)).setText(dbUser.getFirstName());
             ((EditText) findViewById(R.id.txtUsername)).setText(dbUser.getUsername());
             ((EditText) findViewById(R.id.txtEmail)).setText(dbUser.getEmail());
@@ -122,29 +129,51 @@ public class Profile extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveImage();
+                saveUser();
             }
         });
     }
 
-    private void saveImage() {
-
-
+    private void saveUser() {
+        com.ort.num172159_180968.fut5.model.persistance.User dbUser;
+        UpdateUserRequest body;
+        dbUser = db.getUser(userId);
+        dbUser.setUsername(((EditText)findViewById(R.id.txtUsername)).getText().toString());
+        dbUser.setFirstName(((EditText) findViewById(R.id.txtName)).getText().toString());
+        dbUser.setLastName(((EditText) findViewById(R.id.txtLastName)).getText().toString());
+        dbUser.setEmail(((EditText)findViewById(R.id.txtEmail)).getText().toString());
 
         if(image != null) {
+            image = (new AppHelper(getApplicationContext())).getResizedBitmap(image, 512, 512);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream .toByteArray();
             String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
             try {
-                setUpUser();
             } catch (Exception e){
                 e.printStackTrace();
             }
-            AddUserImageRequest.AddUserImageRequestBuilder builder = new AddUserImageRequest.AddUserImageRequestBuilder();
+            UpdateUserRequest.UpdateUserRequestBuilder builder = new UpdateUserRequest.UpdateUserRequestBuilder();
             builder.image(encoded);
-            AddUserImageRequest body = builder.build();
-            user.addUserImage(user_name, body, null);
+            body = builder.build();
+            //user.addUserImage(user_name, body, null);
+            dbUser.setPhoto(encoded);
+        } else {
+            UpdateUserRequest.UpdateUserRequestBuilder builder = new UpdateUserRequest.UpdateUserRequestBuilder();
+            builder.image(dbUser.getPhoto());
+            body = builder.build();
+        }
+
+        Call<String> callObject = user.updateUser(userId + "", dbUser.getUsername(), ((EditText) findViewById(R.id.txtPassword)).getText().toString(),
+                dbUser.getFirstName(), dbUser.getLastName(), dbUser.getEmail(), body, null);
+        try {
+            if (callObject.get().equals("true")) {
+                db.updateUser(dbUser);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
     }
 
@@ -305,6 +334,11 @@ public class Profile extends AppCompatActivity {
         user = controllerFactory.obtainInstance();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.closeDB();
+    }
 
 
 }

@@ -147,6 +147,58 @@ public class UserFactory extends ControllerFactory<User> {
                 null,
                 Arrays.asList("application/json"));
         method5.setBaseUrl("http://" + Value.ip + ":8080");
+
+        JMethod method6 = addMethod("updateUser",
+                "Fut5-war/webservice/updateUser",
+                "POST",
+                String.class,
+                null,
+                Arrays.asList("application/json"),
+                Arrays.asList("text/plain"));
+        method6.setBaseUrl("http://" + Value.ip + ":8080");
+        method6.addParam("userId",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
+        method6.addParam("username",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
+        method6.addParam("password",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
+        method6.addParam("firstName",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
+        method6.addParam("lastName",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
+        method6.addParam("email",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
+        method6.addParam("body",
+                "PLAIN",
+                UpdateUserRequest.class,
+                null,
+                "",
+                true);
+
     }
 
   }
