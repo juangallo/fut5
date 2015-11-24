@@ -2,16 +2,21 @@ package com.ort.num172159_180968.fut5;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInstaller;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,13 +41,25 @@ import com.ort.num172159_180968.fut5.controller.api.User;
 import com.ort.num172159_180968.fut5.controller.api.UserExists;
 import com.ort.num172159_180968.fut5.controller.api.UserExistsFactory;
 import com.ort.num172159_180968.fut5.controller.api.UserFactory;
+import com.ort.num172159_180968.fut5.model.beans.AddUserImageRequest;
 import com.ort.num172159_180968.fut5.model.beans.UserResult;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Array;
-import java.sql.SQLOutput;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -188,18 +205,21 @@ public class FacebookButton extends Fragment {
             protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                 //Log.d("VIVZ", "" + currentProfile);
 
-                Intent intent = new Intent(getActivity(),MainMenu.class);
+
                 if(currentProfile != null) {
+
+                    Intent intent = new Intent(getActivity(),MainMenu.class);
                     intent.putExtra("id_fb", currentProfile.getId());
                     intent.putExtra("user_name", currentProfile.getFirstName());
                     intent.putExtra("last_name", currentProfile.getLastName());
-                    intent.putExtra("profile",currentProfile);
+                    intent.putExtra("profile", currentProfile);
+
+                    addFacebookUser(currentProfile);
+                    session.createLoginSession(currentProfile.getId(), user_email);
+
+                    startActivity(intent);
                 }
 
-                addFacebookUser(currentProfile);
-                session.createLoginSession(currentProfile.getId(),user_email);
-
-                startActivity(intent);
             }
         };
     }
@@ -248,7 +268,59 @@ public class FacebookButton extends Fragment {
             String result = callObject.get();
             System.out.println(result);
             if (result.equals("false")) {
+                System.out.println("datos " + username + profile.getFirstName() + profile.getLastName() + email);
                 Call<UserResult> callObjectResult = userRegister.addUser(username, null, profile.getFirstName(), profile.getLastName(), email, "", null);
+
+                //para subir la foto pasar a otro metodo
+                //Uri uri = profile.getProfilePictureUri(512, 512);
+                //System.out.println("foto en uri: " + profile.getProfilePictureUri(512, 512));
+
+                //Bitmap bitmap = null;
+
+                    //URL imgUrl = new URL(profile.getProfilePictureUri(512, 512).toString());
+                   /* URL imgUrl = new URL("https://graph.facebook.com/" + profile.getId() + "/picture?type=large");
+                    HttpURLConnection.setFollowRedirects(true);
+                    bitmap = BitmapFactory.decodeStream(imgUrl.openConnection().getInputStream());*/
+
+
+                    //URL imgUrl = new URL("https://graph.facebook.com/" + profile.getId() + "/picture?type=large");
+
+               /* Uri uri = profile.getProfilePictureUri(512,512);
+                System.out.println("uriel: " + uri);
+                    ImageView i = new ImageView(this.getActivity().getApplicationContext());
+                    i.setImageURI(uri);
+
+                    bitmap = ((BitmapDrawable)i.getDrawable()).getBitmap();*/
+
+               /* try {
+                    Uri uri = profile.getProfilePictureUri(512, 512);
+                    URL url = new URL(uri.toString());
+                    HttpURLConnection ucon = (HttpURLConnection) url.openConnection();
+                    ucon.setInstanceFollowRedirects(false);
+                    URL secondURL = new URL(ucon.getHeaderField("Location"));
+                    System.out.println("url para gallo: " + secondURL);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+
+                /*ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream .toByteArray();
+
+                System.out.println("foto en byte: " + byteArray);
+
+                String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                System.out.println("foto en string: " + encoded);
+
+                AddUserImageRequest.AddUserImageRequestBuilder builder = new AddUserImageRequest.AddUserImageRequestBuilder();
+                builder.image(encoded);
+                AddUserImageRequest body = builder.build();
+                userRegister.addUserImage(username, body, null);*/
+
+                //fin
+
                 UserResult user = callObjectResult.get();
                 Toast toast = Toast.makeText(getContext(), "User: " + user.getUsername() + " added correctly.", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER,0,0);
@@ -277,5 +349,20 @@ public class FacebookButton extends Fragment {
         userRegister = controllerFactory.obtainInstance();
     }
 
+    private byte[] fromUriToByte(Uri uri){
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        FileInputStream fis;
+        try {
+            fis = new FileInputStream(new File(uri.getPath()));
+            byte[] buf = new byte[1024];
+            int n;
+            while (-1 != (n = fis.read(buf)))
+                baos.write(buf, 0, n);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return baos.toByteArray();
+    }
 
 }

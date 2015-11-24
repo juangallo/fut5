@@ -1,6 +1,7 @@
 package com.ort.num172159_180968.fut5;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,7 +16,10 @@ import com.facebook.share.ShareApi;
 import com.facebook.share.model.ShareLinkContent;
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.async.Call;
+import com.ort.num172159_180968.fut5.controller.api.Fields;
+import com.ort.num172159_180968.fut5.controller.api.FieldsFactory;
 import com.ort.num172159_180968.fut5.controller.api.UserFactory;
+import com.ort.num172159_180968.fut5.model.beans.FieldsResult;
 import com.ort.num172159_180968.fut5.model.beans.UsersWithImagesResult;
 import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 //import com.ort.num172159_180968.fut5.model.persistance.User;
@@ -33,6 +37,7 @@ public class MainMenu extends AppCompatActivity {
     private String last_name;
     private com.facebook.Profile profile;
     private User user;
+    private Fields field;
     private DatabaseHelper db;
 
     SessionManager session;
@@ -87,6 +92,15 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
+        ImageButton btnStatistics = (ImageButton)findViewById(R.id.btnStadistics);
+        btnStatistics.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), Statistics.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+        
         /*if(id_facebook != null){
             share_facebok();
         }*/
@@ -144,7 +158,7 @@ public class MainMenu extends AppCompatActivity {
                 .addPhoto(photo)
                 .build();*/
 
-        ShareApi.share(content,null);
+        ShareApi.share(content, null);
 
     }
 
@@ -155,6 +169,13 @@ public class MainMenu extends AppCompatActivity {
         user = controllerFactory.obtainInstance();
     }
 
+    protected void setUpField() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
+        FieldsFactory controllerFactory = new FieldsFactory(magnetClient);
+        field = controllerFactory.obtainInstance();
+    }
+
     private class AsyncCaller extends AsyncTask<Void, Void, Void>
     {
         @Override
@@ -163,6 +184,7 @@ public class MainMenu extends AppCompatActivity {
             try {
                 db = new DatabaseHelper(getApplicationContext());
                 setUpUser();
+                setUpField();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -185,6 +207,22 @@ public class MainMenu extends AppCompatActivity {
                         db.updateUser(userDb);
                     }
                 }
+
+                Call<List<FieldsResult>> callObjectFields = field.getFields(null);
+                List<FieldsResult> fields = callObjectFields.get();
+                for (FieldsResult f : fields) {
+                    com.ort.num172159_180968.fut5.model.persistance.Field fieldDb = new
+                            com.ort.num172159_180968.fut5.model.persistance.Field(f.getFieldId(), f.getFieldName(), f.getFieldLat(),f.getFieldLon());
+                    if (!db.existsField(f.getFieldId())) {
+                        System.out.println(f.getFieldName());
+                        long field1 = db.createField(fieldDb);
+                        System.out.println(field1);
+                    }else {
+                        System.out.println("field already exists");
+                        db.updateFields(fieldDb);
+                    }
+                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

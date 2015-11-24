@@ -92,6 +92,8 @@ public class SessionManager {
     }
 
     public void logoutUser(){
+
+        LoginManager.getInstance().logOut();
         // Clearing all data from Shared Preferences
         editor.clear();
         editor.commit();
@@ -103,8 +105,6 @@ public class SessionManager {
 
         // Add new Flag to start new Activity
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        LoginManager.getInstance().logOut();
 
         // Staring Login Activity
         _context.startActivity(i);

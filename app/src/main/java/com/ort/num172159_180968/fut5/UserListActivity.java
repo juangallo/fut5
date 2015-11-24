@@ -49,6 +49,25 @@ public class UserListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         users = db.getAllUser();
+
+        if(!local) {
+            int pos = -1;
+            for (int i = 0; i < 6; i++) {
+                System.out.println("Los locales " + playersLocal[i]);
+                int aux = 0;
+                for (User u : users) {
+                    if (playersLocal[i].equals(u.getUsername())) {
+                        pos = aux;
+                    }
+                    aux++;
+                }
+                if (pos != -1) {
+                    users.remove(pos);
+                }
+                pos = 0;
+            }
+        }
+
         try {
             //setUp();
             //callWebServiceGetUsers();

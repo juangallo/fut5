@@ -181,6 +181,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{field_name});
     }
 
+    public boolean existsField(int fieldId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_FIELDS + " WHERE "
+                + KEY_FIELD_ID + " = " + fieldId;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c != null){
+            return c.getCount() > 0;
+        }
+        return false;
+    }
+
     public long createUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
