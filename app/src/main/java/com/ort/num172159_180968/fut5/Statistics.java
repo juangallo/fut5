@@ -87,23 +87,23 @@ public class Statistics extends AppCompatActivity {
 
         mSeriesWin = decoView.addSeries(series3Item);
 
-        addAnimation(decoView, mSeriesLoss, loss, 3000, COLOR_RED);
-        addAnimation(decoView, mSeriesTie, tie, 11000, COLOR_ORANGE);
+        addAnimation(decoView, mSeriesLoss, loss, 0, COLOR_RED);
+        addAnimation(decoView, mSeriesTie, tie, 2000, COLOR_ORANGE);
         decoView.addEvent(new DecoEvent.Builder(loss + tie)
                 .setIndex(mSeriesLoss)
-                .setDelay(11000)
-                .setDuration(5000)
+                .setDelay(2000)
+                .setDuration(2000)
                 .build());
-        addAnimation(decoView, mSeriesWin, win, 19000, COLOR_GREEN);
+        addAnimation(decoView, mSeriesWin, win, 4000, COLOR_GREEN);
         decoView.addEvent(new DecoEvent.Builder(tie + win)
                 .setIndex(mSeriesTie)
-                .setDelay(19000)
-                .setDuration(5000)
+                .setDelay(4000)
+                .setDuration(2000)
                 .build());
         decoView.addEvent(new DecoEvent.Builder(loss + tie + win)
                 .setIndex(mSeriesLoss)
-                .setDelay(19000)
-                .setDuration(5000)
+                .setDelay(4000)
+                .setDuration(2000)
                 .build());
     }
 
