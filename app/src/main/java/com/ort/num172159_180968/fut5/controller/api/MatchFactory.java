@@ -47,37 +47,37 @@ public class MatchFactory extends ControllerFactory<Match> {
 
       //controller schema for controller method addMatch
       JMethod method1 = addMethod("addMatch",
-        "Fut5-war/webservice/addMatch",
-        "POST",
-        AddMatchResult.class,
-        null,
-        Arrays.asList("application/json"),
-        null);
+              "Fut5-war/webservice/addMatch",
+              "POST",
+              AddMatchResult.class,
+              null,
+              Arrays.asList("application/json"),
+              Arrays.asList("application/json"));
       method1.setBaseUrl("http://localhost:8080");
       method1.addParam("username",
-        "QUERY",
-        String.class,
-        null,
-        "",
-        true);
+              "QUERY",
+              String.class,
+              null,
+              "",
+              true);
       method1.addParam("idField",
-        "QUERY",
-        String.class,
-        null,
-        "",
-        true);
+              "QUERY",
+              String.class,
+              null,
+              "",
+              true);
       method1.addParam("date",
-        "QUERY",
-        String.class,
-        null,
-        "",
-        true);
+              "QUERY",
+              String.class,
+              null,
+              "",
+              true);
       method1.addParam("body",
-        "PLAIN",
-        AddMatchRequest.class,
-        null,
-        "",
-        true);
+              "PLAIN",
+              AddMatchRequest.class,
+              null,
+              "",
+              true);
     }
 
   }
