@@ -1,0 +1,26 @@
++Name addMatch
+
++Request
+POST http://localhost:8080/Fut5-war/webservice/addMatch?username=a&idField=40&date=29%2F09%2F2015+18%3A00%3A00
++Headers
++Body
+{
+    "local": [
+        10000,
+        10001,
+        10002,
+        10003,
+        10004
+    ],
+    "visitor": [
+        10005,
+        10006,
+        10007,
+        10008,
+        10009
+    ]
+}
+
++Response
++Body
+

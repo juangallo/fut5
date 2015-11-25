@@ -1,0 +1,26 @@
++Name addMatch
+
++Request
+POST http://localhost:8080/Fut5-war/webservice/addMatch?username=a&idField=40&date=29%2F09%2F2015+18%3A00%3A00
++Headers
++Body
+{
+    "local": [
+        10000,
+        10001,
+        10002,
+        10003,
+        10004
+    ],
+    "visitor": [
+        10005,
+        10006,
+        10007,
+        10008,
+        10009
+    ]
+}
+
++Response
++Body
+{"matchId":53,"teams":[{"userId":10000,"username":"a","password":"a","firstName":"a","lastName":"a","email":"a","userNotifications":[],"needsFieldReload":false,"needsUserReload":false},{"userId":10001,"username":"b","password":"b","firstName":"b","lastName":"b","email":"b","userNotifications":[],"needsFieldReload":false,"needsUserReload":false},{"userId":10002,"username":"c","password":"c","firstName":"c","lastName":"c","email":"c","userNotifications":[],"needsFieldReload":false,"needsUserReload":false},{"userId":10003,"username":"d","password":"d","firstName":"d","lastName":"d","email":"d","userNotifications":[],"needsFieldReload":false,"needsUserReload":false},{"userId":10004,"username":"e","password":"e","firstName":"e","lastName":"e","email":"e","userNotifications":[],"needsFieldReload":false,"needsUserReload":false},{"userId":10005,"username":"f","password":"f","firstName":"f","lastName":"f","email":"f","userNotifications":[],"needsFieldReload":false,"needsUserReload":false},{"userId":10006,"username":"g","password":"g","firstName":"g","lastName":"g","email":"g","userNotifications":[],"needsFieldReload":false,"needsUserReload":false},{"userId":10007,"username":"h","password":"h","firstName":"h","lastName":"h","email":"h","userNotifications":[],"needsFieldReload":false,"needsUserReload":false},{"userId":10008,"username":"i","password":"i","firstName":"i","lastName":"i","email":"i","userNotifications":[],"needsFieldReload":false,"needsUserReload":false},{"userId":10009,"username":"j","password":"j","firstName":"j","lastName":"j","email":"j","userNotifications":[],"needsFieldReload":false,"needsUserReload":false}],"matchDate":"Sep29,20156:00:00PM","matchField":{"fieldId":40,"fieldName":"YatchClub","fieldLat":-34.910851,"fieldLon":-56.131833},"createdByUser":{"userId":10000,"username":"a","password":"a","firstName":"a","lastName":"a","email":"a","userNotifications":[],"needsFieldReload":false,"needsUserReload":false}}
