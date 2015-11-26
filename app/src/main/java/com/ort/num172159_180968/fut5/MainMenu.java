@@ -1,6 +1,11 @@
 package com.ort.num172159_180968.fut5;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -10,10 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.facebook.share.ShareApi;
 import com.facebook.share.model.ShareLinkContent;
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.async.Call;
 import com.ort.num172159_180968.fut5.controller.api.Fields;
@@ -39,7 +49,7 @@ public class MainMenu extends AppCompatActivity {
     private User user;
     private Fields field;
     private DatabaseHelper db;
-
+    private int currentBackgroundColor;
     SessionManager session;
 
     @Override
@@ -48,7 +58,7 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
 
         session = new SessionManager(getApplicationContext());
-
+        currentBackgroundColor = Color.BLACK;
         HashMap<String, String> user = session.getUserDetails();
         String username = user.get(SessionManager.KEY_USERNAME);
 
@@ -129,8 +139,70 @@ public class MainMenu extends AppCompatActivity {
             finish();
             //return true;
         }
+        if (id == R.id.app_color) {
+            final Context context = MainMenu.this;
+
+            ColorPickerDialogBuilder
+                    .with(context)
+                    .setTitle("Choose color")
+                    .initialColor(currentBackgroundColor)
+                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                    .density(12)
+                    .setOnColorSelectedListener(new OnColorSelectedListener() {
+                        @Override
+                        public void onColorSelected(int selectedColor) {
+                            currentBackgroundColor = selectedColor;
+                            //toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
+                        }
+                    })
+                    .setPositiveButton("ok", new ColorPickerClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                            changeBackgroundColor(selectedColor);
+                            if (allColors != null) {
+                                StringBuilder sb = null;
+
+                                for (Integer color : allColors) {
+                                    if (color == null)
+                                        continue;
+                                    if (sb == null)
+                                        sb = new StringBuilder("Color List:");
+                                    sb.append("\r\n#" + Integer.toHexString(color).toUpperCase());
+                                }
+
+                                if (sb != null)
+                                    Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .build()
+                    .show();
+            changeBackgroundColor(currentBackgroundColor);
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @TargetApi(android.os.Build.VERSION_CODES.LOLLIPOP)
+    private void changeBackgroundColor(int selectedColor) {
+        ImageButton button = (ImageButton)findViewById(R.id.btnMaps);
+        button.setColorFilter(selectedColor);
+        button = (ImageButton)findViewById(R.id.btnNew);
+        button.setColorFilter(selectedColor);
+        button = (ImageButton)findViewById(R.id.btnNotification);
+        button.setColorFilter(selectedColor);
+        button = (ImageButton)findViewById(R.id.btnSearch);
+        button.setColorFilter(selectedColor);
+        button = (ImageButton)findViewById(R.id.btnStadistics);
+        button.setColorFilter(selectedColor);
+        button = (ImageButton)findViewById(R.id.btnUser);
+        button.setColorFilter(selectedColor);
+
     }
 
     @Override
