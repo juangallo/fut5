@@ -1,0 +1,10 @@
++Name getNotifications
+
++Request
+GET http://localhost:8080/Fut5-war/webservice/getNotifications?username=juanma
++Headers
++Body
+
++Response
++Body
+[{"notificationId":152,"notificationType":"NEWMATCH","notificationText":"Youhavebeeninvitedbyjuanma,toplayagamein:0Stress","notificationDate":1445890320000},{"notificationId":163,"notificationType":"NEWMATCH","notificationText":"Youhavebeeninvitedbyjuanma,toplayagamein:0Stress","notificationDate":1419624720000},{"notificationId":174,"notificationType":"NEWMATCH","notificationText":"Youhavebeeninvitedbyjuanma,toplayagamein:LaTeclaF5","notificationDate":1448570700000}]

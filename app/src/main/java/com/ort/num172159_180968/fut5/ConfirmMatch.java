@@ -78,7 +78,7 @@ public class ConfirmMatch extends AppCompatActivity {
                 System.out.println("Field Name: " + fieldName);
 
                 int day = date.getDayOfMonth();
-                int month = date.getMonth();
+                int month = date.getMonth()+1;
                 int year = date.getYear();
 
                 int hour = time.getCurrentHour();
