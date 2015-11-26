@@ -3,6 +3,8 @@
   <component name="HistoryComponent">
     <option name="urls">
       <array>
+        <option value="http://localhost:8080/Fut5-war/webservice/addMatch?username=a&amp;idField=40&amp;date=29%2F09%2F2015+18%3A00%3A00" />
+        <option value="http://localhost:8080/Fut5-war/webservice/updateUser?userId=546545&amp;username=juanma&amp;password=juanma&amp;firstName=Juan+Martin&amp;lastName=Gallo&amp;email=juanmartingallo93%40gmail.com" />
         <option value="http://localhost:8080/Fut5-war/webservice/getUserWithImage" />
         <option value="http://192.168.1.105:8080/Fut5-war/webservice/addUserImage?username=juan" />
       </array>

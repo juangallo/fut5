@@ -217,7 +217,7 @@ public class SelectTeamActivity extends AppCompatActivity {
         }
     }
 
-    private void setImageAndText(ImageView image, TextView text, String name, String photo,String username,int code,String[] players){
+    private void setImageAndText(ImageView image, TextView text, String name, String photo, String username, int code, String[] players){
 
         int pos = getPosition(username,players);
         if(pos != 0) {
@@ -227,7 +227,8 @@ public class SelectTeamActivity extends AppCompatActivity {
 
             textChange.setText(text.getText());
             Bitmap b = ((BitmapDrawable)image.getDrawable()).getBitmap();
-            imageChange.setImageBitmap(b);
+            AppHelper helper = new AppHelper(getApplicationContext());
+            imageChange.setImageBitmap(helper.getResizedBitmap(b, 100, 100));
 
         }
 
@@ -249,7 +250,7 @@ public class SelectTeamActivity extends AppCompatActivity {
 
     }
 
-    private int getPosition(String username,String[] players){
+    private int getPosition(String username, String[] players){
         System.out.println("username en el position: " + username);
         for(int i = 0; i < 6; i++)
         {

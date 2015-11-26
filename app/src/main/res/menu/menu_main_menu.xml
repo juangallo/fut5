@@ -8,7 +8,7 @@
 
     <item android:icon="@drawable/com_facebook_profile_picture_blank_portrait"
         android:id="@+id/action_logout"
-        android:title="@string/com_facebook_loginview_log_out_button" />
+        android:title="Logout" />
 
     <item android:id="@+id/app_color" android:title="Choose icons color"/>
 

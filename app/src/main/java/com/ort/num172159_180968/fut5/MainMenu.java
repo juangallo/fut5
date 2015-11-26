@@ -163,7 +163,7 @@ public class MainMenu extends AppCompatActivity {
                             //toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
                         }
                     })
-                    .setPositiveButton("ok", new ColorPickerClickListener() {
+                    .setPositiveButton("Ok", new ColorPickerClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                             changeBackgroundColor(selectedColor);
@@ -183,7 +183,7 @@ public class MainMenu extends AppCompatActivity {
                             }
                         }
                     })
-                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                         }

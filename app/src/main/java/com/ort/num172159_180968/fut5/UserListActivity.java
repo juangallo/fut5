@@ -68,13 +68,6 @@ public class UserListActivity extends AppCompatActivity {
                 pos = 0;
             }
         }
-
-        try {
-            //setUp();
-            //callWebServiceGetUsers();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         populateListView();
         registerClickCallback();
     }

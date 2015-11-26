@@ -43,7 +43,7 @@ import com.ort.num172159_180968.fut5.controller.api.UserExistsFactory;
 import com.ort.num172159_180968.fut5.controller.api.UserFactory;
 import com.ort.num172159_180968.fut5.model.beans.AddUserImageRequest;
 import com.ort.num172159_180968.fut5.model.beans.UserResult;
-import com.squareup.picasso.Picasso;
+//import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;

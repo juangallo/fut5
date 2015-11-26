@@ -36,7 +36,7 @@ dependencies {
     }
     compile 'com.google.android.gms:play-services:8.1.0'
     //compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    //compile 'com.squareup.picasso:picasso:2.5.2'
     //compile 'org.immutables:gson:2.1.0.alpha'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile 'com.android.support:design:23.1.0'

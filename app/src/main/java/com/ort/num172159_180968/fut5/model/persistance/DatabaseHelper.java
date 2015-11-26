@@ -93,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_FIELDS + " WHERE "
                 + KEY_FIELD_ID + " = " + field_id;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -115,7 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_FIELDS + " WHERE "
                 + KEY_FIELD_NAME + " = '" + field_name + "'";
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -135,7 +135,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Field> fields = new ArrayList<Field>();
         String selectQuery = "SELECT  * FROM " + TABLE_FIELDS;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -187,7 +187,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_FIELDS + " WHERE "
                 + KEY_FIELD_ID + " = " + fieldId;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
         if (c != null){
@@ -219,7 +219,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_USERS + " WHERE "
                 + KEY_USER_ID + " = " + user_id;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -243,7 +243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_USERS + " WHERE "
                 + KEY_USERNAME + " = '" + username + "'";
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -267,7 +267,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_USERS + " WHERE "
                 + KEY_USERNAME + " = '" + username + "'";
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
         if (c != null){
@@ -282,7 +282,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_USERS + " WHERE "
                 + KEY_USER_ID + " = " + userId;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
         if (c != null){
@@ -295,7 +295,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<User> users = new ArrayList<User>();
         String selectQuery = "SELECT  * FROM " + TABLE_USERS;
 
-        Log.e(LOG, selectQuery);
+        //Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);

@@ -98,6 +98,8 @@ public class LogIn extends AppCompatActivity {
 
             public void onClick(View v) {
                 if (LogIn()) {
+                    String username = ((EditText)findViewById(R.id.txtUser)).getText().toString();
+                    session.createLoginSession(username,null);
                     Intent intent = new Intent(v.getContext(), MainMenu.class);
                     startActivityForResult(intent, 0);
                     finish();
@@ -117,8 +119,8 @@ public class LogIn extends AppCompatActivity {
         if (!callObject.equals(null)){
             try {
                 String logIn = callObject.get();
+                System.out.println("return: " + logIn);
                 ret = Boolean.parseBoolean(logIn);
-                session.createLoginSession(username,null);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -126,6 +128,7 @@ public class LogIn extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        System.out.println("login: " + ret);
         return ret;
     }
 
