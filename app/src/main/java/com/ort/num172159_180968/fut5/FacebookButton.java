@@ -321,6 +321,13 @@ public class FacebookButton extends Fragment {
 
                 //fin
 
+                /*ProfilePictureView faceBookProfilePictureView = new ProfilePictureView(getContext());
+                faceBookProfilePictureView.setProfileId(profile.getId());
+                Thread.sleep(1000);
+                ImageView profileImageView = ((ImageView)faceBookProfilePictureView.getChildAt(0));
+                Bitmap bitmap  = ((BitmapDrawable)profileImageView.getDrawable()).getBitmap();
+                System.out.println("bitmaptoString: " + BitMapToString(bitmap));*/
+
                 UserResult user = callObjectResult.get();
                 Toast toast = Toast.makeText(getContext(), "User: " + user.getUsername() + " added correctly.", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER,0,0);
@@ -363,6 +370,17 @@ public class FacebookButton extends Fragment {
             e.printStackTrace();
         }
         return baos.toByteArray();
+    }
+    public String BitMapToString(Bitmap bitmap){
+        if(bitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] b = baos.toByteArray();
+            String temp = Base64.encodeToString(b, Base64.DEFAULT);
+            return temp;
+        }else{
+            return "";
+        }
     }
 
 }

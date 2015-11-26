@@ -36,13 +36,14 @@ public class UserListActivity extends AppCompatActivity {
 
     private String[] playersLocal;
     private Boolean local;
+    private AppHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new DatabaseHelper(getApplicationContext());
         setContentView(R.layout.activity_user_list);
-
+        helper = new AppHelper(getApplicationContext());
         playersLocal = getIntent().getStringArrayExtra("playersLocal");
         local = getIntent().getBooleanExtra("local",true);
 
@@ -161,7 +162,7 @@ public class UserListActivity extends AppCompatActivity {
                 User clickedUser = users.get(position);
                 //Toast.makeText(UserListActivity.this, clickedUser.getUsername(), Toast.LENGTH_LONG).show();
                 Intent intent = getIntent();
-                intent.putExtra("username",clickedUser.getUsername());
+                intent.putExtra("username", clickedUser.getUsername());
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -210,7 +211,8 @@ public class UserListActivity extends AppCompatActivity {
             }*/
             String imageString = userRes.getPhoto();
             byte[] decodedString = Base64.decode(imageString, Base64.DEFAULT);
-            image = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+            image = helper.decodeSampledBitmapFromByte(decodedString, 80, 80);
 
             ImageView userImageView = (ImageView) itemView.findViewById(R.id.item_icon);
             if (image != null) {

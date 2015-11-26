@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
@@ -17,6 +18,7 @@ import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -87,6 +89,13 @@ public class Profile extends AppCompatActivity {
         mProfilePicture = (ProfilePictureView) findViewById(R.id.profilePicturePerfil);
         mProfilePicture.setProfileId(id_facebook);
 
+        Button btnTest = (Button)findViewById(R.id.button);
+        btnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                test();
+            }
+        });
         if(id_facebook != null){
             btnSave.setVisibility(View.INVISIBLE);
             btnCamera.setVisibility(View.INVISIBLE);
@@ -137,6 +146,13 @@ public class Profile extends AppCompatActivity {
                 saveUser();
             }
         });
+    }
+
+    private void test() {
+        AppHelper helper = new AppHelper(getApplicationContext());
+        ImageView profileImageView = ((ImageView)mProfilePicture.getChildAt(0));
+        Bitmap bitmap  = ((BitmapDrawable)profileImageView.getDrawable()).getBitmap();
+        System.out.println("bitmaptoString: " + helper.BitMapToString(bitmap));
     }
 
     private void saveUser() {
@@ -214,20 +230,16 @@ public class Profile extends AppCompatActivity {
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo"))
-                {
+                if (options[item].equals("Take Photo")) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                     startActivityForResult(intent, 1);
-                }
-                else if (options[item].equals("Choose from Gallery"))
-                {
-                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                } else if (options[item].equals("Choose from Gallery")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, 2);
 
-                }
-                else if (options[item].equals("Cancel")) {
+                } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
             }
@@ -260,7 +272,7 @@ public class Profile extends AppCompatActivity {
 
                     Bitmap adjustedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                     image = adjustedBitmap;
-                    viewImage.setImageBitmap(adjustedBitmap);
+                    //viewImage.setImageBitmap(adjustedBitmap);
 
                     String path = android.os.Environment
                             .getExternalStorageDirectory()
@@ -298,9 +310,11 @@ public class Profile extends AppCompatActivity {
                 Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
                 //Log.w("path of image from gallery......******************.........", picturePath + "");
                 image = thumbnail;
-                viewImage.setImageBitmap(thumbnail);
+                //viewImage.setImageBitmap(thumbnail);
 
             }
+            AppHelper helper = new AppHelper(getApplicationContext());
+            viewImage.setImageBitmap(helper.getResizedBitmap(image, 250, 250));
         }
         mProfilePicture.setVisibility(View.INVISIBLE);
 
@@ -344,7 +358,6 @@ public class Profile extends AppCompatActivity {
         super.onDestroy();
         db.closeDB();
     }
-
 
 }
 
