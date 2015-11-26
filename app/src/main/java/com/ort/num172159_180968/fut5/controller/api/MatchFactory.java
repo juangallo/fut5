@@ -53,7 +53,7 @@ public class MatchFactory extends ControllerFactory<Match> {
               null,
               Arrays.asList("application/json"),
               Arrays.asList("application/json"));
-      method1.setBaseUrl("http://localhost:8080");
+      method1.setBaseUrl("http://" + Value.ip + ":8080");
       method1.addParam("username",
               "QUERY",
               String.class,

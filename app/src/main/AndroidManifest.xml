@@ -93,6 +93,14 @@
             android:name=".Statistics"
             android:label="@string/title_activity_statistics" >
         </activity>
+        <activity
+            android:name=".ViewMatches"
+            android:label="@string/title_activity_view_matches" >
+        </activity>
+        <activity
+            android:name=".TabMatches"
+            android:label="@string/title_activity_tab_matches" >
+        </activity>
     </application>
 
 </manifest>

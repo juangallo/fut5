@@ -100,6 +100,14 @@ public class MainMenu extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
         });
+
+        ImageButton btnViewMatches = (ImageButton) findViewById(R.id.btnSearch);
+        btnViewMatches.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(v.getContext(), ViewMatches.class);
+                startActivityForResult(intent,0);
+            }
+        });
         
         /*if(id_facebook != null){
             share_facebok();
