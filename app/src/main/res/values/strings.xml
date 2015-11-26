@@ -15,4 +15,6 @@
     <string name="title_activity_user_list">UserListActivity</string>
     <string name="title_activity_confirm_match">ConfirmMatch</string>
     <string name="title_activity_statistics">Statistics</string>
+    <string name="title_activity_view_matches">ViewMatches</string>
+    <string name="title_activity_tab_matches">TabMatches</string>
 </resources>

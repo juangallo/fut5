@@ -13,13 +13,20 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
-import com.ort.num172159_180968.fut5.controller.api.Fields;
+import com.magnet.android.mms.MagnetMobileClient;
+import com.magnet.android.mms.async.Call;
+import com.ort.num172159_180968.fut5.controller.api.Match;
+import com.ort.num172159_180968.fut5.controller.api.MatchFactory;
+import com.ort.num172159_180968.fut5.controller.api.User;
+import com.ort.num172159_180968.fut5.model.beans.AddMatchRequest;
+import com.ort.num172159_180968.fut5.model.beans.AddMatchResult;
 import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 import com.ort.num172159_180968.fut5.model.persistance.Field;
-import com.ort.num172159_180968.fut5.model.persistance.User;
+
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class ConfirmMatch extends AppCompatActivity {
@@ -35,10 +42,15 @@ public class ConfirmMatch extends AppCompatActivity {
     private String[] playersLocal;
     private String[] playersVisitor;
 
+    private Match addMatch;
+    SessionManager session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_match);
+
+        session = new SessionManager(getApplicationContext());
 
         db = new DatabaseHelper(getApplicationContext());
         fields = db.getAllFields();
@@ -50,6 +62,12 @@ public class ConfirmMatch extends AppCompatActivity {
         time = (TimePicker) findViewById(R.id.timePicker);
         comboBox = (Spinner) findViewById(R.id.spinner);
         loadFields();
+
+        try {
+            setUpAddMatch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         btnSave = (Button) findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -69,9 +87,34 @@ public class ConfirmMatch extends AppCompatActivity {
                 String dateMatch = "" + year + "/" + month + "/" + day + " " + hour + ":" + minutes + ":00";
                 System.out.println("date: " + dateMatch);
 
+                HashMap<String, String> user = session.getUserDetails();
+                String username = user.get(SessionManager.KEY_USERNAME);
 
 
-                //addMatch();
+                AddMatchRequest body;
+                List<Integer> local = new ArrayList<Integer>();
+                List<Integer> visitor = new ArrayList<Integer>();
+
+                for(int i = 1; i < 6; i++)
+                {
+                    com.ort.num172159_180968.fut5.model.persistance.User uLocal = db.getUser(playersLocal[i]);
+                    local.add(uLocal.getUserId());
+                    com.ort.num172159_180968.fut5.model.persistance.User uVisitor = db.getUser(playersVisitor[i]);
+                    visitor.add(uVisitor.getUserId());
+                }
+                AddMatchRequest.AddMatchRequestBuilder builder = new AddMatchRequest.AddMatchRequestBuilder();
+                builder.local(local);
+                builder.visitor(visitor);
+
+                body = builder.build();
+
+                Call<AddMatchResult> callObjectResult = addMatch.addMatch(username, field.getFieldId() + "", dateMatch, body, null);
+
+                //ver resultado del call object
+
+
+
+
             }
         });
 
@@ -117,5 +160,12 @@ public class ConfirmMatch extends AppCompatActivity {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         comboBox.setAdapter(dataAdapter);
 
+    }
+
+    protected void setUpAddMatch() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
+        MatchFactory controllerFactory = new MatchFactory(magnetClient);
+        addMatch = controllerFactory.obtainInstance();
     }
 }
