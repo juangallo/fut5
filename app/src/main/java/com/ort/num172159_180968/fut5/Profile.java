@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -73,7 +74,7 @@ public class Profile extends AppCompatActivity {
             e.printStackTrace();
         }
         session = new SessionManager(getApplicationContext());
-
+        changeBackgroundColor();
         HashMap<String, String> user = session.getUserDetails();
         user_name = user.get(SessionManager.KEY_USERNAME);
 
@@ -87,18 +88,11 @@ public class Profile extends AppCompatActivity {
         txtLastName = (EditText) findViewById(R.id.txtLastName);
 
         mProfilePicture = (ProfilePictureView) findViewById(R.id.profilePicturePerfil);
+        mProfilePicture.setVisibility(View.INVISIBLE);
         mProfilePicture.setProfileId(id_facebook);
 
-        Button btnTest = (Button)findViewById(R.id.button);
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                test();
-            }
-        });
         if(id_facebook != null){
             btnSave.setVisibility(View.INVISIBLE);
-            btnCamera.setVisibility(View.INVISIBLE);
             txtName.setEnabled(false);
             txtName.setText(user_name);
             txtLastName.setEnabled(false);
@@ -146,13 +140,6 @@ public class Profile extends AppCompatActivity {
                 saveUser();
             }
         });
-    }
-
-    private void test() {
-        AppHelper helper = new AppHelper(getApplicationContext());
-        ImageView profileImageView = ((ImageView)mProfilePicture.getChildAt(0));
-        Bitmap bitmap  = ((BitmapDrawable)profileImageView.getDrawable()).getBitmap();
-        System.out.println("bitmaptoString: " + helper.BitMapToString(bitmap));
     }
 
     private void saveUser() {
@@ -222,29 +209,35 @@ public class Profile extends AppCompatActivity {
     }
 
     private void selectImage() {
+        if(id_facebook == null) {
+            final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
 
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+            AlertDialog.Builder builder = new AlertDialog.Builder(Profile.this);
+            builder.setTitle("Add Photo!");
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+                    if (options[item].equals("Take Photo")) {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                        startActivityForResult(intent, 1);
+                    } else if (options[item].equals("Choose from Gallery")) {
+                        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, 2);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(Profile.this);
-        builder.setTitle("Add Photo!");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo")) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                    startActivityForResult(intent, 1);
-                } else if (options[item].equals("Choose from Gallery")) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, 2);
-
-                } else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
+                    } else if (options[item].equals("Cancel")) {
+                        dialog.dismiss();
+                    }
                 }
-            }
-        });
-        builder.show();
+            });
+            builder.show();
+        } else {
+            ImageView profileImageView = ((ImageView)mProfilePicture.getChildAt(0));
+            Bitmap bitmap  = ((BitmapDrawable)profileImageView.getDrawable()).getBitmap();
+            ImageView userPhoto = (ImageView)findViewById(R.id.viewImage);
+            userPhoto.setImageBitmap(bitmap);
+        }
     }
 
     @Override
@@ -357,6 +350,16 @@ public class Profile extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         db.closeDB();
+    }
+
+    private void changeBackgroundColor() {
+        HashMap<String, Integer> color = session.getColorDetail();
+        int colorId = color.get(SessionManager.KEY_COLOR);
+
+        ImageButton button = (ImageButton) findViewById(R.id.btnSave);
+        button.setColorFilter(colorId);
+        button = (ImageButton) findViewById(R.id.btnSelectPhoto);
+        button.setColorFilter(colorId);
     }
 
 }
