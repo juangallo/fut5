@@ -58,10 +58,10 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
 
         session = new SessionManager(getApplicationContext());
-        currentBackgroundColor = Color.BLACK;
         HashMap<String, String> user = session.getUserDetails();
         String username = user.get(SessionManager.KEY_USERNAME);
 
+        changeBackgroundColor();
         System.out.println("username en el shared preferences menu: " + username);
 
 
@@ -118,7 +118,14 @@ public class MainMenu extends AppCompatActivity {
                 startActivityForResult(intent,0);
             }
         });
-        
+
+        ImageButton btnNotifications = (ImageButton) findViewById(R.id.btnNotification);
+        btnNotifications.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(v.getContext(), Notification.class);
+                startActivityForResult(intent,0);
+            }
+        });
         /*if(id_facebook != null){
             share_facebok();
         }*/
@@ -153,12 +160,14 @@ public class MainMenu extends AppCompatActivity {
             ColorPickerDialogBuilder
                     .with(context)
                     .setTitle("Choose color")
-                    .initialColor(currentBackgroundColor)
+                    .initialColor(Color.WHITE)
                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                     .density(12)
                     .setOnColorSelectedListener(new OnColorSelectedListener() {
                         @Override
                         public void onColorSelected(int selectedColor) {
+                            System.out.println(selectedColor);
+                            session.createColor(selectedColor);
                             currentBackgroundColor = selectedColor;
                             //toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
                         }
@@ -166,7 +175,7 @@ public class MainMenu extends AppCompatActivity {
                     .setPositiveButton("Ok", new ColorPickerClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                            changeBackgroundColor(selectedColor);
+                            changeBackgroundColor();
                             if (allColors != null) {
                                 StringBuilder sb = null;
 
@@ -178,8 +187,8 @@ public class MainMenu extends AppCompatActivity {
                                     sb.append("\r\n#" + Integer.toHexString(color).toUpperCase());
                                 }
 
-                                if (sb != null)
-                                    Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_SHORT).show();
+                                //if (sb != null)
+                                    //Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     })
@@ -190,26 +199,29 @@ public class MainMenu extends AppCompatActivity {
                     })
                     .build()
                     .show();
-            changeBackgroundColor(currentBackgroundColor);
+            changeBackgroundColor();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @TargetApi(android.os.Build.VERSION_CODES.LOLLIPOP)
-    private void changeBackgroundColor(int selectedColor) {
+
+    private void changeBackgroundColor() {
+        HashMap<String, Integer> color = session.getColorDetail();
+        int colorId = color.get(SessionManager.KEY_COLOR);
+        System.out.println("colorId: " + colorId);
         ImageButton button = (ImageButton)findViewById(R.id.btnMaps);
-        button.setColorFilter(selectedColor);
+        button.setColorFilter(colorId);
         button = (ImageButton)findViewById(R.id.btnNew);
-        button.setColorFilter(selectedColor);
+        button.setColorFilter(colorId);
         button = (ImageButton)findViewById(R.id.btnNotification);
-        button.setColorFilter(selectedColor);
+        button.setColorFilter(colorId);
         button = (ImageButton)findViewById(R.id.btnSearch);
-        button.setColorFilter(selectedColor);
+        button.setColorFilter(colorId);
         button = (ImageButton)findViewById(R.id.btnStadistics);
-        button.setColorFilter(selectedColor);
+        button.setColorFilter(colorId);
         button = (ImageButton)findViewById(R.id.btnUser);
-        button.setColorFilter(selectedColor);
+        button.setColorFilter(colorId);
 
     }
 

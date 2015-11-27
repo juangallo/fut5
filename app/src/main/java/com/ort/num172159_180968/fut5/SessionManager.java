@@ -3,6 +3,7 @@ package com.ort.num172159_180968.fut5;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 
 import com.facebook.login.LoginManager;
 
@@ -32,6 +33,8 @@ public class SessionManager {
 
     // User name (make variable public to access from outside)
     public static final String KEY_USERNAME = "username";
+
+    public static final String KEY_COLOR = "color";
 
     // Email address (make variable public to access from outside)
     //public static final String KEY_EMAIL = "email";
@@ -68,6 +71,22 @@ public class SessionManager {
 
         // return user
         return user;
+    }
+
+    public void createColor(int color) {
+        // Storing name in pref
+        System.out.println("session: " + color);
+        editor.putInt(KEY_COLOR, color);
+
+        editor.commit();
+    }
+
+    public HashMap<String, Integer> getColorDetail(){
+        HashMap<String, Integer> color = new HashMap<>();
+
+        color.put(KEY_COLOR, pref.getInt(KEY_COLOR, Color.BLACK));
+        System.out.println("sessionColor: " + color);
+        return color;
     }
 
     public void checkLogin(){

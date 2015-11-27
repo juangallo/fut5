@@ -35,11 +35,9 @@ dependencies {
         transitive = true
     }
     compile 'com.google.android.gms:play-services:8.1.0'
-    //compile 'com.loopj.android:android-async-http:1.4.9'
-    //compile 'com.squareup.picasso:picasso:2.5.2'
-    //compile 'org.immutables:gson:2.1.0.alpha'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile 'com.android.support:design:23.1.0'
     compile 'com.github.bmarrdev:android-DecoView-charting:v0.9.4'
     compile 'com.github.QuadFlask:colorpicker:0.0.9'
+    compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
 }
