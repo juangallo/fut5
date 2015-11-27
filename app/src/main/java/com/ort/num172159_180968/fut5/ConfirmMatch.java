@@ -3,6 +3,7 @@ package com.ort.num172159_180968.fut5;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.async.Call;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ConfirmMatch extends AppCompatActivity {
 
@@ -109,6 +112,20 @@ public class ConfirmMatch extends AppCompatActivity {
                 body = builder.build();
 
                 Call<AddMatchResult> callObjectResult = addMatch.addMatch(username, field.getFieldId() + "", dateMatch, body, null);
+                try {
+                    AddMatchResult match = callObjectResult.get();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Match created. Field " + field.getFieldName() + " Date " + dateMatch, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    finish();
+                    Intent intent = new Intent(getApplicationContext(),MainMenu.class);
+                    startActivity(intent);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
 
                 //ver resultado del call object
 
