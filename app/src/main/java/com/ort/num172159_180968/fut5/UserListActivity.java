@@ -32,7 +32,7 @@ public class UserListActivity extends AppCompatActivity {
     //private User user;
     DatabaseHelper db;
     private List<User> users = new ArrayList<>();
-    //private List<UsernameImage> images = new ArrayList<>();
+    //private ListWeather<UsernameImage> images = new ArrayList<>();
 
     private String[] playersLocal;
     private Boolean local;
@@ -87,7 +87,7 @@ public class UserListActivity extends AppCompatActivity {
     }*/
 
     /*private void callWebServiceGetUsers(){
-        Call<List<UserResult>> callObject = user.getUsers("", null);
+        Call<ListWeather<UserResult>> callObject = user.getUsers("", null);
         if (!callObject.equals(null)) {
             try {
 

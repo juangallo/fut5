@@ -3,6 +3,7 @@
   <component name="HistoryComponent">
     <option name="urls">
       <array>
+        <option value="http://api.openweathermap.org/data/2.5/forecast?id=3441575&amp;APPID=31395b2bf7f4b409f44676dd0ba53c5b&amp;units=metric" />
         <option value="http://localhost:8080/Fut5-war/webservice/getNotifications?username=juanma" />
         <option value="http://localhost:8080/Fut5-war/webservice/addMatch?username=a&amp;idField=40&amp;date=29%2F09%2F2015+18%3A00%3A00" />
         <option value="http://localhost:8080/Fut5-war/webservice/updateUser?userId=546545&amp;username=juanma&amp;password=juanma&amp;firstName=Juan+Martin&amp;lastName=Gallo&amp;email=juanmartingallo93%40gmail.com" />

@@ -257,13 +257,13 @@ public class Profile extends AppCompatActivity {
                     Bitmap bitmap;
                     BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
                     //bitmapOptions
-
+                    AppHelper helper = new AppHelper(getApplicationContext());
                     bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
                             bitmapOptions);
 
                     Matrix matrix = check_orientation(f.getAbsolutePath());
 
-                    Bitmap adjustedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    Bitmap adjustedBitmap = helper.getResizedBitmap(bitmap, 512, 512);//Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                     image = adjustedBitmap;
                     //viewImage.setImageBitmap(adjustedBitmap);
 

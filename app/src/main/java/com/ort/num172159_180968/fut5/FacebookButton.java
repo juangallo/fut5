@@ -234,7 +234,7 @@ public class FacebookButton extends Fragment {
 
         mButtonLogin.setReadPermissions(permissions);
 
-        /*List<String> permissions_publish = new ArrayList<>();
+        /*ListWeather<String> permissions_publish = new ArrayList<>();
         permissions_publish.add("publish_actions");
         mButtonLogin.setPublishPermissions(permissions_publish);*/
 

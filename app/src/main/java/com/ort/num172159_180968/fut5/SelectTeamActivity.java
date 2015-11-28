@@ -28,6 +28,7 @@ import org.w3c.dom.Text;
 
 import java.sql.Array;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class SelectTeamActivity extends AppCompatActivity {
 
@@ -50,14 +51,20 @@ public class SelectTeamActivity extends AppCompatActivity {
 
     private String[] playersLocal;
     private String[] playersVisitor;
+    private SessionManager session;
+    private int color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_team);
         db = new DatabaseHelper(getApplicationContext());
+        session = new SessionManager(getApplicationContext());
+        HashMap<String, Integer> colorSession = session.getColorDetail();
+        color = colorSession.get(SessionManager.KEY_COLOR);
         listenerPlayers();
-
+        ((ImageButton)findViewById(R.id.imgbtnNext)).setColorFilter(color);
+        ((TextView)findViewById(R.id.lblLocalTeam)).setTextColor(color);
         local = true;
         btnNext = (ImageButton)findViewById(R.id.imgbtnNext);
         btnNext.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +251,7 @@ public class SelectTeamActivity extends AppCompatActivity {
                 image.setImageBitmap(userImage);
         }
         text.setText(name);
-        text.setTextColor(Color.BLACK);
+        text.setTextColor(color);
 
         players[code] = username;
 

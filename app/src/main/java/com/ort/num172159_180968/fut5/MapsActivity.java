@@ -3,8 +3,11 @@ package com.ort.num172159_180968.fut5;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -24,8 +27,10 @@ import com.ort.num172159_180968.fut5.model.beans.FieldsResult;
 import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 import com.ort.num172159_180968.fut5.model.persistance.Field;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class MapsActivity extends FragmentActivity {
@@ -41,11 +46,10 @@ public class MapsActivity extends FragmentActivity {
         db = new DatabaseHelper(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        fieldList = db.getAllFields();
         setUpMapIfNeeded();
         mMap.setMyLocationEnabled(true);
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-34.8076549, -56.1802311), 11));
         markers = new ArrayList<>();
-        fieldList = db.getAllFields();
     }
 
     @Override
@@ -53,7 +57,7 @@ public class MapsActivity extends FragmentActivity {
         super.onStart();
         try {
             System.out.println(fieldList.size());
-            if (fieldList.size() == 0) {
+            if (fieldList.isEmpty()) {
                 setUp();
                 callWebService();
             }
@@ -67,10 +71,34 @@ public class MapsActivity extends FragmentActivity {
         fieldList = db.getAllFields();
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.soccerfieldmarker);
         Bitmap newBitmap = Bitmap.createScaledBitmap(bm, 40, 40, true);
+        Boolean getAddress = true;
+        String addressString = "";
         for (Field f: fieldList) {
-            Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(f.getFieldLat(), f.getFieldLon())).title(f.getFieldName()).icon(BitmapDescriptorFactory.fromBitmap(newBitmap)));
+            if (getAddress)
+                try {
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                    List<Address> addresses = geocoder.getFromLocation(f.getFieldLat(), f.getFieldLon(), 1);
+                    StringBuilder sb = new StringBuilder();
+                    if (addresses.size() > 0) {
+                        Address address = addresses.get(0);
+                        if (address.getThoroughfare() != null) {
+                            sb.append(address.getThoroughfare());
+                            if (address.getSubThoroughfare() != null) {
+                                sb.append(" " + address.getSubThoroughfare());
+                            }
+                        }
+                    }
+                    addressString = sb.toString();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    getAddress = false;
+                }
+            Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(f.getFieldLat(), f.getFieldLon())).title(f.getFieldName()).snippet(addressString).icon(BitmapDescriptorFactory.fromBitmap(newBitmap)));
             markers.add(marker);
+
         }
+
         centerMap();
     }
 

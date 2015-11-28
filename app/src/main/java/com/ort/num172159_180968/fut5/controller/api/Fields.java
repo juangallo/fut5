@@ -17,7 +17,7 @@ public interface Fields {
    * Generated from URL GET http://192.168.1.106:8080/Fut5-war/webservice/getFields
    * GET Fut5-war/webservice/getFields
    * @param listener
-   * @return List<FieldsResult>
+   * @return ListWeather<FieldsResult>
    */
   Call<List<FieldsResult>> getFields(StateChangedListener listener);
 }
