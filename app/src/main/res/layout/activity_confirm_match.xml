@@ -20,9 +20,9 @@
         android:layout_height="wrap_content"
         android:text="SAVE"
         android:id="@+id/btnSave"
-        android:layout_below="@+id/imgCalendarDay"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="121dp" />
+        android:layout_marginBottom="91dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -84,5 +84,34 @@
         android:src="@drawable/clock"
         android:scaleType="fitXY"
         android:background="@android:color/transparent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Weather"
+        android:id="@+id/textView10"
+        android:layout_below="@+id/imgCalendarDay"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="28dp" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/imgWeather"
+        android:layout_alignTop="@+id/textView10"
+        android:layout_toEndOf="@+id/textView10"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="-15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Rain: 20 C"
+        android:id="@+id/txtWeather"
+        android:layout_alignBottom="@+id/textView10"
+        android:layout_toEndOf="@+id/textView10"
+        android:layout_marginLeft="125dp" />
 
 </RelativeLayout>

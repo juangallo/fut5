@@ -18,7 +18,7 @@ public interface UserNotification {
    * GET Fut5-war/webservice/getNotifications
    * @param username  style:QUERY
    * @param listener
-   * @return List<NotificationsResult>
+   * @return ListWeather<NotificationsResult>
    */
   Call<List<NotificationsResult>> getNotifications(
      String username,
