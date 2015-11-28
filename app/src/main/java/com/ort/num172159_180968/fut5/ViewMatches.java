@@ -1,10 +1,13 @@
 package com.ort.num172159_180968.fut5;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
@@ -16,7 +19,6 @@ public class ViewMatches extends AppCompatActivity {
     private TabHost.TabSpec tab1;
     private TabHost.TabSpec tab2;
     private TabHost.TabSpec tab3;
-
 
 
     @Override
@@ -35,18 +37,18 @@ public class ViewMatches extends AppCompatActivity {
         TabHost.TabSpec tab3 = tabHost.newTabSpec("Others");
 
         tab1.setIndicator("Finished");
-        Intent intent = new Intent(this,TabMatches.class);
-        intent.putExtra("type","finished");
-        tab1.setContent(intent);
+        Intent intent1 = new Intent(this, TabMatches.class);
+        intent1.putExtra("type", "finished");
+        tab1.setContent(intent1);
 
         tab2.setIndicator("Next");
-        Intent intent2 = new Intent(this,TabMatches.class);
-        intent.putExtra("type", "next");
+        Intent intent2 = new Intent(this, TabMatches.class);
+        intent2.putExtra("type", "next");
         tab2.setContent(intent2);
 
         tab3.setIndicator("Others");
-        Intent intent3 = new Intent(this,TabMatches.class);
-        intent.putExtra("type", "ohers");
+        Intent intent3 = new Intent(this, TabMatches.class);
+        intent3.putExtra("type", "others");
         tab3.setContent(intent3);
 
         /** Add the tabs  to the TabHost to display. */
@@ -78,4 +80,6 @@ public class ViewMatches extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

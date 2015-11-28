@@ -16,28 +16,61 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.magnet.android.mms.MagnetMobileClient;
+import com.magnet.android.mms.async.Call;
 import com.ort.num172159_180968.fut5.controller.api.Match;
+import com.ort.num172159_180968.fut5.controller.api.MatchFactory;
+import com.ort.num172159_180968.fut5.model.beans.MatchesResult;
+import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 import com.ort.num172159_180968.fut5.model.persistance.User;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class TabMatches extends AppCompatActivity {
 
-    private List<Match> matches = new ArrayList<>();
+    private List<MatchesResult> matches = new ArrayList<>();
     String type;
+
+    private Match getMatch;
+
+    private SessionManager session;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_matches);
 
+        db = new DatabaseHelper(getApplicationContext());
         type = getIntent().getStringExtra("type");
+        System.out.println("type: " + type);
 
-        //dependiendo el tipo es que lista de partidos cargo
+        session = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = session.getUserDetails();
+        String username = user.get(SessionManager.KEY_USERNAME);
 
-        //obtener partidos
+        try {
+            setUpGetMatch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        if(type.equals("finished")){
+            getMatches(username,"true","false");
+        }
+        if(type.equals("next")){
+            getMatches(username,"true","true");
+        }
+        if(type.equals("others")){
+            getMatches(username,"false","false");
+        }
 
         populateListView();
         registerClickCallback();
@@ -45,10 +78,35 @@ public class TabMatches extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        this.getParent().onBackPressed();
+    }
+
+
+
+
+    private void getMatches(String username, String mine, String next){
+        Call<List<MatchesResult>> callObject = getMatch.getMatches(username,mine,next,null);
+        try {
+            matches = callObject.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_tab_matches, menu);
         return true;
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        db.closeDB();
     }
 
     @Override
@@ -67,29 +125,36 @@ public class TabMatches extends AppCompatActivity {
     }
 
     private void registerClickCallback() {
-        ListView list = (ListView)findViewById(R.id.lstMatches);
+        ListView list = (ListView) findViewById(R.id.lstMatches);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
                 //ir al detalle del partido
 
-                //User clickedUser = users.get(position);
-                //Toast.makeText(UserListActivity.this, clickedUser.getUsername(), Toast.LENGTH_LONG).show();
-                //Intent intent = getIntent();
-                //intent.putExtra("username", clickedUser.getUsername());
-                //setResult(RESULT_OK, intent);
+                MatchesResult clickedMatch = matches.get(position);
+                //Toast.makeText(TabMatches.this, clickedMatch.getMatchId(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(),EditMatch.class);
+                intent.putExtra("username", clickedMatch.getCreatedByUser().getUsername());
+                setResult(RESULT_OK, intent);
                 //finish();
             }
         });
     }
 
     private void populateListView() {
-        ArrayAdapter<Match> adapter = new MyListAdapter();
+        ArrayAdapter<MatchesResult> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.lstMatches);
         list.setAdapter(adapter);
     }
 
-    private class MyListAdapter extends ArrayAdapter<Match> {
+    protected void setUpGetMatch() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
+        MatchFactory controllerFactory = new MatchFactory(magnetClient);
+        getMatch = controllerFactory.obtainInstance();
+    }
+
+    private class MyListAdapter extends ArrayAdapter<MatchesResult> {
         public MyListAdapter(){
             super(TabMatches.this, R.layout.match_view, matches);
         }
@@ -103,37 +168,27 @@ public class TabMatches extends AppCompatActivity {
             }
 
             //Find the car to work with
-            Match matchRes = matches.get(position);
-
-            // /Fill the view
-            //missing the image view
+            MatchesResult matchRes = matches.get(position);
 
             TextView matchField = (TextView)itemView.findViewById(R.id.item_txtField);
-            matchField.setText("Cancha 1");
+            matchField.setText(db.getField(matchRes.getMatchField().getFieldId()).getFieldName());
+
+            Date date = new Date();
+            date.setTime(matchRes.getMatchDate());
 
             TextView matchDate = (TextView)itemView.findViewById(R.id.item_txtDate);
-            matchDate.setText("2015-12-12");
+            matchDate.setText("Date: " + date);
 
 
+            TextView matchCreator = (TextView)itemView.findViewById(R.id.item_txtCreator);
+            matchCreator.setText(matchRes.getCreatedByUser().getFirstName());
 
-           /* Bitmap image = null;
+            ImageView matchView = (ImageView) itemView.findViewById(R.id.item_icon);
+            matchView.setImageResource(R.drawable.maracanaa);
 
-            String imageString = userRes.getPhoto();
-            byte[] decodedString = Base64.decode(imageString, Base64.DEFAULT);
-
-            image = helper.decodeSampledBitmapFromByte(decodedString, 80, 80);
-
-            ImageView userImageView = (ImageView) itemView.findViewById(R.id.item_icon);
-            if (image != null) {
-                userImageView.setImageBitmap(image);
-            } else {
-                if(local) {
-                    userImageView.setImageResource(R.drawable.soccerplayer);
-                }else {
-                    userImageView.setImageResource(R.drawable.soccervisit);
-                }
-            }*/
             return itemView;
         }
     }
+
+
 }

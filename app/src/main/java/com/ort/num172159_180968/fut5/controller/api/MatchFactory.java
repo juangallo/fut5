@@ -15,6 +15,7 @@ import com.magnet.android.mms.controller.RequestSchema.JParam;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import com.ort.num172159_180968.fut5.model.beans.*;
 
@@ -78,6 +79,33 @@ public class MatchFactory extends ControllerFactory<Match> {
               null,
               "",
               true);
+
+        JMethod method2 = addMethod("getMatches",
+                "Fut5-war/webservice/getMatches",
+                "GET",
+                List.class,
+                MatchesResult.class,
+                null,
+                Arrays.asList("application/json"));
+        method2.setBaseUrl("http://" + Value.ip + ":8080");
+        method2.addParam("username",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
+        method2.addParam("mine",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
+        method2.addParam("next",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
     }
 
   }

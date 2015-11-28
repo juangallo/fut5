@@ -22,10 +22,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Date"
+        android:text=""
         android:id="@+id/item_txtDate"
         android:layout_alignBottom="@+id/item_icon"
-        android:layout_toEndOf="@+id/item_icon" />
+        android:layout_toEndOf="@+id/item_icon"
+        android:layout_marginStart="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=""
+        android:id="@+id/item_txtCreator"
+        android:layout_marginEnd="88dp"
+        android:layout_alignTop="@+id/item_txtDate"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>
