@@ -17,4 +17,7 @@
     <string name="title_activity_view_matches">ViewMatches</string>
     <string name="title_activity_tab_matches">TabMatches</string>
     <string name="title_activity_notification">Notification</string>
+    <string name="title_activity_edit_match">EditMatch</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

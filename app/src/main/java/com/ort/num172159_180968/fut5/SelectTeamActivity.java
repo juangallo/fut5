@@ -207,19 +207,19 @@ public class SelectTeamActivity extends AppCompatActivity {
                 players = playersVisitor;
             }
             if (requestCode == 1) {
-                setImageAndText(player1, txtPlayer1, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername, 1, players);
+                setImageAndText(player1,txtPlayer1, newPlayer.getFirstName(), newPlayer.getPhoto(), newUsername, 1, players);
             }
             if (requestCode == 2) {
-                setImageAndText(player2,txtPlayer2, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername, 2, players);
+                setImageAndText(player2,txtPlayer2, newPlayer.getFirstName(), newPlayer.getPhoto(), newUsername, 2, players);
             }
             if (requestCode == 3) {
-                setImageAndText(player3,txtPlayer3, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername, 3, players);
+                setImageAndText(player3,txtPlayer3, newPlayer.getFirstName(), newPlayer.getPhoto(), newUsername, 3, players);
             }
             if (requestCode == 4) {
-                setImageAndText(player4,txtPlayer4, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername, 4, players);
+                setImageAndText(player4,txtPlayer4, newPlayer.getFirstName(), newPlayer.getPhoto(), newUsername, 4, players);
             }
             if (requestCode == 5) {
-                setImageAndText(player5,txtPlayer5, newPlayer.getUsername(), newPlayer.getPhoto(), newUsername, 5, players);
+                setImageAndText(player5,txtPlayer5, newPlayer.getFirstName(), newPlayer.getPhoto(), newUsername, 5, players);
             }
         }
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ort.num172159_180968.fut5">
+    package="com.ort.num172159_180968.fut5" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -28,11 +28,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".LogIn"
             android:label="LogIn"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,14 +53,14 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SelectTeamActivity"
             android:label="@string/title_activity_select_team"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainMenu"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -70,31 +70,36 @@
         <activity
             android:name=".Profile"
             android:label="@string/title_activity_perfil"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Register"
             android:label="@string/title_activity_register"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UserListActivity"
             android:label="@string/title_activity_user_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ConfirmMatch"
-            android:label="@string/title_activity_confirm_match"></activity>
+            android:label="@string/title_activity_confirm_match" />
         <activity
             android:name=".Statistics"
-            android:label="@string/title_activity_statistics"></activity>
+            android:label="@string/title_activity_statistics" />
         <activity
             android:name=".ViewMatches"
-            android:label="@string/title_activity_view_matches"></activity>
+            android:label="@string/title_activity_view_matches" />
         <activity
             android:name=".TabMatches"
-            android:label="@string/title_activity_tab_matches"></activity>
+            android:label="@string/title_activity_tab_matches"
+            android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name=".Notification"
             android:label="@string/title_activity_notification"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditMatch"
+            android:label="@string/title_activity_edit_match" >
+        </activity>
     </application>
 
 </manifest>

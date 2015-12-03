@@ -10,6 +10,8 @@ import com.magnet.android.mms.async.StateChangedListener;
 
 import com.ort.num172159_180968.fut5.model.beans.*;
 
+import java.util.List;
+
 public interface Match {
 
   /**
@@ -29,6 +31,13 @@ public interface Match {
      AddMatchRequest body,
      StateChangedListener listener
   );
+
+    Call<List<MatchesResult>> getMatches(
+            String username,
+            String mine,
+            String next,
+            StateChangedListener listener
+    );
 
 
 }
