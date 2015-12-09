@@ -23,6 +23,7 @@ import com.magnet.android.mms.async.Call;
 import com.ort.num172159_180968.fut5.controller.api.Match;
 import com.ort.num172159_180968.fut5.controller.api.MatchFactory;
 import com.ort.num172159_180968.fut5.model.beans.MatchesResult;
+import com.ort.num172159_180968.fut5.model.beans.Team;
 import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 import com.ort.num172159_180968.fut5.model.persistance.User;
 
@@ -132,10 +133,23 @@ public class TabMatches extends AppCompatActivity {
                 //ir al detalle del partido
 
                 MatchesResult clickedMatch = matches.get(position);
+
+                String[] players = new String[10];
+                int i = 0;
+                for (Team t : clickedMatch.getTeams()){
+                    players[i] = t.getUsername();
+                    i++;
+                }
+
+
                 //Toast.makeText(TabMatches.this, clickedMatch.getMatchId(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(),EditMatch.class);
                 intent.putExtra("username", clickedMatch.getCreatedByUser().getUsername());
+                intent.putExtra("date",clickedMatch.getMatchDate());
+                intent.putExtra("idMatch",clickedMatch.getMatchId());
+                intent.putExtra("players",players);
                 setResult(RESULT_OK, intent);
+                startActivityForResult(intent,position);
                 //finish();
             }
         });
