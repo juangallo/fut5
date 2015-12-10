@@ -9,9 +9,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextClock;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class EditMatch extends AppCompatActivity {
 
@@ -21,7 +29,11 @@ public class EditMatch extends AppCompatActivity {
     ListView listLocal;
     ListView listVisitor;
 
+    TextView fieldMatch;
+    TextView dateMatch;
+
     String creatorName;
+    String fieldName;
     Long date;
     Integer idMatch;
     String[] players;
@@ -44,9 +56,22 @@ public class EditMatch extends AppCompatActivity {
         listVisitor = (ListView) findViewById(R.id.listVisitor);
 
         creatorName = getIntent().getStringExtra("username");
+        fieldName = getIntent().getStringExtra("field");
         date = getIntent().getLongExtra("date", 0);
         idMatch = getIntent().getIntExtra("idMatch", 0);
         players = getIntent().getStringArrayExtra("players");
+
+        fieldMatch = (TextView) findViewById(R.id.txtFieldName);
+        fieldMatch.setText(fieldName);
+        dateMatch = (TextView) findViewById(R.id.txtDateMatch);
+
+        Date d = new Date();
+        d.setTime(date);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = df.format(d.getTime());
+
+        dateMatch.setText(formattedDate);
+
 
         for(int i = 0; i < 5; i++)
         {

@@ -27,6 +27,7 @@ import com.ort.num172159_180968.fut5.model.beans.Team;
 import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 import com.ort.num172159_180968.fut5.model.persistance.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -147,6 +148,7 @@ public class TabMatches extends AppCompatActivity {
                 intent.putExtra("username", clickedMatch.getCreatedByUser().getUsername());
                 intent.putExtra("date",clickedMatch.getMatchDate());
                 intent.putExtra("idMatch",clickedMatch.getMatchId());
+                intent.putExtra("field",clickedMatch.getMatchField().getFieldName());
                 intent.putExtra("players",players);
                 setResult(RESULT_OK, intent);
                 startActivityForResult(intent,position);
@@ -191,8 +193,11 @@ public class TabMatches extends AppCompatActivity {
             date.setTime(matchRes.getMatchDate());
 
             TextView matchDate = (TextView)itemView.findViewById(R.id.item_txtDate);
-            matchDate.setText("Date: " + date);
 
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = df.format(date.getTime());
+
+            matchDate.setText("Date: " + formattedDate);
 
             TextView matchCreator = (TextView)itemView.findViewById(R.id.item_txtCreator);
             matchCreator.setText(matchRes.getCreatedByUser().getFirstName());

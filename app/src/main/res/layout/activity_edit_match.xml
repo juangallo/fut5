@@ -24,8 +24,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="VISITOR TEAM"
         android:id="@+id/txtVisitorTeam"
-        android:layout_marginEnd="60dp"
-        android:layout_alignTop="@+id/txtLocalTeam"
+        android:layout_marginEnd="39dp"
+        android:layout_alignTop="@+id/imgLocal"
         android:layout_alignParentEnd="true" />
 
     <ImageView
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listLocal"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="120dp"
         android:layout_below="@+id/txtLocalTeam"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/imgLocal" />
@@ -61,5 +61,51 @@
         android:layout_toEndOf="@+id/imgLocal"
         android:layout_marginEnd="20dp"
         android:layout_alignStart="@+id/txtVisitorTeam" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Field:"
+        android:id="@+id/txtField"
+        android:layout_marginBottom="46dp"
+        android:layout_above="@+id/listVisitor"
+        android:layout_toEndOf="@+id/listLocal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtFieldName"
+        android:layout_alignTop="@+id/txtField"
+        android:layout_alignStart="@+id/txtDateMatch" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Date: "
+        android:id="@+id/txtDate"
+        android:layout_below="@+id/txtFieldName"
+        android:layout_alignStart="@+id/txtField" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtDateMatch"
+        android:layout_alignTop="@+id/txtDate"
+        android:layout_alignStart="@+id/imgVisitor" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="-"
+        android:textSize="100dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/textView2"
+        android:layout_alignTop="@+id/lblLocalTeam"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
