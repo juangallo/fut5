@@ -150,6 +150,7 @@ public class TabMatches extends AppCompatActivity {
                 intent.putExtra("idMatch",clickedMatch.getMatchId());
                 intent.putExtra("field",clickedMatch.getMatchField().getFieldName());
                 intent.putExtra("players",players);
+                intent.putExtra("type",type);
                 setResult(RESULT_OK, intent);
                 startActivityForResult(intent,position);
                 //finish();
@@ -200,7 +201,7 @@ public class TabMatches extends AppCompatActivity {
             matchDate.setText("Date: " + formattedDate);
 
             TextView matchCreator = (TextView)itemView.findViewById(R.id.item_txtCreator);
-            matchCreator.setText(matchRes.getCreatedByUser().getFirstName());
+            matchCreator.setText(matchRes.getCreatedByUser().getUsername());
 
             ImageView matchView = (ImageView) itemView.findViewById(R.id.item_icon);
             matchView.setImageResource(R.drawable.maracanaa);

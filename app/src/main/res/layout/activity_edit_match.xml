@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listLocal"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="140dp"
         android:layout_below="@+id/txtLocalTeam"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/imgLocal" />
@@ -68,9 +68,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Field:"
         android:id="@+id/txtField"
-        android:layout_marginBottom="46dp"
-        android:layout_above="@+id/listVisitor"
-        android:layout_toEndOf="@+id/listLocal" />
+        android:layout_below="@+id/txtLocalTeam"
+        android:layout_alignStart="@+id/imgLocal"
+        android:layout_marginTop="47dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -107,5 +107,30 @@
         android:id="@+id/textView2"
         android:layout_alignTop="@+id/lblLocalTeam"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Created by:"
+        android:id="@+id/txtCreator"
+        android:layout_below="@+id/txtDate"
+        android:layout_toEndOf="@+id/txtLocalTeam" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtCreatedByName"
+        android:layout_alignTop="@+id/txtCreator"
+        android:layout_alignStart="@+id/txtDateMatch" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:id="@+id/btnEdit"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/textView2" />
 
 </RelativeLayout>

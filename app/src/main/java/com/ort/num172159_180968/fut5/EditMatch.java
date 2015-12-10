@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextClock;
@@ -18,6 +19,7 @@ import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -31,20 +33,32 @@ public class EditMatch extends AppCompatActivity {
 
     TextView fieldMatch;
     TextView dateMatch;
+    TextView createdByName;
 
+    Button btnEdit;
+
+    String type;
     String creatorName;
     String fieldName;
     Long date;
     Integer idMatch;
     String[] players;
 
-    private String[] playersLocal = new String[5]; //{"Ubuntu", "Android", "iOS", "Windows", "Mac OSX"};
-    private String[] playersVisitor = new String[5]; //{"Ubuntu", "Android", "iOS", "Windows", "Mac OSX"};
+    private SessionManager session;
+
+    private String[] playersLocal = new String[5];
+    private String[] playersVisitor = new String[5];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_match);
+
+        session = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = session.getUserDetails();
+        String username = user.get(SessionManager.KEY_USERNAME);
+
+        btnEdit = (Button) findViewById(R.id.btnEdit);
 
         imgLocal = (ImageView) findViewById(R.id.imgLocal);
         imgLocal.setImageResource(R.drawable.notepad1);
@@ -60,7 +74,10 @@ public class EditMatch extends AppCompatActivity {
         date = getIntent().getLongExtra("date", 0);
         idMatch = getIntent().getIntExtra("idMatch", 0);
         players = getIntent().getStringArrayExtra("players");
+        type = getIntent().getStringExtra("type");
 
+        createdByName = (TextView) findViewById(R.id.txtCreatedByName);
+        createdByName.setText(creatorName);
         fieldMatch = (TextView) findViewById(R.id.txtFieldName);
         fieldMatch.setText(fieldName);
         dateMatch = (TextView) findViewById(R.id.txtDateMatch);
@@ -82,8 +99,19 @@ public class EditMatch extends AppCompatActivity {
             playersVisitor[i-5] = players[i];
         }
 
-
         populateListView();
+
+        if(type.equals("finished")){
+            if(!username.equals(creatorName)){
+                btnEdit.setVisibility(View.INVISIBLE);
+            }
+        }
+        if(type.equals("next")){
+            btnEdit.setVisibility(View.INVISIBLE);
+        }
+        if(type.equals("others")){
+            btnEdit.setVisibility(View.INVISIBLE);
+        }
 
     }
 
