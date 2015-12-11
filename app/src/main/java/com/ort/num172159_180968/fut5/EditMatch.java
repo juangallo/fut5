@@ -7,11 +7,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextClock;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 public class EditMatch extends AppCompatActivity {
 
@@ -21,18 +31,36 @@ public class EditMatch extends AppCompatActivity {
     ListView listLocal;
     ListView listVisitor;
 
+    TextView fieldMatch;
+    TextView dateMatch;
+    TextView createdByName;
+    TextView goalsLocal;
+    TextView goalsVisitor;
+
+    Button btnEdit;
+
+    String type;
     String creatorName;
+    String fieldName;
     Long date;
     Integer idMatch;
     String[] players;
 
-    private String[] playersLocal = new String[5]; //{"Ubuntu", "Android", "iOS", "Windows", "Mac OSX"};
-    private String[] playersVisitor = new String[5]; //{"Ubuntu", "Android", "iOS", "Windows", "Mac OSX"};
+    private SessionManager session;
+
+    private String[] playersLocal = new String[5];
+    private String[] playersVisitor = new String[5];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_match);
+
+        session = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = session.getUserDetails();
+        String username = user.get(SessionManager.KEY_USERNAME);
+
+        btnEdit = (Button) findViewById(R.id.btnEdit);
 
         imgLocal = (ImageView) findViewById(R.id.imgLocal);
         imgLocal.setImageResource(R.drawable.notepad1);
@@ -43,10 +71,23 @@ public class EditMatch extends AppCompatActivity {
         listLocal = (ListView) findViewById(R.id.listLocal);
         listVisitor = (ListView) findViewById(R.id.listVisitor);
 
-        creatorName = getIntent().getStringExtra("username");
-        date = getIntent().getLongExtra("date", 0);
-        idMatch = getIntent().getIntExtra("idMatch", 0);
-        players = getIntent().getStringArrayExtra("players");
+        getStringFromIntent();
+
+        createdByName = (TextView) findViewById(R.id.txtCreatedByName);
+        createdByName.setText(creatorName);
+        fieldMatch = (TextView) findViewById(R.id.txtFieldName);
+        fieldMatch.setText(fieldName);
+        dateMatch = (TextView) findViewById(R.id.txtDateMatch);
+
+        Date d = new Date();
+        d.setTime(date);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = df.format(d.getTime());
+
+        dateMatch.setText(formattedDate);
+
+        goalsLocal = (TextView) findViewById(R.id.txtGoalsLocal);
+        goalsVisitor = (TextView) findViewById(R.id.txtGoalsVisitor);
 
         for(int i = 0; i < 5; i++)
         {
@@ -57,8 +98,29 @@ public class EditMatch extends AppCompatActivity {
             playersVisitor[i-5] = players[i];
         }
 
-
         populateListView();
+
+
+
+        if(type.equals("finished")){
+            if(!username.equals(creatorName)){
+                btnEdit.setVisibility(View.INVISIBLE);
+            }
+            //Hay que sacar las estadisticas del partido terminado, el servicio ya esta creado
+            //goalsLocal.setText("");
+            //goalsVisitor.setText("");
+        }
+        if(type.equals("next")){
+            btnEdit.setVisibility(View.INVISIBLE);
+            goalsLocal.setText("");
+            goalsVisitor.setText("");
+        }
+        if(type.equals("others")){
+            btnEdit.setVisibility(View.INVISIBLE);
+            //Hay que sacar las estadisticas del partido terminado, el servicio ya esta creado
+            //goalsLocal.setText("");
+            //goalsVisitor.setText("");
+        }
 
     }
 
@@ -82,6 +144,15 @@ public class EditMatch extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getStringFromIntent(){
+        creatorName = getIntent().getStringExtra("username");
+        fieldName = getIntent().getStringExtra("field");
+        date = getIntent().getLongExtra("date", 0);
+        idMatch = getIntent().getIntExtra("idMatch", 0);
+        players = getIntent().getStringArrayExtra("players");
+        type = getIntent().getStringExtra("type");
     }
 
     private void populateListView() {
