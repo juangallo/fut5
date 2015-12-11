@@ -34,6 +34,8 @@ public class EditMatch extends AppCompatActivity {
     TextView fieldMatch;
     TextView dateMatch;
     TextView createdByName;
+    TextView goalsLocal;
+    TextView goalsVisitor;
 
     Button btnEdit;
 
@@ -69,12 +71,7 @@ public class EditMatch extends AppCompatActivity {
         listLocal = (ListView) findViewById(R.id.listLocal);
         listVisitor = (ListView) findViewById(R.id.listVisitor);
 
-        creatorName = getIntent().getStringExtra("username");
-        fieldName = getIntent().getStringExtra("field");
-        date = getIntent().getLongExtra("date", 0);
-        idMatch = getIntent().getIntExtra("idMatch", 0);
-        players = getIntent().getStringArrayExtra("players");
-        type = getIntent().getStringExtra("type");
+        getStringFromIntent();
 
         createdByName = (TextView) findViewById(R.id.txtCreatedByName);
         createdByName.setText(creatorName);
@@ -89,6 +86,8 @@ public class EditMatch extends AppCompatActivity {
 
         dateMatch.setText(formattedDate);
 
+        goalsLocal = (TextView) findViewById(R.id.txtGoalsLocal);
+        goalsVisitor = (TextView) findViewById(R.id.txtGoalsVisitor);
 
         for(int i = 0; i < 5; i++)
         {
@@ -101,16 +100,26 @@ public class EditMatch extends AppCompatActivity {
 
         populateListView();
 
+
+
         if(type.equals("finished")){
             if(!username.equals(creatorName)){
                 btnEdit.setVisibility(View.INVISIBLE);
             }
+            //Hay que sacar las estadisticas del partido terminado, el servicio ya esta creado
+            //goalsLocal.setText("");
+            //goalsVisitor.setText("");
         }
         if(type.equals("next")){
             btnEdit.setVisibility(View.INVISIBLE);
+            goalsLocal.setText("");
+            goalsVisitor.setText("");
         }
         if(type.equals("others")){
             btnEdit.setVisibility(View.INVISIBLE);
+            //Hay que sacar las estadisticas del partido terminado, el servicio ya esta creado
+            //goalsLocal.setText("");
+            //goalsVisitor.setText("");
         }
 
     }
@@ -135,6 +144,15 @@ public class EditMatch extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getStringFromIntent(){
+        creatorName = getIntent().getStringExtra("username");
+        fieldName = getIntent().getStringExtra("field");
+        date = getIntent().getLongExtra("date", 0);
+        idMatch = getIntent().getIntExtra("idMatch", 0);
+        players = getIntent().getStringArrayExtra("players");
+        type = getIntent().getStringExtra("type");
     }
 
     private void populateListView() {
