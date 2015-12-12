@@ -152,11 +152,9 @@ public class Profile extends AppCompatActivity {
         dbUser.setEmail(((EditText)findViewById(R.id.txtEmail)).getText().toString());
 
         if(image != null) {
-            image = (new AppHelper(getApplicationContext())).getResizedBitmap(image, 512, 512);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream .toByteArray();
-            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            AppHelper helper = new AppHelper(getApplicationContext());
+            image = helper.getResizedBitmap(image, 512, 512);
+            String encoded = helper.BitMapToString(image);
             try {
             } catch (Exception e){
                 e.printStackTrace();
@@ -237,6 +235,13 @@ public class Profile extends AppCompatActivity {
             Bitmap bitmap  = ((BitmapDrawable)profileImageView.getDrawable()).getBitmap();
             ImageView userPhoto = (ImageView)findViewById(R.id.viewImage);
             userPhoto.setImageBitmap(bitmap);
+            AppHelper helper = new AppHelper(getApplicationContext());
+            String photoString = helper.BitMapToString(bitmap);
+            AddUserImageRequest request = new AddUserImageRequest();
+            AddUserImageRequest.AddUserImageRequestBuilder builder = new AddUserImageRequest.AddUserImageRequestBuilder();
+            builder.image(photoString);
+            request = builder.build();
+            user.addUserImage(id_facebook, request, null);
         }
     }
 
@@ -263,7 +268,8 @@ public class Profile extends AppCompatActivity {
 
                     Matrix matrix = check_orientation(f.getAbsolutePath());
 
-                    Bitmap adjustedBitmap = helper.getResizedBitmap(bitmap, 512, 512);//Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    Bitmap adjustedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    adjustedBitmap  = helper.getResizedBitmap(adjustedBitmap, 512, 512);
                     image = adjustedBitmap;
                     //viewImage.setImageBitmap(adjustedBitmap);
 

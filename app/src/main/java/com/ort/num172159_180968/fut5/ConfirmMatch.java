@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,13 +30,9 @@ import com.ort.num172159_180968.fut5.model.persistance.Field;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
-
-import org.w3c.dom.Text;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -44,7 +40,7 @@ import java.util.concurrent.ExecutionException;
 public class ConfirmMatch extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private Spinner comboBox;
-    private Button btnSave;
+    private ImageButton btnSave;
 
     private DatabaseHelper db;
     private List<Field> fields = new ArrayList<>();
@@ -83,7 +79,7 @@ public class ConfirmMatch extends AppCompatActivity implements DatePickerDialog.
 
         //date = (DatePicker) findViewById(R.id.datePicker);
         //time = (TimePicker) findViewById(R.id.timePicker);
-        comboBox = (Spinner) findViewById(R.id.spinner);
+        comboBox = (Spinner) findViewById(R.id.spnFields);
         loadFields();
 
         try {
@@ -91,8 +87,8 @@ public class ConfirmMatch extends AppCompatActivity implements DatePickerDialog.
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        btnSave = (Button) findViewById(R.id.btnSave);
+        updateColors();
+        btnSave = (ImageButton) findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -359,7 +355,7 @@ public class ConfirmMatch extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void updateWeather() {
-        TextView label = ((TextView)findViewById(R.id.textView10));
+        TextView label = ((TextView)findViewById(R.id.txtViewWeather));
         ImageView imgWeather = ((ImageView)findViewById(R.id.imgWeather));
         TextView txtWeather = ((TextView)findViewById(R.id.txtWeather));
         String temp = "";
@@ -392,7 +388,8 @@ public class ConfirmMatch extends AppCompatActivity implements DatePickerDialog.
                 txtWeather.setVisibility(View.VISIBLE);
 
                 txtWeather.setText(forecast + ": " + temp + "°C");
-                imgWeather.setImageResource(getWeatherIcon(icon));
+                if (getWeatherIcon(icon) != 0)
+                    imgWeather.setImageResource(getWeatherIcon(icon));
             } else {
                 label.setVisibility(View.INVISIBLE);
                 imgWeather.setVisibility(View.INVISIBLE);
@@ -446,6 +443,24 @@ public class ConfirmMatch extends AppCompatActivity implements DatePickerDialog.
                 return R.drawable.othd;
             case "50d":
                 return R.drawable.fzd;
+            case "01n":
+                return R.drawable.zod;
+            case "02n":
+                return R.drawable.ztd;
+            case "03n":
+                return R.drawable.zthd;
+            case "04n":
+                return R.drawable.zfd;
+            case "09n":
+                return R.drawable.znd;
+            case "10n":
+                return R.drawable.ozd;
+            case "11n":
+                return R.drawable.ood;
+            case "13n":
+                return R.drawable.othd;
+            case "50n":
+                return R.drawable.fzd;
             default:
                 return 0;
         }
@@ -472,5 +487,37 @@ public class ConfirmMatch extends AppCompatActivity implements DatePickerDialog.
         res += minute + ":00.0";
         Timestamp timestamp = Timestamp.valueOf(res);
         return timestamp.getTime();
+    }
+
+    public void updateColors() {
+        HashMap<String, Integer> color = session.getColorDetail();
+        int colorId = color.get(SessionManager.KEY_COLOR);
+
+        TextView textView = (TextView)findViewById(R.id.txtConfirmMatch);
+        textView.setTextColor(colorId);
+
+        textView = (TextView)findViewById(R.id.txtSelectField);
+        textView.setTextColor(colorId);
+        textView = (TextView)findViewById(R.id.txtSelectDate);
+        textView.setTextColor(colorId);
+        textView = (TextView)findViewById(R.id.txtViewWeather);
+        textView.setTextColor(colorId);
+        textView = (TextView)findViewById(R.id.txtDate);
+        textView.setTextColor(colorId);
+        textView = (TextView)findViewById(R.id.txtViewWeather);
+        textView.setTextColor(colorId);
+        textView = (TextView)findViewById(R.id.txtSelectField);
+        textView.setTextColor(colorId);
+        Spinner spn = (Spinner)findViewById(R.id.spnFields);
+        textView = (TextView)spn.getChildAt(0);
+        textView.setTextColor(colorId);
+        ImageButton button = (ImageButton)findViewById(R.id.imgCalendarDay);
+        button.setColorFilter(colorId);
+        button = (ImageButton)findViewById(R.id.imgTime);
+        button.setColorFilter(colorId);
+        button = (ImageButton)findViewById(R.id.btnSave);
+        button.setColorFilter(colorId);
+
+
     }
 }

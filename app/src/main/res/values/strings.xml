@@ -20,4 +20,12 @@
     <string name="title_activity_edit_match">EditMatch</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="ConfirmMatchTitle">Confirm Match</string>
+    <string name="SelectField">Select Field</string>
+    <string name="Date">Date</string>
+    <string name="SelectDateContetDescription">Select Date</string>
+    <string name="SelectTimeContentDescription">Select Time</string>
+    <string name="Weather">Weather</string>
+    <string name="WeatherPhotoContentDescription">Weather Photo</string>
+    <string name="btnSaveContentDescription">Save button</string>
 </resources>

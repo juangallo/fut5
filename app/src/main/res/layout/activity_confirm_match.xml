@@ -4,76 +4,75 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.ort.num172159_180968.fut5.ConfirmMatch">
+    tools:context="com.ort.num172159_180968.fut5.ConfirmMatch"
+    android:background="@drawable/grass2">
 
 
     <Spinner
         android:layout_width="250dp"
         android:layout_height="100dp"
-        android:id="@+id/spinner"
+        android:id="@+id/spnFields"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/textView7"
-        android:layout_alignEnd="@+id/textView7" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SAVE"
-        android:id="@+id/btnSave"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="91dp" />
+        android:layout_below="@+id/txtConfirmMatch"
+        android:layout_alignEnd="@+id/txtConfirmMatch"
+        android:textSize="40sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Confirm Match"
-        android:id="@+id/textView7"
+        android:text="@string/ConfirmMatchTitle"
+        android:id="@+id/txtConfirmMatch"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textSize="40sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Select Field"
-        android:id="@+id/textView8"
-        android:layout_alignTop="@+id/spinner"
+        android:text="@string/SelectField"
+        android:id="@+id/txtSelectField"
+        android:layout_alignTop="@+id/spnFields"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="35dp" />
+        android:layout_marginTop="35dp"
+        android:textSize="25sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Date"
-        android:id="@+id/textView9"
-        android:layout_below="@+id/spinner"
-        android:layout_alignParentStart="true" />
+        android:text="@string/Date"
+        android:id="@+id/txtSelectDate"
+        android:layout_below="@+id/spnFields"
+        android:layout_alignParentStart="true"
+        android:textSize="25sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/txtDate"
-        android:layout_alignBottom="@+id/textView9"
-        android:layout_alignStart="@+id/spinner"
-        android:layout_toStartOf="@+id/textView7"
-        android:layout_alignEnd="@+id/spinner"
+        android:layout_alignBottom="@+id/txtSelectDate"
+        android:layout_alignStart="@+id/spnFields"
+        android:layout_toStartOf="@+id/txtConfirmMatch"
+        android:layout_alignEnd="@+id/spnFields"
         android:gravity="center"
-        android:enabled="true" />
+        android:enabled="true"
+        android:textSize="25sp" />
 
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/imgCalendarDay"
-        android:layout_below="@+id/spinner"
-        android:layout_toEndOf="@+id/spinner"
+        android:layout_below="@+id/spnFields"
+        android:layout_toEndOf="@+id/spnFields"
         android:layout_marginTop="-15dp"
         android:background="@android:color/transparent"
         android:src="@drawable/calendar1"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:contentDescription="@string/SelectDateContetDescription" />
 
     <ImageButton
         android:layout_width="50dp"
@@ -83,35 +82,50 @@
         android:layout_toEndOf="@+id/imgCalendarDay"
         android:src="@drawable/clock"
         android:scaleType="fitXY"
-        android:background="@android:color/transparent" />
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/SelectTimeContentDescription" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Weather"
-        android:id="@+id/textView10"
+        android:text="@string/Weather"
+        android:id="@+id/txtViewWeather"
         android:layout_below="@+id/imgCalendarDay"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="28dp" />
+        android:layout_marginTop="28dp"
+        android:textSize="25sp" />
 
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/imgWeather"
-        android:layout_alignTop="@+id/textView10"
-        android:layout_toEndOf="@+id/textView10"
+        android:layout_alignTop="@+id/txtViewWeather"
+        android:layout_toEndOf="@+id/txtViewWeather"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="-15dp" />
+        android:layout_marginTop="-15dp"
+        android:contentDescription="@string/WeatherPhotoContentDescription" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Rain: 20 C"
         android:id="@+id/txtWeather"
-        android:layout_alignBottom="@+id/textView10"
-        android:layout_toEndOf="@+id/textView10"
-        android:layout_marginLeft="125dp" />
+        android:layout_alignBottom="@+id/txtViewWeather"
+        android:layout_toEndOf="@+id/txtViewWeather"
+        android:layout_marginLeft="125dp"
+        android:textSize="25sp" />
+
+    <ImageButton
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:id="@+id/btnSave"
+        android:layout_marginBottom="54dp"
+        android:src="@drawable/save"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/txtWeather"
+        android:contentDescription="@string/btnSaveContentDescription" />
 
 </RelativeLayout>
