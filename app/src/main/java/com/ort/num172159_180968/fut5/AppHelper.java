@@ -14,28 +14,30 @@ import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 import com.ort.num172159_180968.fut5.model.persistance.User;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by JuanMartin on 22-Nov-15.
- */
 public class AppHelper {
     private Context context;
     private DatabaseHelper db;
     private User dbUser;
     private com.ort.num172159_180968.fut5.controller.api.User user;
+    private SessionManager session;
 
 
     public AppHelper(Context context){
         this.context = context;
+        session = new SessionManager(context);
     }
 
     public void reloadUsers(){
         db = new DatabaseHelper(context);
         try {
             setUpUser();
-            Call<List<UsersWithImagesResult>> callObject = user.getUsersWithImages(null);
+            HashMap<String, String> userSession = session.getUserDetails();
+            String username = userSession.get(SessionManager.KEY_USERNAME);
+            Call<List<UsersWithImagesResult>> callObject = user.getUsersWithImages(username, null);
             List<UsersWithImagesResult> users = callObject.get();
             for (UsersWithImagesResult u : users) {
 
@@ -72,9 +74,7 @@ public class AppHelper {
         // RESIZE THE BIT MAP
         matrix.postScale(scaleWidth, scaleHeight);
         // RECREATE THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
-                matrix, false);
-        return resizedBitmap;
+        return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
     }
 
     public static int calculateInSampleSize(
@@ -96,7 +96,6 @@ public class AppHelper {
                 inSampleSize *= 2;
             }
         }
-
         return inSampleSize;
     }
 
@@ -120,8 +119,7 @@ public class AppHelper {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] b = baos.toByteArray();
-            String temp = Base64.encodeToString(b, Base64.DEFAULT);
-            return temp;
+            return Base64.encodeToString(b, Base64.DEFAULT);
         }else{
             return "";
         }

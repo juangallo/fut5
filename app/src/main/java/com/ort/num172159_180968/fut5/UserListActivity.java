@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -25,18 +26,19 @@ import com.ort.num172159_180968.fut5.model.persistance.User;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class UserListActivity extends AppCompatActivity {
-    //private User user;
+public class UserListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener  {
     DatabaseHelper db;
     private List<User> users = new ArrayList<>();
-    //private ListWeather<UsernameImage> images = new ArrayList<>();
+    private SessionManager session;
 
     private String[] playersLocal;
     private Boolean local;
     private AppHelper helper;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +47,12 @@ public class UserListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_list);
         helper = new AppHelper(getApplicationContext());
         playersLocal = getIntent().getStringArrayExtra("playersLocal");
-        local = getIntent().getBooleanExtra("local",true);
-
+        local = getIntent().getBooleanExtra("local", true);
+        session = new SessionManager(getApplicationContext());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         users = db.getAllUser();
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
         if(!local) {
             int pos = -1;
@@ -70,6 +73,34 @@ public class UserListActivity extends AppCompatActivity {
         }
         populateListView();
         registerClickCallback();
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        /**
+         * Showing Swipe Refresh animation on activity create
+         * As animation won't start on onCreate, post runnable is used
+         */
+        swipeRefreshLayout.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        swipeRefreshLayout.setRefreshing(true);
+
+                                        updateUsers();
+                                    }
+                                }
+        );
+    }
+
+    private void updateUsers() {
+        swipeRefreshLayout.setRefreshing(true);
+        AppHelper helper = new AppHelper(getApplicationContext());
+        helper.reloadUsers();
+        populateListView();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        updateUsers();
     }
 
     @Override
@@ -77,69 +108,6 @@ public class UserListActivity extends AppCompatActivity {
         super.onDestroy();
         db.closeDB();
     }
-
-
-    /*protected void setUp() throws Exception {
-        // Instantiate a controller
-        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
-        UserFactory controllerFactory = new UserFactory(magnetClient);
-        user = controllerFactory.obtainInstance();
-    }*/
-
-    /*private void callWebServiceGetUsers(){
-        Call<ListWeather<UserResult>> callObject = user.getUsers("", null);
-        if (!callObject.equals(null)) {
-            try {
-
-                users = callObject.get();
-
-                if(!local) {
-
-                    int pos = -1;
-                    for (int i = 0; i < 6; i++) {
-                        System.out.println("Los locales " + playersLocal[i]);
-                        int aux = 0;
-                        for (UserResult u : users) {
-                            if (playersLocal[i].equals(u.getUsername())) {
-                                pos = aux;
-                            }
-                            aux++;
-                        }
-                        if (pos != -1) {
-                            users.remove(pos);
-                        }
-                        pos = 0;
-                    }
-                }
-
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
-
-    /*private Bitmap callWebServiceGetUserImage(String username){
-        System.out.println(username);
-        Call<String> callObject = user.getUserImage(username, null);
-        Bitmap ret = null;
-        if (!callObject.equals(null)) {
-            try {
-                String image = callObject.get();
-                if (!image.equals("-1")) {
-                    byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
-                    ret = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-        return ret;
-    }*/
 
     private void populateListView() {
         ArrayAdapter<User> adapter = new MyListAdapter();
@@ -169,6 +137,9 @@ public class UserListActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            HashMap<String, Integer> color = session.getColorDetail();
+            int colorId = color.get(SessionManager.KEY_COLOR);
+
             //make sure we have a view to work with (may be null)
             View itemView = convertView;
             if (itemView == null) {
@@ -181,12 +152,15 @@ public class UserListActivity extends AppCompatActivity {
             //missing the image view
             TextView userNameText = (TextView)itemView.findViewById(R.id.item_txtUsername);
             userNameText.setText(userRes.getUsername());
+            userNameText.setTextColor(colorId);
 
             TextView nameText = (TextView)itemView.findViewById(R.id.item_txtName);
             nameText.setText(userRes.getFirstName());
+            nameText.setTextColor(colorId);
 
             TextView lastNameText = (TextView)itemView.findViewById(R.id.item_txtLastName);
             lastNameText.setText(userRes.getLastName());
+            lastNameText.setTextColor(colorId);
 
             Bitmap image = null;
             /*

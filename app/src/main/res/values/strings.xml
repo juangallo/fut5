@@ -28,4 +28,8 @@
     <string name="Weather">Weather</string>
     <string name="WeatherPhotoContentDescription">Weather Photo</string>
     <string name="btnSaveContentDescription">Save button</string>
+    <string name="Register">Register</string>
+    <string name="LogIn">Log In</string>
+    <string name="Password">Password</string>
+    <string name="Username">Username</string>
 </resources>

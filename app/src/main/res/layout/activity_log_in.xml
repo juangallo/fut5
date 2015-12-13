@@ -8,11 +8,10 @@
     android:background="@drawable/grass">
 
     <TextView android:id="@+id/lblTitle"
-        android:text="Login"
+        android:text="@string/LogIn"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         style="CodeFont"
-        android:editable="false"
         android:textColor="#f1f1f1"
         android:textSize="48sp"
         android:layout_alignParentTop="true"
@@ -21,20 +20,20 @@
     <EditText android:id="@+id/txtUser"
         android:layout_width="400dp"
         android:layout_height="40dp"
-        android:hint="Username"
+        android:hint="@string/Username"
         android:layout_marginTop="26dp"
         android:background="#ffffffff"
         android:alpha="0.40"
         android:layout_below="@+id/lblTitle"
         android:layout_centerHorizontal="true"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textAlignment="center" />
 
     <EditText android:id="@+id/txtPassword"
         android:layout_width="400dp"
         android:layout_height="40dp"
         android:inputType="textPassword"
-        android:hint="Password"
+        android:hint="@string/Password"
         android:layout_marginTop="13dp"
         android:background="#ffffffff"
         android:alpha="0.40"
@@ -42,7 +41,7 @@
         android:layout_alignRight="@+id/txtUser"
         android:layout_alignEnd="@+id/txtUser"
         android:layout_alignStart="@+id/txtUser"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:textAlignment="center" />
 
 
@@ -59,7 +58,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log In"
+        android:text="@string/LogIn"
         android:id="@+id/btnOk"
         android:layout_alignTop="@+id/btnRegister"
         android:layout_toStartOf="@+id/lblTitle" />
@@ -67,19 +66,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="@string/Register"
         android:id="@+id/btnRegister"
         android:layout_marginTop="47dp"
         android:layout_below="@+id/txtPassword"
         android:layout_toEndOf="@+id/lblTitle" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="OK"
-        android:id="@+id/btnNext"
-        android:layout_alignTop="@+id/btnRegister"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
