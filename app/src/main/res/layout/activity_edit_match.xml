@@ -63,15 +63,17 @@
         android:text="0"
         android:textSize="40dp"
         android:textStyle="bold"
-        android:layout_marginRight="90dp"
-        android:layout_above="@+id/txtFieldName"
+        android:layout_marginStart="85dp"
+        android:layout_alignTop="@+id/txtGoalsLocal"
+        android:layout_toEndOf="@+id/textView2" />
+        //android:layout_above="@+id/txtFieldName"
         android:layout_alignEnd="@+id/txtFieldName" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listLocal"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="200dp"
         android:layout_below="@+id/txtLocalTeam"
         android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/imgLocal" />
@@ -94,7 +96,7 @@
         android:id="@+id/txtField"
         android:layout_below="@+id/txtLocalTeam"
         android:layout_alignStart="@+id/imgLocal"
-        android:layout_marginTop="47dp" />
+        android:layout_marginTop="60dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -155,6 +157,24 @@
         android:text="Set Result"
         android:id="@+id/btnEdit"
         android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/textView2" />
+        android:layout_alignStart="@+id/txtCreator" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share Facebook"
+        android:id="@+id/btnShareFb"
+        android:background="@color/com_facebook_button_background_color"
+        android:textColor="@color/com_facebook_share_button_text_color"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/textView2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CHANGE FIELD &amp; DATE"
+        android:id="@+id/btnChange"
+        android:layout_alignTop="@+id/btnEdit"
+        android:layout_alignStart="@+id/txtLocalTeam" />
 
 </RelativeLayout>

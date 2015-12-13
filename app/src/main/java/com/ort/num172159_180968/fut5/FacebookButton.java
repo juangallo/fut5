@@ -208,7 +208,7 @@ public class FacebookButton extends Fragment {
 
                 if(currentProfile != null) {
 
-                    Intent intent = new Intent(getActivity(),MainMenu.class);
+                    Intent intent = new Intent(getContext(),MainMenu.class);
                     intent.putExtra("id_fb", currentProfile.getId());
                     intent.putExtra("user_name", currentProfile.getFirstName());
                     intent.putExtra("last_name", currentProfile.getLastName());

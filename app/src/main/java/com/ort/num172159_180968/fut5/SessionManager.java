@@ -36,6 +36,9 @@ public class SessionManager {
 
     public static final String KEY_COLOR = "color";
 
+    public static final String IS_FB = "IsFacebook";
+
+
     // Email address (make variable public to access from outside)
     //public static final String KEY_EMAIL = "email";
 
@@ -54,6 +57,7 @@ public class SessionManager {
         // Storing name in pref
         editor.putString(KEY_USERNAME, username);
 
+        editor.putBoolean(IS_FB,false);
         // Storing email in pref
         //editor.putString(KEY_EMAIL, email);
 
@@ -72,6 +76,8 @@ public class SessionManager {
         // return user
         return user;
     }
+
+
 
     public void createColor(int color) {
         // Storing name in pref
@@ -108,6 +114,15 @@ public class SessionManager {
 
     public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
+    }
+
+    public void setFacebook(){
+        editor.putBoolean(IS_FB,true);
+        editor.commit();
+    }
+
+    public boolean isFacebook(){
+        return pref.getBoolean(IS_FB,false);
     }
 
     public void logoutUser(){

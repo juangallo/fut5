@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="LOCAL TEAM"
+        android:id="@+id/txtLocal"
+        android:layout_marginTop="75dp"
+        android:layout_alignTop="@+id/pickerLocal"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="17dp" />
+
+    <NumberPicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pickerLocal"
+        android:layout_marginStart="25dp"
+        android:layout_toEndOf="@+id/txtLocal" />
+
+    <NumberPicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pickerVisitor"
+        android:layout_marginStart="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="VISITOR TEAM"
+        android:id="@+id/txtVisitor"
+        android:layout_alignTop="@+id/txtLocal"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="18dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SAVE"
+        android:id="@+id/btnSaveResult"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_below="@+id/pickerLocal"
+        android:layout_alignStart="@+id/pickerLocal" />
+
+</RelativeLayout>

@@ -509,8 +509,8 @@ public class ConfirmMatch extends AppCompatActivity implements DatePickerDialog.
         textView = (TextView)findViewById(R.id.txtSelectField);
         textView.setTextColor(colorId);
         Spinner spn = (Spinner)findViewById(R.id.spnFields);
-        textView = (TextView)spn.getChildAt(0);
-        textView.setTextColor(colorId);
+        //textView = (TextView)spn.getChildAt(0);
+        //textView.setTextColor(colorId);
         ImageButton button = (ImageButton)findViewById(R.id.imgCalendarDay);
         button.setColorFilter(colorId);
         button = (ImageButton)findViewById(R.id.imgTime);
