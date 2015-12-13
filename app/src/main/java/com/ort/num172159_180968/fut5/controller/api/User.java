@@ -52,7 +52,7 @@ public interface User {
             StateChangedListener listener
     );
 
-    Call<List<UsersWithImagesResult>> getUsersWithImages(StateChangedListener listener);
+    Call<List<UsersWithImagesResult>> getUsersWithImages(String username, StateChangedListener listener);
 
     Call<String> updateUser(
             String userId,

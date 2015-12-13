@@ -1,12 +1,9 @@
 package com.ort.num172159_180968.fut5;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.facebook.share.ShareApi;
@@ -28,12 +24,8 @@ import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.async.Call;
 import com.ort.num172159_180968.fut5.controller.api.Fields;
 import com.ort.num172159_180968.fut5.controller.api.FieldsFactory;
-import com.ort.num172159_180968.fut5.controller.api.UserFactory;
 import com.ort.num172159_180968.fut5.model.beans.FieldsResult;
-import com.ort.num172159_180968.fut5.model.beans.UsersWithImagesResult;
 import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
-//import com.ort.num172159_180968.fut5.model.persistance.User;
-import com.ort.num172159_180968.fut5.controller.api.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,11 +37,8 @@ public class MainMenu extends AppCompatActivity {
     private String id_facebook;
     private String user_name;
     private String last_name;
-    private com.facebook.Profile profile;
-    private User user;
     private Fields field;
     private DatabaseHelper db;
-    private int currentBackgroundColor;
     SessionManager session;
 
     @Override
@@ -168,8 +157,6 @@ public class MainMenu extends AppCompatActivity {
                         public void onColorSelected(int selectedColor) {
                             System.out.println(selectedColor);
                             session.createColor(selectedColor);
-                            currentBackgroundColor = selectedColor;
-                            //toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
                         }
                     })
                     .setPositiveButton("Ok", new ColorPickerClickListener() {
@@ -187,8 +174,6 @@ public class MainMenu extends AppCompatActivity {
                                     sb.append("\r\n#" + Integer.toHexString(color).toUpperCase());
                                 }
 
-                                //if (sb != null)
-                                    //Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     })
@@ -231,13 +216,6 @@ public class MainMenu extends AppCompatActivity {
         db.closeDB();
     }
 
-    protected void setUpUser() throws Exception {
-        // Instantiate a controller
-        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
-        UserFactory controllerFactory = new UserFactory(magnetClient);
-        user = controllerFactory.obtainInstance();
-    }
-
     protected void setUpField() throws Exception {
         // Instantiate a controller
         MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
@@ -252,7 +230,6 @@ public class MainMenu extends AppCompatActivity {
             super.onPreExecute();
             try {
                 db = new DatabaseHelper(getApplicationContext());
-                setUpUser();
                 setUpField();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -262,20 +239,8 @@ public class MainMenu extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Call<List<UsersWithImagesResult>> callObject = user.getUsersWithImages(null);
-                List<UsersWithImagesResult> users = callObject.get();
-                for (UsersWithImagesResult u : users) {
-                    com.ort.num172159_180968.fut5.model.persistance.User userDb = new
-                            com.ort.num172159_180968.fut5.model.persistance.User(u.getUserId(), u.getUsername(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getPhoto());
-                    if (!db.existsUser(u.getUserId())) {
-                        System.out.println(u.getUsername());
-                        long user1 = db.createUser(userDb);
-                        System.out.println(user1);
-                    }else {
-                        System.out.println("user already exists");
-                        db.updateUser(userDb);
-                    }
-                }
+                AppHelper helper = new AppHelper(getApplicationContext());
+                helper.reloadUsers();
 
                 Call<List<FieldsResult>> callObjectFields = field.getFields(null);
                 List<FieldsResult> fields = callObjectFields.get();
@@ -292,9 +257,7 @@ public class MainMenu extends AppCompatActivity {
                     }
                 }
 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
             //this method will be running on background thread so don't update UI frome here

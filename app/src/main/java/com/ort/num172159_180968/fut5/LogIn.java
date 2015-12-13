@@ -52,9 +52,6 @@ public class LogIn extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        btnOkAction();
         btnLogInAction();
         btnRegisterAction();
     }
@@ -79,17 +76,6 @@ public class LogIn extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void btnOkAction(){
-        Button btnNext = (Button)findViewById(R.id.btnNext);
-        btnNext.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), MainMenu.class);
-                startActivityForResult(intent, 0);
-            }
-        });
     }
 
     public void btnLogInAction(){

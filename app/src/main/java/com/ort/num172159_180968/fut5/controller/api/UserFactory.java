@@ -139,6 +139,7 @@ public class UserFactory extends ControllerFactory<User> {
                 null,
                 "",
                 true);
+
         JMethod method5 = addMethod("getUsersWithImages",
                 "Fut5-war/webservice/getUserWithImage",
                 "GET",
@@ -147,6 +148,12 @@ public class UserFactory extends ControllerFactory<User> {
                 null,
                 Arrays.asList("application/json"));
         method5.setBaseUrl("http://" + Value.ip + ":8080");
+        method5.addParam("username",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
 
         JMethod method6 = addMethod("updateUser",
                 "Fut5-war/webservice/updateUser",

@@ -69,6 +69,8 @@ public class Notification extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            HashMap<String, Integer> color = session.getColorDetail();
+            int colorId = color.get(SessionManager.KEY_COLOR);
             //make sure we have a view to work with (may be null)
             View itemView = convertView;
             if (itemView == null) {
@@ -81,13 +83,8 @@ public class Notification extends AppCompatActivity {
             //missing the image view
             TextView notificationText = (TextView)itemView.findViewById(R.id.txtNotification);
             notificationText.setText(notificationRes.getNotificationText());
+            notificationText.setTextColor(colorId);
 
-            //Bitmap image = null;
-
-            //String imageString = userRes.getPhoto();
-            //byte[] decodedString = Base64.decode(imageString, Base64.DEFAULT);
-
-            //image = helper.decodeSampledBitmapFromByte(decodedString, 80, 80);
             int notificationImageId = getPhotoIdFromNotificationType(notificationRes.getNotificationType());
             ImageView notificationImage = (ImageView) itemView.findViewById(R.id.imgNotificationIcon);
             if (notificationImageId != 0) {
