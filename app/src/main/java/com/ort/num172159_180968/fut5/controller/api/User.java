@@ -64,4 +64,9 @@ public interface User {
             UpdateUserRequest body,
             StateChangedListener listener
     );
+
+    Call<String> getNeedsUserReload(
+            String username,
+            StateChangedListener listener
+    );
 }

@@ -351,4 +351,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (db != null && db.isOpen())
             db.close();
     }
+
+    public boolean deleteAllUsers() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "DELETE FROM " + TABLE_USERS;
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c != null){
+            return c.getCount() > 0;
+        }
+        return false;
+    }
 }

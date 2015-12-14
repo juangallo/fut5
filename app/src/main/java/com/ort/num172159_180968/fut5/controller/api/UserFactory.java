@@ -65,11 +65,11 @@ public class UserFactory extends ControllerFactory<User> {
               "",
               true);
       method1.addParam("firstName",
-        "QUERY",
-        String.class,
-        null,
-        "",
-        true);
+              "QUERY",
+              String.class,
+              null,
+              "",
+              true);
       method1.addParam("lastName",
         "QUERY",
         String.class,
@@ -77,11 +77,11 @@ public class UserFactory extends ControllerFactory<User> {
         "",
         true);
       method1.addParam("email",
-        "QUERY",
-        String.class,
-        null,
-        "",
-        true);
+              "QUERY",
+              String.class,
+              null,
+              "",
+              true);
       method1.addParam("url",
               "QUERY",
               String.class,
@@ -202,6 +202,21 @@ public class UserFactory extends ControllerFactory<User> {
         method6.addParam("body",
                 "PLAIN",
                 UpdateUserRequest.class,
+                null,
+                "",
+                true);
+
+        JMethod method7 = addMethod("getNeedsUserReload",
+                "Fut5-war/webservice/getNeedsUserReload",
+                "GET",
+                String.class,
+                null,
+                null,
+                Arrays.asList("text/plain"));
+        method7.setBaseUrl("http://" + Value.ip + ":8080");
+        method7.addParam("username",
+                "QUERY",
+                String.class,
                 null,
                 "",
                 true);

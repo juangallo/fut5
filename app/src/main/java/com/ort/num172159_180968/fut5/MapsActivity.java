@@ -74,7 +74,7 @@ public class MapsActivity extends FragmentActivity {
         Boolean getAddress = true;
         String addressString = "";
         for (Field f: fieldList) {
-            if (getAddress)
+            /*if (getAddress)
                 try {
                     Geocoder geocoder = new Geocoder(this, Locale.getDefault());
                     List<Address> addresses = geocoder.getFromLocation(f.getFieldLat(), f.getFieldLon(), 1);
@@ -93,7 +93,7 @@ public class MapsActivity extends FragmentActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                     getAddress = false;
-                }
+                }*/
             Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(f.getFieldLat(), f.getFieldLon())).title(f.getFieldName()).snippet(addressString).icon(BitmapDescriptorFactory.fromBitmap(newBitmap)));
             markers.add(marker);
 

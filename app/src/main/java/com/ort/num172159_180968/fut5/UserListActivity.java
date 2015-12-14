@@ -51,26 +51,10 @@ public class UserListActivity extends AppCompatActivity implements SwipeRefreshL
         session = new SessionManager(getApplicationContext());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        users = db.getAllUser();
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
-        if(!local) {
-            int pos = -1;
-            for (int i = 0; i < 6; i++) {
-                System.out.println("Los locales " + playersLocal[i]);
-                int aux = 0;
-                for (User u : users) {
-                    if (playersLocal[i].equals(u.getUsername())) {
-                        pos = aux;
-                    }
-                    aux++;
-                }
-                if (pos != -1) {
-                    users.remove(pos);
-                }
-                pos = 0;
-            }
-        }
+        refreshUsers();
+
         populateListView();
         registerClickCallback();
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -94,6 +78,9 @@ public class UserListActivity extends AppCompatActivity implements SwipeRefreshL
         swipeRefreshLayout.setRefreshing(true);
         AppHelper helper = new AppHelper(getApplicationContext());
         helper.reloadUsers();
+
+        refreshUsers();
+
         populateListView();
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -101,6 +88,27 @@ public class UserListActivity extends AppCompatActivity implements SwipeRefreshL
     @Override
     public void onRefresh() {
         updateUsers();
+    }
+
+    private void refreshUsers(){
+        users = db.getAllUser();
+        if(!local) {
+            int pos = -1;
+            for (int i = 0; i < 6; i++) {
+                System.out.println("Los locales " + playersLocal[i]);
+                int aux = 0;
+                for (User u : users) {
+                    if (playersLocal[i].equals(u.getUsername())) {
+                        pos = aux;
+                    }
+                    aux++;
+                }
+                if (pos != -1) {
+                    users.remove(pos);
+                }
+                pos = 0;
+            }
+        }
     }
 
     @Override

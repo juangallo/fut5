@@ -31,14 +31,35 @@ public class AppHelper {
         session = new SessionManager(context);
     }
 
+    public boolean needsUserReload() {
+        boolean res;
+        try {
+            HashMap<String, String> userSession = session.getUserDetails();
+            String username = userSession.get(SessionManager.KEY_USERNAME);
+            setUpUser();
+            Call<String> callObject = user.getNeedsUserReload(username, null);
+            if (callObject != null) {
+                res = Boolean.parseBoolean(callObject.get());
+            } else {
+                res = false;
+            }
+        } catch (Exception e) {
+            res = false;
+        }
+        System.out.println("res:::" + res);
+        return res;
+    }
+
     public void reloadUsers(){
         db = new DatabaseHelper(context);
+        System.out.println("in reload users");
         try {
             setUpUser();
             HashMap<String, String> userSession = session.getUserDetails();
             String username = userSession.get(SessionManager.KEY_USERNAME);
             Call<List<UsersWithImagesResult>> callObject = user.getUsersWithImages(username, null);
             List<UsersWithImagesResult> users = callObject.get();
+            db.deleteAllUsers();
             for (UsersWithImagesResult u : users) {
 
                 dbUser = new User(u.getUserId(), u.getUsername(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getPhoto());

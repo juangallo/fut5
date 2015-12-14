@@ -263,7 +263,9 @@ public class MainMenu extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 AppHelper helper = new AppHelper(getApplicationContext());
-                helper.reloadUsers();
+                if (db.getAllUser().isEmpty() || helper.needsUserReload()) {
+                    helper.reloadUsers();
+                }
 
                 Call<List<FieldsResult>> callObjectFields = field.getFields(null);
                 List<FieldsResult> fields = callObjectFields.get();
