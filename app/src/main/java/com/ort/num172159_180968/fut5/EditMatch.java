@@ -429,7 +429,9 @@ public class EditMatch extends AppCompatActivity {
             }
 
             //ver si tiene estadistica y poner el tick
-            if(type.equals("finished")){
+            HashMap<String, String> user = session.getUserDetails();
+            String username = user.get(SessionManager.KEY_USERNAME);
+            if(type.equals("finished") && username.equals(creatorName)){
                 System.out.println("valor en el players detail: " + isLocal + ":" + position + ":" + playersDetail[position]);
                 if (!playersDetail[position]) {
                     try {
