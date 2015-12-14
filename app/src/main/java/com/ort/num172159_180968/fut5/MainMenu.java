@@ -115,9 +115,9 @@ public class MainMenu extends AppCompatActivity {
                 startActivityForResult(intent,0);
             }
         });
-        /*if(id_facebook != null){
-            share_facebook();
-        }*/
+        if(id_facebook != null){
+            session.setFacebook();
+        }
     }
 
     @Override
@@ -214,29 +214,6 @@ public class MainMenu extends AppCompatActivity {
     protected void onDestroy(){
         super.onDestroy();
         db.closeDB();
-    }
-
-    public void share_facebook (){
-        List<String> permissions_publish = new ArrayList<>();
-        permissions_publish.add("publish_actions");
-        LoginManager.getInstance().logInWithPublishPermissions(this, permissions_publish);
-        System.out.println("estoy en el share");
-
-        ShareLinkContent content = new ShareLinkContent.Builder()
-                .setContentUrl(Uri.parse("https://developers.facebook.com"))
-                .setContentDescription("Desde Fut5")
-                .build();
-
-        /*Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.unknown);
-        SharePhoto photo = new SharePhoto.Builder()
-                .setBitmap(image)
-                .build();
-        SharePhotoContent content = new SharePhotoContent.Builder()
-                .addPhoto(photo)
-                .build();*/
-
-        ShareApi.share(content, null);
-
     }
 
     protected void setUpField() throws Exception {

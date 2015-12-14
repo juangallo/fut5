@@ -1,0 +1,10 @@
++Name saveMatchGoals
+
++Request
+GET http://192.168.1.6:8080/Fut5-war/webservice/addMatchStadistics?idMatch=51&localGoals=1&visitorGoals=2
++Headers
++Body
+
++Response
++Body
+{"matchStadisticsId":201,"team1Goals":1,"team2Goals":2}

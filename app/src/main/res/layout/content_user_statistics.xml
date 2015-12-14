@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/imgGoals"
+        android:src="@drawable/ball2"
+        android:layout_marginStart="54dp"
+        android:layout_marginTop="33dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/imgCards"
+        android:src="@drawable/cards"
+        android:layout_below="@+id/imgGoals"
+        android:layout_alignStart="@+id/imgGoals" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/imgPannas"
+        android:src="@drawable/boots"
+        android:layout_below="@+id/imgCards"
+        android:layout_alignStart="@+id/imgCards" />
+
+</RelativeLayout>
