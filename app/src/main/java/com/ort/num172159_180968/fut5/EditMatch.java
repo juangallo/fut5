@@ -107,6 +107,8 @@ public class EditMatch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_match);
 
+        System.out.println("entro al oncreate del edit");
+
         db = new DatabaseHelper(getApplicationContext());
         session = new SessionManager(getApplicationContext());
         HashMap<String, String> user = session.getUserDetails();
@@ -205,7 +207,8 @@ public class EditMatch extends AppCompatActivity {
             if(!username.equals(creatorName)) {
                 btnChange.setVisibility(View.INVISIBLE);
             } else {
-                btnChange.setVisibility(View.INVISIBLE);
+                btnChange.setVisibility(View.VISIBLE);
+
             }
             goalsLocal.setText("");
             goalsVisitor.setText("");
@@ -325,6 +328,8 @@ public class EditMatch extends AppCompatActivity {
     }
 
     public void update_match(){
+
+        //no voy a abrir dialog tengo hacer listener del boton para llamar al serivicio
         btnChange.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 final Dialog dialog = new Dialog(v.getContext());
@@ -411,6 +416,8 @@ public class EditMatch extends AppCompatActivity {
             View itemView = convertView;
             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.content_players_list, parent, false);
+            } else {
+                return itemView;
             }
 
             //Find the car to work with
@@ -512,7 +519,7 @@ public class EditMatch extends AppCompatActivity {
                 });
                 ImageView img = (ImageView)viewClicked.findViewById(R.id.imgTick);
                 if(img.getDrawable() != null){
-                    Toast.makeText(getApplicationContext(), "With data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "User with statistics", Toast.LENGTH_SHORT).show();
                 } else {
                     dialog.show();
                 }
