@@ -3,6 +3,10 @@
   <component name="HistoryComponent">
     <option name="urls">
       <array>
+        <option value="http://192.168.1.6:8080/Fut5-war/webservice/getMatchStadisticDetail?idMatch=303&amp;idUser=1" />
+        <option value="http://192.168.1.6:8080/Fut5-war/webservice/addMatchStadisticDetail?idMatch=303&amp;idUser=1&amp;goals=1&amp;yellowCard=true&amp;redCard=false&amp;pannas=2" />
+        <option value="http://192.168.1.6:8080/Fut5-war/webservice/getMatchStadistics?idMatch=62" />
+        <option value="http://192.168.1.6:8080/Fut5-war/webservice/addMatchStadistics?idMatch=51&amp;localGoals=1&amp;visitorGoals=2" />
         <option value="http://api.openweathermap.org/data/2.5/forecast?id=3441575&amp;APPID=31395b2bf7f4b409f44676dd0ba53c5b&amp;units=metric" />
         <option value="http://localhost:8080/Fut5-war/webservice/getNotifications?username=juanma" />
         <option value="http://localhost:8080/Fut5-war/webservice/addMatch?username=a&amp;idField=40&amp;date=29%2F09%2F2015+18%3A00%3A00" />

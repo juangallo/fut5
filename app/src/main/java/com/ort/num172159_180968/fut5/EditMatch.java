@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -34,8 +35,14 @@ import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.async.Call;
 import com.ort.num172159_180968.fut5.controller.api.Statistic;
 import com.ort.num172159_180968.fut5.controller.api.StatisticFactory;
+import com.ort.num172159_180968.fut5.controller.api.UserStatistics;
+import com.ort.num172159_180968.fut5.controller.api.UserStatisticsFactory;
+import com.ort.num172159_180968.fut5.model.beans.AddMatchStadisticDetailResult;
 import com.ort.num172159_180968.fut5.model.beans.MatchGoalsResult;
+import com.ort.num172159_180968.fut5.model.beans.MatchStadisticDetailResult;
 import com.ort.num172159_180968.fut5.model.beans.SaveMatchGoalsResult;
+import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
+import com.ort.num172159_180968.fut5.model.persistance.User;
 
 import org.w3c.dom.Text;
 
@@ -50,9 +57,6 @@ import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 public class EditMatch extends AppCompatActivity {
-
-    CallbackManager callbackManager;
-    ShareDialog shareDialog;
 
     ImageView imgLocal;
     ImageView imgVisitor;
@@ -74,6 +78,11 @@ public class EditMatch extends AppCompatActivity {
     NumberPicker pickerLocal;
     NumberPicker pickerVisitor;
 
+    NumberPicker pickerGoalsPlayer;
+    NumberPicker pickerPannas;
+    CheckBox yellowCard;
+    CheckBox redCard;
+
     String type;
     String creatorName;
     String fieldName;
@@ -82,18 +91,23 @@ public class EditMatch extends AppCompatActivity {
     String[] players;
 
     Statistic statistic;
+    UserStatistics userStatistics;
 
     private SessionManager session;
+    DatabaseHelper db;
     private int color;
 
     private String[] playersLocal = new String[5];
+    private Boolean[] playersLocalDetail = new Boolean[5];
     private String[] playersVisitor = new String[5];
+    private Boolean[] playersVisitorDetail = new Boolean[5];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_match);
 
+        db = new DatabaseHelper(getApplicationContext());
         session = new SessionManager(getApplicationContext());
         HashMap<String, String> user = session.getUserDetails();
         String username = user.get(SessionManager.KEY_USERNAME);
@@ -115,8 +129,7 @@ public class EditMatch extends AppCompatActivity {
             }
         });
         btnChange = (Button) findViewById(R.id.btnChange);
-       update_match();
-
+        update_match();
 
         imgLocal = (ImageView) findViewById(R.id.imgLocal);
         imgLocal.setImageResource(R.drawable.notepad1);
@@ -137,6 +150,8 @@ public class EditMatch extends AppCompatActivity {
         for(int i = 0; i < 5; i++)
         {
             playersLocal[i] = players[i];
+            playersLocalDetail[i] = false;
+            playersVisitorDetail[i] = false;
         }
         for(int i = 5; i < 10; i++)
         {
@@ -145,19 +160,16 @@ public class EditMatch extends AppCompatActivity {
 
         populateListView();
 
-        try {
-            setUpAddStatistics();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        setUpServices();
 
         if(type.equals("finished")){
-            registerClickCallback(true);
-            registerClickCallback(false);
             btnChange.setVisibility(View.INVISIBLE);
             if(!username.equals(creatorName)){
                 btnEdit.setVisibility(View.INVISIBLE);
             } else {
+                registerClickCallback(true);
+                registerClickCallback(false);
+            }
                 try {
                     Call<MatchGoalsResult> callObject = statistic.getMatchGoals(idMatch + "", null);
                     MatchGoalsResult matchGoalsResult = callObject.get();
@@ -177,7 +189,7 @@ public class EditMatch extends AppCompatActivity {
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-            }
+
 
             if(session.isFacebook()){
                 btnShare.setVisibility(View.VISIBLE);
@@ -185,8 +197,8 @@ public class EditMatch extends AppCompatActivity {
                 btnShare.setVisibility(View.INVISIBLE);
 
             }
-
         }
+
         if(type.equals("next")){
             btnEdit.setVisibility(View.INVISIBLE);
             btnShare.setVisibility(View.INVISIBLE);
@@ -198,6 +210,7 @@ public class EditMatch extends AppCompatActivity {
             goalsLocal.setText("");
             goalsVisitor.setText("");
         }
+
         if(type.equals("others")){
             btnEdit.setVisibility(View.INVISIBLE);
             btnShare.setVisibility(View.INVISIBLE);
@@ -216,6 +229,12 @@ public class EditMatch extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        db.closeDB();
     }
 
     @Override
@@ -343,11 +362,27 @@ public class EditMatch extends AppCompatActivity {
 
     }
 
+    private void setUpServices(){
+        try {
+            setUpAddStatistics();
+            setUpAddUserStatistics();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     protected void setUpAddStatistics() throws Exception {
         // Instantiate a controller
         MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
         StatisticFactory controllerFactory = new StatisticFactory(magnetClient);
         statistic = controllerFactory.obtainInstance();
+    }
+
+    protected void setUpAddUserStatistics() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
+        UserStatisticsFactory controllerFactory = new UserStatisticsFactory(magnetClient);
+        userStatistics = controllerFactory.obtainInstance();
     }
 
     private void populateListView() {
@@ -362,9 +397,10 @@ public class EditMatch extends AppCompatActivity {
     private class MyListAdapter extends ArrayAdapter<String> {
         boolean isLocal;
         String[] players;
+        Boolean[] playersDetail;
 
         public MyListAdapter(boolean local,String[] playersTeam){
-            super(EditMatch.this, R.layout.content_players_list,playersTeam);
+            super(EditMatch.this, R.layout.content_players_list, playersTeam);
             isLocal = local;
             players = playersTeam;
         }
@@ -386,15 +422,40 @@ public class EditMatch extends AppCompatActivity {
             ImageView imgPlayer = (ImageView) itemView.findViewById(R.id.imgPlayer);
             if(isLocal) {
                 imgPlayer.setImageResource(R.drawable.soccerplayer);
+                playersDetail = playersLocalDetail;
             } else {
                 imgPlayer.setImageResource(R.drawable.soccervisit);
+                playersDetail = playersVisitorDetail;
+            }
+
+            //ver si tiene estadistica y poner el tick
+            if(type.equals("finished")){
+                System.out.println("valor en el players detail: " + isLocal + ":" + position + ":" + playersDetail[position]);
+                if (!playersDetail[position]) {
+                    try {
+                        User clickedUser = db.getUser(players[position]);
+                        Call<MatchStadisticDetailResult> callObject = userStatistics.getMatchStadisticDetail(idMatch + "", clickedUser.getUserId() + "", null);
+                        int result = callObject.get().getMatchStadisticsDetailId();
+                        if (result == 0) {
+                            //Toast.makeText(getApplicationContext(), "Problem saving match result", Toast.LENGTH_LONG).show();
+                        } else {
+                            //Toast.makeText(getApplicationContext(), "Data Saved", Toast.LENGTH_SHORT).show();
+                            ImageView imgTick = (ImageView) itemView.findViewById(R.id.imgTick);
+                            imgTick.setImageResource(R.drawable.checkmark);
+                            playersDetail[position] = true;
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
             }
 
             return itemView;
         }
     }
 
-    private void registerClickCallback(boolean local) {
+    private void registerClickCallback(final boolean local) {
+
         ListView list;
         if(local){
              list = (ListView)findViewById(R.id.listLocal);
@@ -403,11 +464,57 @@ public class EditMatch extends AppCompatActivity {
         }
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, final View viewClicked, final int position, long id) {
                 final Dialog dialog = new Dialog(viewClicked.getContext());
                 dialog.setContentView(R.layout.content_user_statistics);
 
-                dialog.show();
+                pickerGoalsPlayer = (NumberPicker) dialog.findViewById(R.id.pickerGoalsPlayer);
+                pickerGoalsPlayer.setMinValue(0);
+                pickerGoalsPlayer.setMaxValue(10);
+                pickerPannas = (NumberPicker) dialog.findViewById(R.id.pickerPannas);
+                pickerPannas.setMinValue(0);
+                pickerPannas.setMaxValue(10);
+                yellowCard = (CheckBox) dialog.findViewById(R.id.checkYellow);
+                redCard = (CheckBox) dialog.findViewById(R.id.checkRed);
+
+                Button btnSaveUserStatistics = (Button) dialog.findViewById(R.id.btnSaveUserStatistics);
+                btnSaveUserStatistics.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        try {
+                            User clickedUser;
+                            if(local){
+                                clickedUser = db.getUser(playersLocal[position]);
+                            } else {
+                                clickedUser = db.getUser(playersVisitor[position]);
+                            }
+
+                            Call<AddMatchStadisticDetailResult> callObject = userStatistics.addMatchStadisticDetail(idMatch + "" ,clickedUser.getUserId() + "" ,pickerGoalsPlayer.getValue() + "" ,yellowCard.isChecked() + "" ,redCard.isChecked() + "",pickerPannas.getValue() + "" ,null);
+                            int result = callObject.get().getMatchStadisticsDetailId();
+                            if (result == 0) {
+                                Toast.makeText(getApplicationContext(), "Problem saving match result", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Data Saved", Toast.LENGTH_SHORT).show();
+                                ImageView imgTick = (ImageView)viewClicked.findViewById(R.id.imgTick);
+                                imgTick.setImageResource(R.drawable.checkmark);
+                                if(local){
+                                    playersLocalDetail[position] = true;
+                                } else {
+                                    playersVisitorDetail[position] = true;
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                ImageView img = (ImageView)viewClicked.findViewById(R.id.imgTick);
+                if(img.getDrawable() != null){
+                    Toast.makeText(getApplicationContext(), "With data", Toast.LENGTH_SHORT).show();
+                } else {
+                    dialog.show();
+                }
+
             }
         });
     }

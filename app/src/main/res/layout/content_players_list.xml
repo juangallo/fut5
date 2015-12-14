@@ -13,5 +13,13 @@ android:layout_height="match_parent" >
         android:layout_toRightOf="@+id/imgPlayer"
         android:layout_height="30dp" />
 
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/imgTick"
+        android:layout_marginStart="140dp"
+        android:layout_below="@+id/imgPlayer"
+        android:layout_toEndOf="@+id/txtPlayer" />
+
 
 </RelativeLayout>

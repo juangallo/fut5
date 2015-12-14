@@ -70,8 +70,8 @@
         android:layout_alignEnd="@+id/txtFieldName" />
 
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/listLocal"
         android:layout_marginTop="200dp"
         android:layout_below="@+id/txtLocalTeam"
@@ -79,8 +79,8 @@
         android:layout_alignEnd="@+id/imgLocal" />
 
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/listVisitor"
         android:layout_alignTop="@+id/listLocal"
         android:layout_alignLeft="@+id/imgVisitor"
