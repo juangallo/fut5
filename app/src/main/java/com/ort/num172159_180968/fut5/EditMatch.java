@@ -1,9 +1,6 @@
 package com.ort.num172159_180968.fut5;
 
 import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,26 +8,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
-import android.widget.Spinner;
-import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.CallbackManager;
 import com.facebook.login.LoginManager;
 import com.facebook.share.ShareApi;
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareDialog;
+import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.async.Call;
 import com.ort.num172159_180968.fut5.controller.api.Statistic;
@@ -43,20 +35,18 @@ import com.ort.num172159_180968.fut5.model.beans.MatchStadisticDetailResult;
 import com.ort.num172159_180968.fut5.model.beans.SaveMatchGoalsResult;
 import com.ort.num172159_180968.fut5.model.persistance.DatabaseHelper;
 import com.ort.num172159_180968.fut5.model.persistance.User;
+import com.sleepbot.datetimepicker.time.RadialPickerLayout;
+import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
-import org.w3c.dom.Text;
-
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
-public class EditMatch extends AppCompatActivity {
+public class EditMatch extends AppCompatActivity  implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     ImageView imgLocal;
     ImageView imgVisitor;
@@ -101,6 +91,9 @@ public class EditMatch extends AppCompatActivity {
     private Boolean[] playersLocalDetail = new Boolean[5];
     private String[] playersVisitor = new String[5];
     private Boolean[] playersVisitorDetail = new Boolean[5];
+
+    public static final String DATEPICKER_TAG = "datepicker";
+    public static final String TIMEPICKER_TAG = "timepicker";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +201,10 @@ public class EditMatch extends AppCompatActivity {
                 btnChange.setVisibility(View.INVISIBLE);
             } else {
                 btnChange.setVisibility(View.VISIBLE);
-
+                ImageButton button = (ImageButton)findViewById(R.id.btnCalendar);
+                button.setVisibility(View.VISIBLE);
+                button = (ImageButton)findViewById(R.id.btnTime);
+                button.setVisibility(View.VISIBLE);
             }
             goalsLocal.setText("");
             goalsVisitor.setText("");
@@ -231,7 +227,40 @@ public class EditMatch extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        final Calendar calendar = Calendar.getInstance();
 
+        final DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), false);
+        final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY) ,calendar.get(Calendar.MINUTE), false, false);
+
+        findViewById(R.id.btnCalendar).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                datePickerDialog.setYearRange(1985, 2028);
+                datePickerDialog.setCloseOnSingleTapDay(false);
+                datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
+            }
+        });
+
+        findViewById(R.id.btnTime).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePickerDialog.setCloseOnSingleTapMinute(false);
+                timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
+            }
+        });
+
+        if (savedInstanceState != null) {
+            DatePickerDialog dpd = (DatePickerDialog) getSupportFragmentManager().findFragmentByTag(DATEPICKER_TAG);
+            if (dpd != null) {
+                dpd.setOnDateSetListener(this);
+            }
+
+            TimePickerDialog tpd = (TimePickerDialog) getSupportFragmentManager().findFragmentByTag(TIMEPICKER_TAG);
+            if (tpd != null) {
+                tpd.setOnTimeSetListener(this);
+            }
+        }
     }
 
     @Override
@@ -397,6 +426,16 @@ public class EditMatch extends AppCompatActivity {
         ArrayAdapter<String> adapterVisitor = new MyListAdapter(false,playersVisitor);
         listVisitor.setAdapter(adapterVisitor);
 
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
+        Toast.makeText(EditMatch.this, "new date:" + year + "-" + month + "-" + day, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
+        Toast.makeText(EditMatch.this, "new time:" + hourOfDay + "-" + minute, Toast.LENGTH_LONG).show();
     }
 
     private class MyListAdapter extends ArrayAdapter<String> {

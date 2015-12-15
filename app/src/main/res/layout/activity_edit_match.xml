@@ -177,4 +177,29 @@
         android:layout_alignTop="@+id/btnEdit"
         android:layout_alignStart="@+id/txtLocalTeam" />
 
+    <ImageButton
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:id="@+id/btnCalendar"
+        android:background="@android:color/transparent"
+        android:src="@drawable/calendar1"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/SelectDateContetDescription"
+        android:layout_alignBottom="@+id/txtDateMatch"
+        android:layout_toRightOf="@+id/txtDateMatch"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:id="@+id/btnTime"
+        android:src="@drawable/clock"
+        android:scaleType="fitXY"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/SelectTimeContentDescription"
+        android:layout_alignBottom="@+id/btnCalendar"
+        android:layout_toRightOf="@+id/btnCalendar"
+        android:layout_marginLeft="10dp"
+        android:visibility="invisible" />
+
 </RelativeLayout>

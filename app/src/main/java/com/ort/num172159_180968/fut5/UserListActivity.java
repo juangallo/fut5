@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class UserListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener  {
+public class UserListActivity extends AppCompatActivity {
     DatabaseHelper db;
     private List<User> users = new ArrayList<>();
     private SessionManager session;
@@ -38,7 +38,6 @@ public class UserListActivity extends AppCompatActivity implements SwipeRefreshL
     private String[] playersLocal;
     private Boolean local;
     private AppHelper helper;
-    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,44 +50,23 @@ public class UserListActivity extends AppCompatActivity implements SwipeRefreshL
         session = new SessionManager(getApplicationContext());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
         refreshUsers();
 
         populateListView();
         registerClickCallback();
-        swipeRefreshLayout.setOnRefreshListener(this);
 
-        /**
-         * Showing Swipe Refresh animation on activity create
-         * As animation won't start on onCreate, post runnable is used
-         */
-        swipeRefreshLayout.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        swipeRefreshLayout.setRefreshing(true);
-
-                                        updateUsers();
-                                    }
-                                }
-        );
     }
 
     private void updateUsers() {
-        swipeRefreshLayout.setRefreshing(true);
         AppHelper helper = new AppHelper(getApplicationContext());
         helper.reloadUsers();
 
         refreshUsers();
 
         populateListView();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
-    @Override
-    public void onRefresh() {
-        updateUsers();
-    }
 
     private void refreshUsers(){
         users = db.getAllUser();
