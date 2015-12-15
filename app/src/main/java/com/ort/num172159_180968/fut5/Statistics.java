@@ -9,12 +9,18 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.hookedonplay.decoviewlib.DecoView;
 import com.hookedonplay.decoviewlib.charts.EdgeDetail;
 import com.hookedonplay.decoviewlib.charts.SeriesItem;
 import com.hookedonplay.decoviewlib.charts.SeriesLabel;
 import com.hookedonplay.decoviewlib.events.DecoEvent;
+import com.magnet.android.mms.MagnetMobileClient;
+import com.magnet.android.mms.async.Call;
+import com.ort.num172159_180968.fut5.controller.api.Statistic;
+import com.ort.num172159_180968.fut5.controller.api.StatisticFactory;
+import com.ort.num172159_180968.fut5.model.beans.PlayerStatisticsResult;
 
 public class Statistics extends AppCompatActivity {
     final private int COLOR_ORANGE = Color.parseColor("#FFA500");
@@ -29,15 +35,25 @@ public class Statistics extends AppCompatActivity {
     private int win;
     private int tie;
     private int loss;
+    private Statistic statistic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
+        PlayerStatisticsResult res = new PlayerStatisticsResult();
+        try {
+            setUpStatistics();
+            Call<PlayerStatisticsResult> callObject = statistic.getPlayerStatistics("", null);
+            res = callObject.get();
+        } catch (Exception e) {
 
-        win = 42;
-        tie = 4;
-        loss = 31;
+        }
+
+
+        win = res.getWon();
+        tie = res.getDraw();
+        loss = res.getLoss();
         mSeriesMax = win + tie + loss;
 
         DecoView decoView = (DecoView)findViewById(R.id.dynamicArcView);
@@ -105,6 +121,16 @@ public class Statistics extends AppCompatActivity {
                 .setDelay(4000)
                 .setDuration(2000)
                 .build());
+
+        TextView textView = (TextView)findViewById(R.id.txtCards);
+        int cards = (res.getRed() + res.getYellow());
+        textView.setText(cards + "");
+        textView = (TextView)findViewById(R.id.txtBall);
+        textView.setText(res.getGoal() + "");
+        textView = (TextView)findViewById(R.id.txtCup);
+        textView.setText(res.getChampionship() + "");
+        textView = (TextView)findViewById(R.id.txtBoots);
+        textView.setText(res.getPanna() + "");
     }
 
     @Override
@@ -167,5 +193,12 @@ public class Statistics extends AppCompatActivity {
                 .setDuration(5000)
                 .setListener(listener)
                 .build());
+    }
+
+    protected void setUpStatistics() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
+        StatisticFactory controllerFactory = new StatisticFactory(magnetClient);
+        statistic = controllerFactory.obtainInstance();
     }
 }

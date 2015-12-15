@@ -42,5 +42,9 @@ public interface Statistic {
      StateChangedListener listener
   );
 
+  Call<PlayerStatisticsResult> getPlayerStatistics(
+     String username,
+     StateChangedListener listener
+  );
 
 }
