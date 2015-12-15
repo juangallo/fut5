@@ -40,4 +40,18 @@ public interface Match {
     );
 
 
+    /**
+     * Generated from URL POST http://192.168.1.7:8080/Fut5-war/webservice/updateMatchDate?idMatch=701&date=1450141200000
+     * POST Fut5-war/webservice/updateMatchDate
+     * @param idMatch  style:QUERY
+     * @param date  style:QUERY
+     * @param listener
+     * @return void
+     */
+    Call<Void> updateMatchDate(
+            String idMatch,
+            String date,
+            StateChangedListener listener
+    );
+
 }

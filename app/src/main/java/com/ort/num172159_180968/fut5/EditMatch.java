@@ -25,6 +25,8 @@ import com.facebook.share.model.ShareLinkContent;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.magnet.android.mms.MagnetMobileClient;
 import com.magnet.android.mms.async.Call;
+import com.ort.num172159_180968.fut5.controller.api.Match;
+import com.ort.num172159_180968.fut5.controller.api.MatchFactory;
 import com.ort.num172159_180968.fut5.controller.api.Statistic;
 import com.ort.num172159_180968.fut5.controller.api.StatisticFactory;
 import com.ort.num172159_180968.fut5.controller.api.UserStatistics;
@@ -82,6 +84,7 @@ public class EditMatch extends AppCompatActivity  implements DatePickerDialog.On
 
     Statistic statistic;
     UserStatistics userStatistics;
+    Match updateMatch;
 
     private SessionManager session;
     DatabaseHelper db;
@@ -94,6 +97,12 @@ public class EditMatch extends AppCompatActivity  implements DatePickerDialog.On
 
     public static final String DATEPICKER_TAG = "datepicker";
     public static final String TIMEPICKER_TAG = "timepicker";
+
+    private int day;
+    private int month;
+    private int year;
+    private int hour;
+    private int minute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -308,7 +317,30 @@ public class EditMatch extends AppCompatActivity  implements DatePickerDialog.On
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(d.getTime());
 
-        dateMatch.setText(formattedDate);
+        System.out.println("formatted date: " + formattedDate);
+
+        SimpleDateFormat yearformat = new SimpleDateFormat("yyyy");
+        String year = yearformat.format(d.getTime());
+
+        SimpleDateFormat monthformat = new SimpleDateFormat("MM");
+        String month = monthformat.format(d.getTime());
+
+        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+        String day = dayFormat.format(d.getTime());
+
+        SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
+        String hour = hourFormat.format(d.getTime());
+
+        SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
+        String minute = minuteFormat.format(d.getTime());
+
+        System.out.println("fecha: " + year + ":" + month + ":" + day + " " + hour + ":" + minute );
+        //dateMatch.setText(formattedDate);
+
+        editDateTime(Integer.parseInt(day),Integer.parseInt(month),Integer.parseInt(year),Integer.parseInt(hour),Integer.parseInt(minute));
+        //editDateTime(d.getDay(), d.getMonth(), d.getYear(), d.getHours(), d.getMinutes());
+
+        dateMatch.setText(getDateString());
     }
 
     public void setResult(){
@@ -359,12 +391,16 @@ public class EditMatch extends AppCompatActivity  implements DatePickerDialog.On
     public void update_match(){
 
         //no voy a abrir dialog tengo hacer listener del boton para llamar al serivicio
-        btnChange.setOnClickListener(new View.OnClickListener(){
+        btnChange.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(v.getContext());
-                dialog.setContentView(R.layout.content_update_match);
+                //final Dialog dialog = new Dialog(v.getContext());
+                //dialog.setContentView(R.layout.content_update_match);
 
-                dialog.show();
+                //dialog.show();
+                String dateMatch = getDateString();//"" + year + "/" + month + "/" + day + " " + hour + ":" + minute + ":00";
+
+                Call<Void> callObjectResult = updateMatch.updateMatchDate(idMatch + "" ,dateMatch,null);
+                Toast.makeText(EditMatch.this,"Date Changed",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -380,26 +416,14 @@ public class EditMatch extends AppCompatActivity  implements DatePickerDialog.On
                 .setContentDescription("Match: " + dateMatch.getText() + ", Field: " + fieldMatch.getText() + ", Result: " + goalsLocal.getText() + "-" + goalsVisitor.getText())
                 .build();
 
-        /*Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.soccerfield);
-        SharePhoto photo = new SharePhoto.Builder()
-                .setBitmap(image)
-                .build();
-        SharePhotoContent content = new SharePhotoContent.Builder()
-                .addPhoto(photo)
-                .build();*/
-
-
-
         ShareApi.share(content, null);
-
-
-
     }
 
     private void setUpServices(){
         try {
             setUpAddStatistics();
             setUpAddUserStatistics();
+            setUpUpdateMatch();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -419,6 +443,13 @@ public class EditMatch extends AppCompatActivity  implements DatePickerDialog.On
         userStatistics = controllerFactory.obtainInstance();
     }
 
+    protected void setUpUpdateMatch() throws Exception {
+        // Instantiate a controller
+        MagnetMobileClient magnetClient = MagnetMobileClient.getInstance(this.getApplicationContext());
+        MatchFactory controllerFactory = new MatchFactory(magnetClient);
+        updateMatch = controllerFactory.obtainInstance();
+    }
+
     private void populateListView() {
         ArrayAdapter<String> adapterLocal = new MyListAdapter(true,playersLocal);
         listLocal.setAdapter(adapterLocal);
@@ -431,11 +462,54 @@ public class EditMatch extends AppCompatActivity  implements DatePickerDialog.On
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
         Toast.makeText(EditMatch.this, "new date:" + year + "-" + month + "-" + day, Toast.LENGTH_LONG).show();
+
+        this.day = day;
+        this.month = month + 1;
+        this.year = year;
+
+        dateMatch.setText(getDateString());
+
     }
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
         Toast.makeText(EditMatch.this, "new time:" + hourOfDay + "-" + minute, Toast.LENGTH_LONG).show();
+
+        this.hour = hourOfDay;
+        this.minute = minute;
+
+        dateMatch.setText(getDateString());
+
+    }
+
+    private String getDateString() {
+        String res = "";
+        res += year + "/";
+        if (month < 10){
+            res += "0";
+        }
+        res += month + "/";
+        if (day < 10) {
+            res += "0";
+        }
+        res += day + " ";
+        if (hour < 10) {
+            res += "0";
+        }
+        res += hour + ":";
+        if (minute < 10) {
+            res += "0";
+        }
+        res += minute + ":00";
+        return res;
+    }
+
+    private void editDateTime(int date, int month, int year, int hour, int minute) {
+        this.day = date;
+        this.month = month;
+        this.year = year;
+        this.hour = hour;
+        this.minute = minute;
     }
 
     private class MyListAdapter extends ArrayAdapter<String> {

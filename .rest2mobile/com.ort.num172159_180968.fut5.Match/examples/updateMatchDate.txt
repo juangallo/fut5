@@ -1,0 +1,10 @@
++Name updateMatchDate
+
++Request
+POST http://192.168.1.7:8080/Fut5-war/webservice/updateMatchDate?idMatch=701&date=1450141200000
++Headers
++Body
+
++Response
++Body
+

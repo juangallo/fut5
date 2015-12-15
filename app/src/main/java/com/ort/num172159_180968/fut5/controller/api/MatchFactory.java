@@ -106,6 +106,28 @@ public class MatchFactory extends ControllerFactory<Match> {
                 null,
                 "",
                 true);
+
+        JMethod method3 = addMethod("updateMatchDate",
+                "Fut5-war/webservice/updateMatchDate",
+                "POST",
+                void.class,
+                null,
+                null,
+                null);
+        method3.setBaseUrl("http://" + Value.ip + ":8080");
+        method3.addParam("idMatch",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
+        method3.addParam("date",
+                "QUERY",
+                String.class,
+                null,
+                "",
+                true);
+
     }
 
   }

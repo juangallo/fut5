@@ -75,6 +75,8 @@ public class Notification extends AppCompatActivity {
             View itemView = convertView;
             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.notification_item, parent, false);
+            } else {
+                return itemView;
             }
 
             //Find the car to work with
