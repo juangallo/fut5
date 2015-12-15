@@ -77,17 +77,32 @@ public class StatisticFactory extends ControllerFactory<Statistic> {
         "",
         true);
       method2.addParam("localGoals",
-        "QUERY",
-        String.class,
-        null,
-        "",
-        true);
+              "QUERY",
+              String.class,
+              null,
+              "",
+              true);
       method2.addParam("visitorGoals",
         "QUERY",
         String.class,
         null,
         "",
         true);
+
+      JMethod method3 = addMethod("getPlayerStatistics",
+              "Fut5-war/webservice/getPlayerStatistics",
+              "GET",
+              PlayerStatisticsResult.class,
+              null,
+              null,
+              Arrays.asList("application/json"));
+      method3.setBaseUrl("http://" + Value.ip + ":8080");
+      method3.addParam("username",
+              "QUERY",
+              String.class,
+              null,
+              "",
+              true);
     }
 
   }

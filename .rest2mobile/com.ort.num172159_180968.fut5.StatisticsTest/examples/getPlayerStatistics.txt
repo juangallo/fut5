@@ -1,0 +1,10 @@
++Name getPlayerStatistics
+
++Request
+GET http://192.168.1.106:8080/Fut5-war/webservice/getPlayerStatistics?username=juan
++Headers
++Body
+
++Response
++Body
+{"won":92,"draw":7,"loss":70,"red":5,"yellow":8,"panna":16,"goal":309,"championship":1}
